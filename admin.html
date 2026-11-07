@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Studio Dashboard · Glam By Nel</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0b0a0b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Nel Bookings">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0a0b'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='30' text-anchor='middle' fill='%23e2a99b'%3EGN%3C/text%3E%3C/svg%3E">
+<style>
+[hidden]{display:none!important}
+:root{--ink:#0b0a0b;--ink2:#151113;--ink3:#201a1c;--line:rgba(246,207,196,.16);--cream:#fff7f5;--muted:#b3a0a3;--gold:#e2a99b;--gold1:#fbe3d8;--rose:#c9808b;--ok:#8fd6ae;--warn:#f2c46b;--bad:#f2a0ad;
+  --lac:linear-gradient(180deg,#ffe9e3,#f1b9b0 42%,#d58f8e 68%,#f3c2b8);--serif:'Cormorant Garamond',Georgia,serif;--sans:'Montserrat',system-ui,sans-serif;--script:'Great Vibes',cursive}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:radial-gradient(700px 400px at 90% -10%,rgba(201,128,139,.22),transparent 60%),var(--ink);color:var(--cream);min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit}
+.g{background:var(--lac);-webkit-background-clip:text;background-clip:text;color:transparent}
+.wrap{width:min(1100px,94vw);margin:0 auto}
+header{position:sticky;top:0;z-index:20;background:rgba(11,10,11,.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:.7rem}
+.brand b{font-family:var(--serif);font-size:1.6rem}
+.brand span{font-size:.62rem;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+.icon-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.03);display:grid;place-items:center;cursor:pointer}
+.icon-btn svg{width:18px;height:18px;stroke:var(--cream);fill:none;stroke-width:1.6}
+.hdr-r{display:flex;gap:.5rem}
+.card{background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));border:1px solid var(--line);border-radius:20px;box-shadow:0 1px 0 rgba(255,255,255,.08) inset}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;padding:.7rem 1.05rem;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);cursor:pointer;font-size:.8rem;font-weight:500;text-decoration:none;white-space:nowrap;transition:transform .2s,background .2s}
+.btn:active{transform:scale(.97)}
+.btn:hover{background:rgba(255,255,255,.08)}
+.btn.pri{background:var(--lac);color:#2a1215;border-color:transparent;font-weight:600;box-shadow:0 1px 0 #fff inset,0 8px 20px -10px rgba(233,170,180,.7)}
+.btn.wa{background:#1f3b2c;border-color:#2f6a4a;color:#c9f2da}
+.btn.dang{color:var(--bad);border-color:rgba(242,160,173,.35)}
+.btn svg{width:15px;height:15px;fill:currentColor}
+h2.t{font-family:var(--serif);font-weight:500;font-size:2.1rem;margin:1.6rem 0 1rem}
+h3.st{font-size:.66rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);margin:1.6rem 0 .8rem}
+label.l{display:block;font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin:0 0 .4rem}
+input,select,textarea{width:100%;padding:.8rem .95rem;border-radius:12px;border:1px solid var(--line);background:rgba(0,0,0,.3);outline:none;color-scheme:dark}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+textarea{min-height:110px;resize:vertical;line-height:1.5}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.f{margin-bottom:.9rem}
+.muted{color:var(--muted);font-size:.85rem}
+/* tabs */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(11,10,11,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+nav.tabs .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+nav.tabs button{background:none;border:0;padding:.75rem 0 .65rem;display:flex;flex-direction:column;align-items:center;gap:.25rem;cursor:pointer;color:var(--muted);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;position:relative}
+nav.tabs svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.5}
+nav.tabs button.on{color:var(--gold1)}
+nav.tabs button.on::before{content:"";position:absolute;top:0;left:30%;right:30%;height:2px;border-radius:2px;background:var(--lac)}
+.badge{position:absolute;top:6px;left:55%;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--rose);color:#fff;font-size:.62rem;letter-spacing:0;display:grid;place-items:center;font-weight:600}
+.view{display:none}.view.on{display:block}
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-top:1.2rem}
+.stat{padding:1rem 1.1rem}
+.stat b{font-family:var(--serif);font-size:2.2rem;font-weight:600;line-height:1;display:block}
+.stat span{font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted)}
+.chips{display:flex;gap:.5rem;overflow-x:auto;padding:1.1rem 0 .4rem;scrollbar-width:none}
+.chip{flex:none;padding:.55rem 1rem;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);cursor:pointer;font-size:.72rem}
+.chip.on{background:var(--lac);color:#2a1215;border-color:transparent;font-weight:600}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:.6rem;flex-wrap:wrap}
+/* booking cards */
+.list{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:.9rem;margin-top:.8rem}
+.bk{padding:1.2rem 1.2rem 1rem}
+.bk .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.6rem}
+.pill{font-size:.58rem;letter-spacing:.22em;text-transform:uppercase;padding:.35rem .7rem;border-radius:999px;border:1px solid}
+.pill.pending{color:var(--warn);border-color:rgba(242,196,107,.4);background:rgba(242,196,107,.08)}
+.pill.confirmed{color:var(--ok);border-color:rgba(143,214,174,.4);background:rgba(143,214,174,.08)}
+.pill.declined,.pill.cancelled,.pill.noshow{color:var(--bad);border-color:rgba(242,160,173,.35)}
+.pill.done{color:var(--muted);border-color:var(--line)}
+.ref{font-size:.66rem;letter-spacing:.15em;color:var(--muted)}
+.bk h4{font-family:var(--serif);font-size:1.6rem;font-weight:600;line-height:1.1}
+.bk .when{display:flex;gap:.9rem;margin:.55rem 0;font-size:.9rem;flex-wrap:wrap}
+.bk .when b{color:var(--gold1)}
+.bk .meta{font-size:.82rem;color:#d6c5c6;display:grid;gap:.2rem}
+.bk .notes{margin-top:.55rem;padding:.6rem .8rem;border-radius:10px;background:rgba(0,0,0,.25);font-size:.82rem;color:#d6c5c6;white-space:pre-wrap}
+.bk .acts{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.9rem}
+.empty{padding:2.4rem 1rem;text-align:center;color:var(--muted)}
+.empty b{display:block;font-family:var(--script);font-size:2.4rem;color:var(--rose);font-weight:400}
+/* calendar */
+.cal-head{display:flex;justify-content:space-between;align-items:center;margin:1rem 0 .8rem}
+.cal-head b{font-family:var(--serif);font-size:1.7rem;font-weight:600}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:.35rem}
+.cal .dow{text-align:center;font-size:.58rem;letter-spacing:.2em;color:var(--muted);padding:.3rem 0}
+.day{aspect-ratio:1/1.05;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.02);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.15rem;position:relative;font-size:.95rem}
+.day small{font-size:.55rem;color:var(--muted)}
+.day.open{background:linear-gradient(180deg,rgba(241,185,176,.24),rgba(213,143,142,.12));border-color:rgba(241,185,176,.5)}
+.day.sel{outline:2px solid var(--gold1);outline-offset:1px}
+.day.past{opacity:.3;cursor:default}
+.day.today b{color:var(--gold1);text-decoration:underline;text-underline-offset:3px}
+.day .bkd{position:absolute;top:4px;right:5px;width:7px;height:7px;border-radius:50%;background:var(--ok)}
+.day.blank{border:0;background:none;cursor:default}
+.panel{padding:1.2rem;margin-top:1rem}
+.slots{display:flex;flex-wrap:wrap;gap:.5rem;margin:.8rem 0}
+.slot{padding:.6rem .9rem;border-radius:999px;border:1px dashed rgba(246,207,196,.3);background:none;cursor:pointer;font-size:.85rem;color:var(--muted)}
+.slot.open{border-style:solid;background:var(--lac);color:#2a1215;font-weight:600;border-color:transparent}
+.slot.booked{border-style:solid;border-color:rgba(143,214,174,.4);color:var(--ok);cursor:default;background:rgba(143,214,174,.08)}
+.legend{display:flex;gap:1rem;flex-wrap:wrap;font-size:.72rem;color:var(--muted);margin-top:.6rem}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:.35rem;vertical-align:-1px}
+.wk{display:flex;gap:.35rem;flex-wrap:wrap;margin:.6rem 0}
+.wk label{display:flex;align-items:center;gap:.35rem;padding:.5rem .75rem;border:1px solid var(--line);border-radius:999px;font-size:.78rem;cursor:pointer}
+.wk input{width:auto;accent-color:#d58f8e}
+/* looks */
+.drop{border:1.5px dashed rgba(246,207,196,.35);border-radius:18px;padding:1.6rem;text-align:center;cursor:pointer;display:block}
+.drop b{font-family:var(--serif);font-size:1.4rem;font-weight:600;display:block}
+.drop input{display:none}
+.lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.8rem;margin-top:1rem}
+.lk{overflow:hidden;padding:0}
+.lk img{width:100%;aspect-ratio:3/4;object-fit:cover;display:block}
+.lk .c{padding:.6rem;display:grid;gap:.4rem}
+.lk select,.lk input{padding:.5rem .6rem;font-size:.78rem;border-radius:9px}
+.lk .a{display:flex;gap:.3rem}
+.lk .a button{flex:1;padding:.45rem 0;border-radius:9px;border:1px solid var(--line);background:none;cursor:pointer;font-size:.8rem}
+.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:.8rem}
+.gslot{padding:.6rem;text-align:center}
+.gslot .ph{aspect-ratio:1;border-radius:50%;overflow:hidden;background:radial-gradient(circle at 35% 30%,#fff,#efc3c1 40%,#9e5361);margin:0 auto .6rem;width:100px;display:grid;place-items:center;font-size:.6rem;color:#2a1215;letter-spacing:.2em}
+.gslot .ph img{width:100%;height:100%;object-fit:cover}
+.gslot b{font-family:var(--serif);font-size:1.2rem;display:block;margin-bottom:.4rem}
+.gslot select{font-size:.75rem;padding:.45rem .5rem}
+/* sheet */
+.sheet-bg{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.sheet-bg.on{opacity:1;pointer-events:auto}
+.sheet{width:min(560px,100%);max-height:92vh;overflow:auto;background:var(--ink2);border:1px solid var(--line);border-radius:24px 24px 0 0;padding:1.4rem 1.3rem calc(1.4rem + env(safe-area-inset-bottom));transform:translateY(30px);transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.sheet-bg.on .sheet{transform:none}
+@media (min-width:700px){.sheet-bg{align-items:center}.sheet{border-radius:24px}}
+.sheet h3{font-family:var(--serif);font-size:1.9rem;font-weight:500;margin-bottom:.3rem}
+.sheet .acts{display:flex;gap:.6rem;margin-top:1rem;flex-wrap:wrap}
+.sheet .acts .btn{flex:1}
+.dates{display:flex;gap:.4rem;overflow-x:auto;padding-bottom:.4rem}
+.dates button,.times button{flex:none;padding:.55rem .8rem;border-radius:12px;border:1px solid var(--line);background:none;cursor:pointer;font-size:.8rem}
+.dates button.on,.times button.on{background:var(--lac);color:#2a1215;border-color:transparent;font-weight:600}
+.times{display:flex;gap:.4rem;flex-wrap:wrap;margin:.6rem 0}
+.toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translate(-50%,20px);z-index:60;background:var(--cream);color:#2a1215;padding:.7rem 1.2rem;border-radius:999px;font-size:.82rem;font-weight:600;opacity:0;transition:all .3s;pointer-events:none;box-shadow:0 10px 30px -10px rgba(0,0,0,.6)}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+/* login */
+#login{min-height:100vh;display:grid;place-items:center;padding:2rem}
+#login .card{width:min(400px,100%);padding:2.4rem 2rem;text-align:center}
+#login .mono{font-family:var(--serif);font-size:3.4rem;font-weight:600;line-height:1}
+#login h1{font-family:var(--script);font-weight:400;font-size:2.4rem;color:var(--rose);margin:.4rem 0 1.4rem}
+#login .btn{width:100%;margin-top:.8rem;padding:.95rem}
+#app{display:none}
+.help{font-size:.78rem;color:var(--muted);line-height:1.6}
+.help code{background:rgba(255,255,255,.07);padding:.1rem .35rem;border-radius:5px;font-size:.75rem}
+</style>
+</head>
+<body>
+
+<section id="login">
+  <form class="card" id="loginForm">
+    <div class="mono g">GN</div>
+    <h1>Studio Dashboard</h1>
+    <input type="password" id="pw" placeholder="Password" autocomplete="current-password" required>
+    <p class="muted" id="loginErr" style="color:var(--bad);margin-top:.7rem;min-height:1.2em"></p>
+    <button class="btn pri" type="submit">Sign in</button>
+  </form>
+</section>
+
+<div id="app">
+<header><div class="wrap">
+  <div class="brand"><b class="g">GN</b><span>Studio Dashboard</span></div>
+  <div class="hdr-r">
+    <a class="icon-btn" href="/" target="_blank" title="View website"><svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 01-1 1H5a1 1 0 01-1-1V7a1 1 0 011-1h5"/></svg></a>
+    <button class="icon-btn" id="refresh" title="Refresh"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 10-2.3 5.7M20 4v7h-7"/></svg></button>
+    <button class="icon-btn" id="logout" title="Sign out"><svg viewBox="0 0 24 24"><path d="M15 4h4a1 1 0 011 1v14a1 1 0 01-1 1h-4M10 17l-5-5 5-5M5 12h11"/></svg></button>
+  </div>
+</div></header>
+
+<main class="wrap">
+  <!-- BOOKINGS -->
+  <section class="view on" id="v-bookings">
+    <div class="stats">
+      <div class="card stat"><b class="g" id="stPending">0</b><span>To confirm</span></div>
+      <div class="card stat"><b id="stToday">0</b><span>Today</span></div>
+      <div class="card stat"><b id="stWeek">0</b><span>Next 7 days</span></div>
+    </div>
+    <div class="toolbar">
+      <div class="chips" id="bkFilters"></div>
+      <button class="btn pri" id="addBk">+ Add booking</button>
+    </div>
+    <div class="list" id="bkList"></div>
+  </section>
+
+  <!-- AVAILABILITY -->
+  <section class="view" id="v-avail">
+    <h2 class="t">Open <span class="g">dates</span></h2>
+    <p class="muted">Tap a day, then tap times to open or close them. Clients only see open times that aren't booked. Changes save automatically.</p>
+    <div class="cal-head"><button class="icon-btn" id="calPrev"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></button><b id="calTitle"></b><button class="icon-btn" id="calNext"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></button></div>
+    <div class="cal" id="cal"></div>
+    <div class="legend"><span><i style="background:#e7a9a6"></i>Open for booking</span><span><i style="background:var(--ok)"></i>Has bookings</span></div>
+    <div class="card panel" id="dayPanel"></div>
+    <div class="card panel">
+      <h3 class="st" style="margin-top:0">Quick fill</h3>
+      <p class="muted">Open these weekdays with your default times (<span id="defSlotsTxt"></span>).</p>
+      <div class="wk" id="wkDays"></div>
+      <div class="row" style="align-items:end">
+        <div><label class="l">For the next</label><select id="wkWeeks"><option value="1">1 week</option><option value="2">2 weeks</option><option value="4" selected>4 weeks</option><option value="8">8 weeks</option></select></div>
+        <div style="display:flex;gap:.5rem"><button class="btn pri" id="wkOpen" style="flex:1">Open</button><button class="btn dang" id="wkClear" style="flex:1">Close</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOOKS -->
+  <section class="view" id="v-looks">
+    <h2 class="t">Looks &amp; <span class="g">photos</span></h2>
+    <p class="help">Save photos from Instagram (or screenshot and crop them), then upload them here. They appear in the website gallery straight away. Assign one photo to each lash type for the Lash Guide.</p>
+    <div class="card panel">
+      <div class="row">
+        <div class="f"><label class="l">Lash type</label><select id="upTag"><option value="wispy">Wispy</option><option value="cateye">Cat Eye</option><option value="classic">Classic</option><option value="hybrid">Hybrid</option><option value="volume">Volume</option><option value="other">Other</option></select></div>
+        <div class="f"><label class="l">Caption (optional)</label><input id="upCap" placeholder="e.g. Volume Wispy Set"></div>
+      </div>
+      <label class="drop"><input type="file" id="upFiles" accept="image/*" multiple><b>Tap to add photos</b><span class="muted" id="upStatus">You can pick several at once.</span></label>
+    </div>
+    <h3 class="st">Lash guide photos</h3>
+    <div class="ggrid" id="guideGrid"></div>
+    <h3 class="st">Gallery (<span id="lkCount">0</span>)</h3>
+    <div class="lgrid" id="lkGrid"></div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section class="view" id="v-settings">
+    <h2 class="t">Studio <span class="g">settings</span></h2>
+    <form class="card panel" id="setForm">
+      <div class="f"><label class="l">Default appointment times</label><input id="sSlots" placeholder="08:00, 11:00, 14:00, 17:00"><p class="help" style="margin-top:.3rem">24-hour times separated by commas. Used by "Open" and Quick fill.</p></div>
+      <div class="f"><label class="l">Minimum notice (hours)</label><input id="sLead" type="number" min="0" max="72"><p class="help" style="margin-top:.3rem">Clients can't book a slot starting sooner than this.</p></div>
+      <div class="f"><label class="l">Studio address</label><input id="sAddr"></div>
+      <div class="f"><label class="l">Map pin</label><input id="sMap" placeholder="e.g. 5.6239, -0.2789"><p class="help" style="margin-top:.3rem">For an exact pin: open Google Maps, press and hold on the studio, copy the numbers shown (latitude, longitude), and paste them here. This updates the website map and directions buttons.</p></div>
+      <h3 class="st">WhatsApp message templates</h3>
+      <p class="help">You can use: <code>{name}</code> <code>{set}</code> <code>{date}</code> <code>{time}</code> <code>{total}</code> <code>{ref}</code> <code>{address}</code> <code>{map}</code> and in the decline message <code>{openings}</code>.</p>
+      <div class="f" style="margin-top:.8rem"><label class="l">Confirmation</label><textarea id="tConfirm"></textarea></div>
+      <div class="f"><label class="l">Reminder</label><textarea id="tReminder"></textarea></div>
+      <div class="f"><label class="l">Slot unavailable / decline</label><textarea id="tDecline"></textarea></div>
+      <div class="f"><label class="l">Rescheduled</label><textarea id="tReschedule"></textarea></div>
+      <button class="btn pri" type="submit" style="width:100%;padding:.95rem">Save settings</button>
+    </form>
+    <p class="help" style="margin:1.2rem 0 2rem">Tip: on your phone, use "Add to Home Screen" so this dashboard opens like an app.</p>
+  </section>
+</main>
+
+<nav class="tabs"><div class="wrap">
+  <button class="on" data-v="bookings"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>Bookings<span class="badge" id="badge" hidden>0</span></button>
+  <button data-v="avail"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/></svg>Availability</button>
+  <button data-v="looks"><svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M20 16l-5-5-8 8"/></svg>Looks</button>
+  <button data-v="settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>Settings</button>
+</div></nav>
+</div>
+
+<div class="sheet-bg" id="sheetBg"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+const MENU={'Volume Wispy Set':330,'Hybrid Wispy Set':215,'Mini Hybrid Wispy':195,'Classic Wispy':180,'Volume Cat Eye Set':300,'Hybrid Cat Eye Set':210,'Mini Hybrid Cat Eye Set':190,'Classic Cat Eye Set':175,'Normal Volume Set':280,'Normal Hybrid Set':200,'Normal Mini Hybrid Set':180,'Normal Classic Lash':160,'Bottom Lashes only':0};
+const TAGS={wispy:'Wispy',cateye:'Cat Eye',classic:'Classic',hybrid:'Hybrid',volume:'Volume',other:'Other'};
+const GUIDE={classic:'Classic',hybrid:'Hybrid',volume:'Volume',wispy:'Wispy',cateye:'Cat Eye'};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let KEY=localStorage.getItem('gn_admin')||'';
+let D={bookings:[],availability:{},settings:{slots:[],templates:{}},looks:[],guide:{},open:{}};
+const today=()=>new Date().toISOString().slice(0,10);
+const fmtTime=t=>{if(!t)return'';const[h,m]=t.split(':').map(Number);return `${(h%12)||12}:${String(m).padStart(2,'0')} ${h<12?'AM':'PM'}`};
+const fmtDate=(d,o={weekday:'short',day:'numeric',month:'short'})=>new Date(d+'T12:00:00Z').toLocaleDateString('en-GB',{...o,timeZone:'UTC'});
+const addDays=(d,n)=>{const x=new Date(d+'T12:00:00Z');x.setUTCDate(x.getUTCDate()+n);return x.toISOString().slice(0,10)};
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2200)}
+
+async function api(body){
+  const r=await fetch('/api/admin',{method:body?'POST':'GET',headers:{'x-admin-key':KEY,'content-type':'application/json'},body:body?JSON.stringify(body):undefined});
+  let j={};try{j=await r.json()}catch(_){j={ok:false,error:'Server error ('+r.status+')'}}
+  if(r.status===401){logout(j.error);throw new Error(j.error)}
+  if(!j.ok){toast(j.error||'Something went wrong');throw new Error(j.error)}
+  return j;
+}
+
+/* ---------- auth ---------- */
+$('#loginForm').onsubmit=async e=>{e.preventDefault();KEY=$('#pw').value;$('#loginErr').textContent='';
+  try{await api({action:'login'});localStorage.setItem('gn_admin',KEY);start()}catch(err){$('#loginErr').textContent=err.message||'Could not sign in'}};
+function logout(msg){localStorage.removeItem('gn_admin');KEY='';$('#app').style.display='none';$('#login').style.display='grid';if(msg)$('#loginErr').textContent=msg}
+$('#logout').onclick=()=>logout();
+async function start(){$('#login').style.display='none';$('#app').style.display='block';await load()}
+async function load(){D=await api();renderAll()}
+$('#refresh').onclick=()=>load().then(()=>toast('Up to date'));
+setInterval(()=>{if(KEY&&document.visibilityState==='visible'&&!$('#sheetBg').classList.contains('on'))load().catch(()=>{})},60000);
+
+/* ---------- tabs ---------- */
+document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav.tabs button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+b.dataset.v));scrollTo(0,0)});
+
+function renderAll(){renderBookings();renderCal();renderDay();renderLooks();renderSettings()}
+
+/* ---------- templates / whatsapp ---------- */
+const mapUrl=()=>'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(D.settings.mapQuery||'');
+function openingsText(){const lines=[];for(const d of Object.keys(D.open).sort()){for(const t of D.open[d]){lines.push(`• ${fmtDate(d)} at ${fmtTime(t)}`);if(lines.length>=6)break}if(lines.length>=6)break}return lines.join('\n')||'• (message me and we’ll find a time)'}
+function fill(tpl,b){const set=b.set+(b.bottom&&b.set!=='Bottom Lashes only'?' + Bottom lashes':'');return (tpl||'').replace(/\{(\w+)\}/g,(m,k)=>({name:b.name.split(' ')[0],set,date:fmtDate(b.date,{weekday:'long',day:'numeric',month:'long'}),time:fmtTime(b.time),total:'GHS '+b.total,ref:b.ref,address:D.settings.address,map:mapUrl(),openings:openingsText()}[k]??m))}
+const waLink=(phone,text)=>`https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+function waSheet(title,b,tplKey,sub){
+  if(!b.phone){sheet(`<h3>${title}</h3><p class="muted">This booking has no WhatsApp number saved.</p><div class="acts"><button class="btn" data-close>Close</button></div>`);return}
+  sheet(`<h3>${title}</h3><p class="muted" style="margin-bottom:.8rem">${sub||'Check the message, then tap send. WhatsApp opens with it ready.'}</p>
+    <textarea id="waText" style="min-height:220px">${esc(fill(D.settings.templates[tplKey],b))}</textarea>
+    <div class="acts"><button class="btn" data-close>Close</button><a class="btn wa" id="waGo" target="_blank" rel="noopener">${waIcon} Send on WhatsApp</a></div>`);
+  const go=$('#waGo'),ta=$('#waText');const set=()=>go.href=waLink(b.phone,ta.value);set();ta.oninput=set;go.onclick=()=>setTimeout(closeSheet,400);
+}
+const waIcon='<svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm4.5 12.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.7 11.8 11.8 0 004.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.2-.3-.2-.5-.3z"/></svg>';
+
+/* ---------- sheet ---------- */
+function sheet(html){$('#sheet').innerHTML=html;$('#sheetBg').classList.add('on');$('#sheet').querySelectorAll('[data-close]').forEach(b=>b.onclick=closeSheet)}
+function closeSheet(){$('#sheetBg').classList.remove('on')}
+$('#sheetBg').onclick=e=>{if(e.target.id==='sheetBg')closeSheet()};
+
+/* ---------- bookings ---------- */
+let bkFilter='pending';
+const FILTERS={pending:'To confirm',upcoming:'Upcoming',past:'Past',closed:'Declined & cancelled',all:'All'};
+function bucket(b){const t=today();if(b.status==='pending')return'pending';if(['declined','cancelled'].includes(b.status))return'closed';if(b.status==='confirmed'&&b.date>=t)return'upcoming';return'past'}
+function renderBookings(){
+  const B=D.bookings, t=today(), wk=addDays(t,7);
+  const pend=B.filter(b=>b.status==='pending').length;
+  $('#stPending').textContent=pend;$('#stToday').textContent=B.filter(b=>b.date===t&&['pending','confirmed'].includes(b.status)).length;
+  $('#stWeek').textContent=B.filter(b=>b.date>=t&&b.date<=wk&&['pending','confirmed'].includes(b.status)).length;
+  $('#badge').hidden=!pend;$('#badge').textContent=pend;document.title=(pend?`(${pend}) `:'')+'Studio Dashboard · Glam By Nel';
+  $('#bkFilters').innerHTML=Object.entries(FILTERS).map(([k,v])=>`<button class="chip ${k===bkFilter?'on':''}" data-f="${k}">${v}${k==='pending'&&pend?` (${pend})`:''}</button>`).join('');
+  let list=bkFilter==='all'?B.slice():B.filter(b=>bucket(b)===bkFilter);
+  if(['past','closed','all'].includes(bkFilter)) list.reverse();
+  $('#bkList').innerHTML=list.length?list.map(card).join(''):`<div class="card empty" style="grid-column:1/-1"><b>All clear</b>${bkFilter==='pending'?'No requests waiting for you.':'Nothing here yet.'}</div>`;
+}
+$('#bkFilters').onclick=e=>{const c=e.target.closest('.chip');if(c){bkFilter=c.dataset.f;renderBookings()}};
+const STATUS_LABEL={pending:'Pending',confirmed:'Confirmed',declined:'Declined',cancelled:'Cancelled',done:'Completed',noshow:'No-show'};
+function card(b){
+  const isPast=b.date<today(), set=esc(b.set)+(b.bottom&&b.set!=='Bottom Lashes only'?' + bottom lashes':'');
+  let acts='';
+  if(b.status==='pending') acts=`<button class="btn pri" data-a="confirm" data-r="${b.ref}">✓ Confirm</button><button class="btn" data-a="decline" data-r="${b.ref}">Decline</button><button class="btn" data-a="move" data-r="${b.ref}">Reschedule</button>`;
+  else if(b.status==='confirmed'&&!isPast) acts=`<button class="btn wa" data-a="sendconfirm" data-r="${b.ref}">${waIcon} Confirmation</button><button class="btn" data-a="remind" data-r="${b.ref}">Reminder</button><button class="btn" data-a="move" data-r="${b.ref}">Reschedule</button><button class="btn dang" data-a="cancel" data-r="${b.ref}">Cancel</button>`;
+  else if(b.status==='confirmed') acts=`<button class="btn pri" data-a="done" data-r="${b.ref}">Mark completed</button><button class="btn dang" data-a="noshow" data-r="${b.ref}">No-show</button>`;
+  else if(['declined','cancelled'].includes(b.status)) acts=`<button class="btn" data-a="restore" data-r="${b.ref}">Restore</button><button class="btn dang" data-a="delete" data-r="${b.ref}">Delete</button>`;
+  else acts=`<button class="btn dang" data-a="delete" data-r="${b.ref}">Delete</button>`;
+  if(b.phone) acts+=`<a class="btn" href="https://wa.me/${b.phone}" target="_blank" rel="noopener" title="Chat">${waIcon}</a>`;
+  return `<article class="card bk"><div class="top"><span class="pill ${b.status}">${STATUS_LABEL[b.status]||b.status}</span><span class="ref">${b.ref}</span></div>
+    <h4>${esc(b.name)}</h4>
+    <div class="when"><span>📅 <b>${fmtDate(b.date,{weekday:'short',day:'numeric',month:'short'})}</b></span><span>⏰ <b>${fmtTime(b.time)}</b></span></div>
+    <div class="meta"><span>💎 ${set} · <b>GHS ${b.total}</b></span>${b.phone?`<span>📱 +${b.phone}</span>`:''}<span class="muted" style="font-size:.72rem">${b.source==='manual'?'Added by you':'Booked online'} · ${new Date(b.createdAt).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span></div>
+    ${b.notes?`<div class="notes">${esc(b.notes)}</div>`:''}
+    <div class="acts">${acts}</div></article>`;
+}
+const findB=r=>D.bookings.find(b=>b.ref===r);
+async function setStatus(ref,status){const j=await api({action:'status',ref,status});await load();return j.booking}
+$('#bkList').onclick=async e=>{
+  const a=e.target.closest('[data-a]');if(!a)return;const b=findB(a.dataset.r);if(!b)return;
+  const act=a.dataset.a; a.disabled=true;
+  try{
+    if(act==='confirm'){const nb=await setStatus(b.ref,'confirmed');toast('Confirmed');waSheet('Booking confirmed ✓',nb,'confirm','Now send '+esc(nb.name.split(' ')[0])+' her confirmation:')}
+    else if(act==='sendconfirm') waSheet('Send confirmation',b,'confirm');
+    else if(act==='remind') waSheet('Send reminder',b,'reminder');
+    else if(act==='decline'){if(!confirm('Decline this request? The slot opens up again.'))return;const nb=await setStatus(b.ref,'declined');toast('Declined');waSheet('Let her know',nb,'decline','Suggest other times. Your next open slots are already listed:')}
+    else if(act==='cancel'){if(!confirm('Cancel this appointment? The slot opens up again.'))return;await setStatus(b.ref,'cancelled');toast('Cancelled')}
+    else if(act==='done'){await setStatus(b.ref,'done');toast('Marked completed')}
+    else if(act==='noshow'){await setStatus(b.ref,'noshow');toast('Marked no-show')}
+    else if(act==='restore'){await setStatus(b.ref,'pending');toast('Restored')}
+    else if(act==='delete'){if(!confirm('Delete this booking permanently?'))return;await api({action:'delete',ref:b.ref});await load();toast('Deleted')}
+    else if(act==='move') moveSheet(b);
+  }catch(_){}finally{a.disabled=false}
+};
+function slotPicker(id,allowAny){
+  // open slots + custom date/time
+  const ds=Object.keys(D.open).sort();
+  return `<div id="${id}"><label class="l">Open slots</label>${ds.length?`<div class="dates">${ds.map((d,i)=>`<button type="button" data-d="${d}" class="${i===0?'on':''}">${fmtDate(d)}</button>`).join('')}</div><div class="times"></div>`:'<p class="muted" style="margin-bottom:.6rem">No open slots. Use a custom time below.</p>'}
+    <label class="l" style="margin-top:.6rem">${allowAny?'Or any date &amp; time':'Or a custom date &amp; time'}</label><div class="row"><input type="date" class="cd"><input type="time" class="ct"></div></div>`;
+}
+function wirePicker(id){
+  const root=$('#'+id);let pick={d:null,t:null};
+  const times=root.querySelector('.times');
+  const showT=d=>{pick.d=d;pick.t=null;if(times)times.innerHTML=(D.open[d]||[]).map(t=>`<button type="button" data-t="${t}">${fmtTime(t)}</button>`).join('')};
+  const first=root.querySelector('.dates button');if(first)showT(first.dataset.d);
+  root.querySelector('.dates')?.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;root.querySelectorAll('.dates button').forEach(x=>x.classList.toggle('on',x===b));showT(b.dataset.d)});
+  times?.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;times.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));pick.t=b.dataset.t});
+  return()=>{const cd=root.querySelector('.cd').value,ct=root.querySelector('.ct').value;if(cd&&ct)return{date:cd,time:ct};if(pick.d&&pick.t)return{date:pick.d,time:pick.t};return null};
+}
+function moveSheet(b){
+  sheet(`<h3>Reschedule</h3><p class="muted" style="margin-bottom:.8rem">${esc(b.name)} · currently ${fmtDate(b.date)} at ${fmtTime(b.time)}</p>${slotPicker('mv',true)}
+    <div class="acts"><button class="btn" data-close>Cancel</button><button class="btn pri" id="mvGo">Move booking</button></div>`);
+  const get=wirePicker('mv');
+  $('#mvGo').onclick=async()=>{const p=get();if(!p)return toast('Pick a new date and time');try{const j=await api({action:'reschedule',ref:b.ref,...p});await load();toast('Rescheduled');waSheet('Let her know',j.booking,'reschedule')}catch(_){}};
+}
+$('#addBk').onclick=()=>{
+  sheet(`<h3>Add a booking</h3><p class="muted" style="margin-bottom:.9rem">For clients who booked by DM or call. It's saved as confirmed and blocks the slot.</p>
+    <div class="row"><div class="f"><label class="l">Name</label><input id="mName"></div><div class="f"><label class="l">WhatsApp</label><input id="mPhone" type="tel" placeholder="024…"></div></div>
+    <div class="f"><label class="l">Set</label><select id="mSet">${Object.entries(MENU).map(([k,v])=>`<option value="${k}">${k}${v?' · GHS '+v:' · GHS 70'}</option>`).join('')}</select></div>
+    <label class="f" style="display:flex;gap:.5rem;align-items:center;font-size:.85rem"><input type="checkbox" id="mBottom" style="width:auto"> + Bottom lashes</label>
+    ${slotPicker('mp',true)}
+    <div class="f" style="margin-top:.8rem"><label class="l">Notes</label><textarea id="mNotes" style="min-height:70px"></textarea></div>
+    <div class="acts"><button class="btn" data-close>Cancel</button><button class="btn pri" id="mGo">Save booking</button></div>`);
+  const get=wirePicker('mp');
+  $('#mGo').onclick=async()=>{const p=get();if(!$('#mName').value.trim())return toast('Add a name');if(!p)return toast('Pick a date and time');
+    try{const j=await api({action:'manual',booking:{name:$('#mName').value,phone:$('#mPhone').value,set:$('#mSet').value,bottom:$('#mBottom').checked,notes:$('#mNotes').value,...p}});await load();bkFilter='upcoming';renderBookings();toast('Booking added');if(j.booking.phone)waSheet('Send confirmation?',j.booking,'confirm');else closeSheet()}catch(_){}};
+};
+
+/* ---------- availability ---------- */
+let calM=today().slice(0,7), selDay=today(), saveT=null;
+const bookedAt=(d)=>D.bookings.filter(b=>b.date===d&&['pending','confirmed'].includes(b.status));
+function renderCal(){
+  const [y,m]=calM.split('-').map(Number);const first=new Date(Date.UTC(y,m-1,1));const days=new Date(Date.UTC(y,m,0)).getUTCDate();
+  const offset=(first.getUTCDay()+6)%7; const t=today();
+  $('#calTitle').textContent=first.toLocaleDateString('en-GB',{month:'long',year:'numeric',timeZone:'UTC'});
+  let h=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d=>`<div class="dow">${d}</div>`).join('')+'<div class="day blank"></div>'.repeat(offset);
+  for(let i=1;i<=days;i++){const d=`${calM}-${String(i).padStart(2,'0')}`;const open=(D.availability[d]||[]).length;const bk=bookedAt(d).length;
+    h+=`<button class="day ${open?'open':''} ${d<t?'past':''} ${d===t?'today':''} ${d===selDay?'sel':''}" data-d="${d}" ${d<t?'disabled':''}><b>${i}</b>${open?`<small>${open} slot${open>1?'s':''}</small>`:''}${bk?'<span class="bkd"></span>':''}</button>`}
+  $('#cal').innerHTML=h;
+  $('#defSlotsTxt').textContent=(D.settings.slots||[]).map(fmtTime).join(', ')||'none set';
+  $('#wkDays').innerHTML=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map((n,i)=>`<label><input type="checkbox" value="${(i+1)%7}" ${i<6?'checked':''}>${n}</label>`).join('');
+}
+$('#cal').onclick=e=>{const b=e.target.closest('.day[data-d]');if(!b||b.disabled)return;selDay=b.dataset.d;renderCal();renderDay();$('#dayPanel').scrollIntoView({behavior:'smooth',block:'nearest'})};
+$('#calPrev').onclick=()=>{const[y,m]=calM.split('-').map(Number);const d=new Date(Date.UTC(y,m-2,1));calM=d.toISOString().slice(0,7);renderCal()};
+$('#calNext').onclick=()=>{const[y,m]=calM.split('-').map(Number);const d=new Date(Date.UTC(y,m,1));calM=d.toISOString().slice(0,7);renderCal()};
+function renderDay(){
+  const d=selDay, open=new Set(D.availability[d]||[]), bk=bookedAt(d);
+  const all=[...new Set([...(D.settings.slots||[]),...open,...bk.map(b=>b.time)])].sort();
+  $('#dayPanel').innerHTML=`<div class="toolbar"><b style="font-family:var(--serif);font-size:1.5rem;font-weight:600">${fmtDate(d,{weekday:'long',day:'numeric',month:'long'})}</b><span class="muted">${open.size} open · ${bk.length} booked</span></div>
+    <div class="slots">${all.map(t=>{const b=bk.find(x=>x.time===t);return b?`<span class="slot booked">${fmtTime(t)} · ${esc(b.name.split(' ')[0])}</span>`:`<button class="slot ${open.has(t)?'open':''}" data-t="${t}">${fmtTime(t)}</button>`}).join('')}</div>
+    <div class="row" style="align-items:end"><div><label class="l">Add another time</label><input type="time" id="addT"></div><button class="btn" id="addTBtn">+ Add</button></div>
+    <div class="acts" style="display:flex;gap:.5rem;margin-top:.9rem;flex-wrap:wrap"><button class="btn pri" id="dayOpen">Open default times</button><button class="btn dang" id="dayClose">Close this day</button></div>`;
+  $('#dayPanel').querySelectorAll('button.slot').forEach(s=>s.onclick=()=>{const t=s.dataset.t;open.has(t)?open.delete(t):open.add(t);setDay(d,[...open])});
+  $('#addTBtn').onclick=()=>{const t=$('#addT').value;if(!t)return;open.add(t);setDay(d,[...open])};
+  $('#dayOpen').onclick=()=>setDay(d,[...new Set([...open,...(D.settings.slots||[])])]);
+  $('#dayClose').onclick=()=>setDay(d,[]);
+}
+function setDay(d,times){if(times.length)D.availability[d]=times.sort();else delete D.availability[d];renderCal();renderDay();queueSave()}
+function queueSave(){clearTimeout(saveT);saveT=setTimeout(async()=>{try{const j=await api({action:'setAvailability',availability:D.availability});D.availability=j.availability;const r=await api();D.open=r.open;toast('Availability saved')}catch(_){}},700)}
+function bulk(openIt){
+  const days=[...$('#wkDays').querySelectorAll('input:checked')].map(i=>+i.value);const weeks=+$('#wkWeeks').value;const t=today();
+  if(!days.length)return toast('Pick at least one day');
+  for(let i=0;i<weeks*7;i++){const d=addDays(t,i);const dow=new Date(d+'T12:00:00Z').getUTCDay();if(!days.includes(dow))continue;
+    if(openIt)D.availability[d]=[...new Set([...(D.availability[d]||[]),...(D.settings.slots||[])])].sort();else delete D.availability[d]}
+  renderCal();renderDay();queueSave();
+}
+$('#wkOpen').onclick=()=>{if(!(D.settings.slots||[]).length)return toast('Set default times in Settings first');bulk(true)};
+$('#wkClear').onclick=()=>{if(confirm('Close the selected days? Existing bookings stay as they are.'))bulk(false)};
+
+/* ---------- looks ---------- */
+function renderLooks(){
+  $('#lkCount').textContent=D.looks.length;
+  $('#lkGrid').innerHTML=D.looks.length?D.looks.map((l,i)=>`<div class="card lk" data-id="${l.id}"><img src="/api/img/${l.id}" loading="lazy" alt="">
+    <div class="c"><select data-k="tag">${Object.entries(TAGS).map(([k,v])=>`<option value="${k}" ${k===l.tag?'selected':''}>${v}</option>`).join('')}</select>
+    <input data-k="caption" value="${esc(l.caption)}" placeholder="Caption">
+    <div class="a"><button data-m="-1" ${i===0?'disabled':''} title="Move earlier">←</button><button data-m="1" ${i===D.looks.length-1?'disabled':''} title="Move later">→</button><button data-del title="Delete" style="color:var(--bad)">✕</button></div></div></div>`).join(''):'<div class="card empty" style="grid-column:1/-1"><b>No photos yet</b>The website shows the bundled photos until you add some.</div>';
+  $('#guideGrid').innerHTML=Object.entries(GUIDE).map(([k,v])=>{const id=D.guide[k];return `<div class="card gslot"><div class="ph">${id?`<img src="/api/img/${id}" alt="">`:'DRAWING'}</div><b>${v}</b>
+    <select data-g="${k}"><option value="">Use drawing</option>${D.looks.map((l,i)=>`<option value="${l.id}" ${l.id===id?'selected':''}>#${i+1} ${esc(l.caption||TAGS[l.tag])}</option>`).join('')}</select></div>`}).join('');
+}
+$('#lkGrid').addEventListener('change',async e=>{const c=e.target.closest('.lk');const k=e.target.dataset.k;if(!c||!k)return;try{const j=await api({action:'updateLook',id:c.dataset.id,[k]:e.target.value});D.looks=j.looks;toast('Saved');renderLooks()}catch(_){}});
+$('#lkGrid').addEventListener('click',async e=>{const c=e.target.closest('.lk');if(!c)return;const id=c.dataset.id;
+  if(e.target.dataset.m){try{const j=await api({action:'updateLook',id,move:+e.target.dataset.m});D.looks=j.looks;renderLooks()}catch(_){}}
+  if(e.target.hasAttribute('data-del')){if(!confirm('Delete this photo from the website?'))return;try{const j=await api({action:'deleteLook',id});D.looks=j.looks;D.guide=j.guide;renderLooks();toast('Deleted')}catch(_){}}});
+$('#guideGrid').addEventListener('change',async e=>{const k=e.target.dataset.g;if(!k)return;try{const j=await api({action:'setGuide',key:k,id:e.target.value});D.guide=j.guide;renderLooks();toast('Lash guide updated')}catch(_){}});
+function shrink(file,max=1400){return new Promise((res,rej)=>{const img=new Image();img.onload=()=>{const s=Math.min(1,max/Math.max(img.width,img.height));const c=document.createElement('canvas');c.width=Math.round(img.width*s);c.height=Math.round(img.height*s);c.getContext('2d').drawImage(img,0,0,c.width,c.height);URL.revokeObjectURL(img.src);res({dataUrl:c.toDataURL('image/jpeg',.86),w:c.width,h:c.height})};img.onerror=rej;img.src=URL.createObjectURL(file)})}
+$('#upFiles').onchange=async e=>{
+  const files=[...e.target.files];if(!files.length)return;let n=0;
+  for(const f of files){$('#upStatus').textContent=`Uploading ${++n} of ${files.length}…`;
+    try{const s=await shrink(f);const j=await api({action:'uploadLook',tag:$('#upTag').value,caption:$('#upCap').value,...s});D.looks=j.looks}catch(_){toast('Could not upload '+f.name)}}
+  e.target.value='';$('#upStatus').textContent='Done! Add more any time.';renderLooks();toast(files.length+' photo'+(files.length>1?'s':'')+' added');
+};
+
+/* ---------- settings ---------- */
+function renderSettings(){const s=D.settings;$('#sSlots').value=(s.slots||[]).join(', ');$('#sLead').value=s.leadHours??2;$('#sAddr').value=s.address||'';$('#sMap').value=s.mapQuery||'';
+  $('#tConfirm').value=s.templates.confirm||'';$('#tReminder').value=s.templates.reminder||'';$('#tDecline').value=s.templates.decline||'';$('#tReschedule').value=s.templates.reschedule||''}
+$('#setForm').onsubmit=async e=>{e.preventDefault();
+  const slots=$('#sSlots').value.split(/[,\s]+/).map(x=>x.trim()).filter(Boolean).map(x=>{const m=/^(\d{1,2})[:.]?(\d{2})?$/.exec(x);return m?`${m[1].padStart(2,'0')}:${m[2]||'00'}`:null}).filter(Boolean);
+  try{const j=await api({action:'setSettings',settings:{slots,leadHours:+$('#sLead').value,address:$('#sAddr').value,mapQuery:$('#sMap').value,templates:{confirm:$('#tConfirm').value,reminder:$('#tReminder').value,decline:$('#tDecline').value,reschedule:$('#tReschedule').value}}});D.settings=j.settings;renderSettings();renderCal();toast('Settings saved')}catch(_){}};
+
+if(KEY) start().catch(()=>{});
+})();
+</script>
+</body>
+</html>

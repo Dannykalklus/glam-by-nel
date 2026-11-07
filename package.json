@@ -1,0 +1,10 @@
+{
+  "name": "glam-by-nel",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Glam By Nel website with booking system (Netlify)",
+  "dependencies": {
+    "@netlify/blobs": "^11.1.8"
+  }
+}
