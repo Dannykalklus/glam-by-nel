@@ -5,6 +5,6 @@
   "type": "module",
   "description": "Glam By Nel website with booking system (Netlify)",
   "dependencies": {
-    "@netlify/blobs": "^11.1.8"
+    "@netlify/blobs": "10.1.0"
   }
 }
