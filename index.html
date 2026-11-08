@@ -98,7 +98,9 @@ section{position:relative}
 .cursor,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:250;border-radius:50%;transform:translate(-50%,-50%)}
 .cursor{width:6px;height:6px;background:var(--gold-1)}
 .cursor-ring{width:38px;height:38px;border:1px solid rgba(246,207,196,.55);transition:width .35s var(--ease),height .35s var(--ease),background .35s}
-.cursor-ring.hover{width:70px;height:70px;background:rgba(233,170,180,.12)}
+.cursor-ring.hover{width:46px;height:46px;border-color:rgba(246,207,196,.35);background:rgba(233,170,180,.06)}
+.cursor,.cursor-ring{transition:opacity .3s}
+body.cursor-off .cursor,body.cursor-off .cursor-ring{opacity:0}
 @media (hover:none),(pointer:coarse){.cursor,.cursor-ring{display:none}}
 
 /* ---------- nav ---------- */
@@ -234,7 +236,7 @@ section{position:relative}
 .frame{position:relative;border-radius:200px 200px 26px 26px;padding:10px;background:var(--rosegold);background-size:200% 200%;
   box-shadow:0 40px 80px -30px rgba(233,170,180,.45),0 0 0 1px rgba(255,255,255,.3) inset;transform-style:preserve-3d}
 .frame .ph{border-radius:190px 190px 18px 18px;overflow:hidden;aspect-ratio:3/4.4;position:relative;background:#2a1a1d}
-.frame img{width:100%;height:100%;object-fit:cover;transform:scale(1.12);filter:saturate(1.05) contrast(1.03)}
+.frame img{width:100%;height:100%;object-fit:cover;object-position:center 32%;filter:saturate(1.04) contrast(1.04)}
 .frame .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(130deg,rgba(255,255,255,.35) 0%,rgba(255,255,255,0) 30%,rgba(255,255,255,0) 70%,rgba(255,220,225,.18));pointer-events:none}
 .frame .cap{position:absolute;left:50%;bottom:-18px;transform:translateX(-50%);white-space:nowrap;padding:.55rem 1.2rem;border-radius:999px;font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;background:var(--ink);border:1px solid rgba(246,207,196,.4);color:var(--gold-1)}
 .frame.mid{transform:translateY(-30px)}
@@ -307,7 +309,8 @@ footer{padding:3rem 0 2.4rem;border-top:1px solid rgba(246,207,196,.12);backgrou
 
 /* ---------- guide photo ---------- */
 .gv-photo{position:absolute;inset:6%;border-radius:50%;overflow:hidden;opacity:0;transition:opacity .6s var(--ease);background:#2a1a1d}
-.gv-photo img{width:100%;height:100%;object-fit:cover;transform:scale(1.05);transition:transform 1.2s var(--ease)}
+.gv-photo img{width:100%;height:100%;object-fit:cover;object-position:center 40%;filter:contrast(1.04)}
+.guide-visual{width:100%;max-width:420px;justify-self:center}
 .guide-visual.has-photo .gv-photo{opacity:1}
 .guide-visual.has-photo #guideSvg{opacity:0}
 #guideSvg{transition:opacity .5s}
@@ -322,7 +325,11 @@ footer{padding:3rem 0 2.4rem;border-top:1px solid rgba(246,207,196,.12);backgrou
 .looks-rail{display:flex;gap:1.6rem;overflow-x:auto;scroll-snap-type:x mandatory;padding:2.5rem max(4vw,calc((100vw - 1200px)/2)) 3rem;scrollbar-width:none;cursor:grab;-webkit-overflow-scrolling:touch}
 .looks-rail::-webkit-scrollbar{display:none}
 .looks-rail.drag{cursor:grabbing;scroll-snap-type:none}
-.looks-rail .frame{flex:0 0 clamp(220px,24vw,300px);scroll-snap-align:center;cursor:pointer}
+.looks-rail .frame{flex:0 0 clamp(200px,19vw,250px);scroll-snap-align:center;cursor:pointer}
+/* light nav while over the blush (pink) section */
+.nav.on-light{background:rgba(255,246,244,.86)!important;box-shadow:0 0 0 1px rgba(184,115,122,.22),0 18px 40px -24px rgba(125,65,72,.4)!important}
+.nav.on-light .nav-links a,.nav.on-light .brand-name{color:#3a1d22}
+.nav.on-light .menu-toggle{border-color:rgba(58,29,34,.3)}.nav.on-light .menu-toggle span{background:#3a1d22}
 .looks-rail .frame img{pointer-events:none;-webkit-user-drag:none}
 .looks-rail .frame:nth-child(even){transform:translateY(28px)}
 .rail-ctrl{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:1.5rem}
@@ -1051,7 +1058,9 @@ document.querySelectorAll('.acc').forEach(acc=>{
 
 /* ---- nav ---- */
 const nav=document.getElementById('nav'), mm=document.getElementById('mobileMenu'), tog=document.querySelector('.menu-toggle');
-addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>40),{passive:true});
+const lightSec=document.querySelector('.guide');
+function navState(){nav.classList.toggle('scrolled',scrollY>40);const r=lightSec.getBoundingClientRect(),y=nav.getBoundingClientRect().bottom-30;nav.classList.toggle('on-light',r.top<y&&r.bottom>y)}
+addEventListener('scroll',navState,{passive:true}); navState();
 tog.addEventListener('click',()=>{mm.classList.toggle('open');tog.classList.toggle('x')});
 mm.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>mm.classList.remove('open')));
 document.getElementById('yr').textContent=new Date().getFullYear();
@@ -1113,6 +1122,8 @@ if(fine && !reduce && !LITE){
   addEventListener('pointermove',e=>{mx=e.clientX;my=e.clientY;c.style.transform=`translate(${mx}px,${my}px) translate(-50%,-50%)`});
   (function loop(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.transform=`translate(${rx}px,${ry}px) translate(-50%,-50%)`;requestAnimationFrame(loop)})();
   document.addEventListener('pointerover',e=>ring.classList.toggle('hover',!!e.target.closest('a,button,.style-row,select,input,textarea')));
+  document.documentElement.addEventListener('mouseleave',()=>document.body.classList.add('cursor-off'));
+  document.documentElement.addEventListener('mouseenter',()=>document.body.classList.remove('cursor-off'));
 }
 
 initMotion(); // scripts sit at the end of <body>, so the page is ready; no need to wait for every image
