@@ -1,6 +1,6 @@
 import {
-  store, json, isAdmin, getSettings, openSlots, slotKey, isDate, isTime, clean, normalizePhone, newRef,
-  MENU, BOTTOM_PRICE, TAGS, GUIDE_KEYS, DEFAULT_SETTINGS,
+  store, json, isAdmin, getSettings, openSlots, slotKey, isDate, isTime, clean, normalizePhone, newRef, newToken,
+  getMenu, sanitizeMenu, quote, TAGS, GUIDE_KEYS, DEFAULT_SETTINGS, DEFAULT_MENU,
 } from '../lib/common.mjs';
 import { randomBytes } from 'node:crypto';
 
@@ -31,11 +31,15 @@ export default async (req) => {
   const s = store();
 
   if (req.method === 'GET') {
-    const [bookings, availability, settings, looks, guide, open] = await Promise.all([
+    const [bookings, availability, settings, looks, guide, open, menu] = await Promise.all([
       allBookings(s), s.get('availability', { type: 'json' }), getSettings(s),
-      s.get('looks', { type: 'json' }), s.get('guide', { type: 'json' }), openSlots(s),
+      s.get('looks', { type: 'json' }), s.get('guide', { type: 'json' }), openSlots(s), getMenu(s),
     ]);
-    return json({ ok: true, bookings, availability: availability || {}, settings, looks: looks || [], guide: guide || {}, open });
+    if (!settings.calToken) { // create the private calendar link on first use
+      settings.calToken = newToken();
+      await s.setJSON('settings', settings);
+    }
+    return json({ ok: true, bookings, availability: availability || {}, settings, looks: looks || [], guide: guide || {}, open, menu });
   }
 
   let b;
@@ -63,6 +67,8 @@ export default async (req) => {
         leadHours: Number.isFinite(+n.leadHours) ? Math.max(0, Math.min(72, +n.leadHours)) : cur.leadHours,
         address: n.address != null ? clean(n.address, 200) : cur.address,
         mapQuery: n.mapQuery != null ? clean(n.mapQuery, 200) || cur.mapQuery : cur.mapQuery,
+        banner: n.banner ? { on: !!n.banner.on, text: clean(n.banner.text, 160) } : cur.banner,
+        calToken: n.newCalToken ? newToken() : cur.calToken,
         templates: { ...cur.templates },
       };
       for (const k of Object.keys(DEFAULT_SETTINGS.templates)) if (typeof n.templates?.[k] === 'string') next.templates[k] = n.templates[k].slice(0, 2000);
@@ -98,19 +104,43 @@ export default async (req) => {
 
     case 'manual': {
       const m = b.booking || {};
-      const set = clean(m.set, 60);
       if (!clean(m.name)) return json({ ok: false, error: 'Name is required' }, 400);
       if (!isDate(m.date) || !isTime(m.time)) return json({ ok: false, error: 'Pick a date and time' }, 400);
+      const q = quote(await getMenu(s), clean(m.item, 80), Array.isArray(m.addons) ? m.addons.map(String) : [], { allowInactive: true });
+      if (!q) return json({ ok: false, error: 'Choose a set' }, 400);
       const ref = newRef();
       if (!(await lockSlot(s, ref, m.date, m.time))) return json({ ok: false, error: 'That slot is already booked' }, 409);
-      const bottom = !!m.bottom || set === 'Bottom Lashes only';
       const bk = {
-        ref, name: clean(m.name, 80), phone: normalizePhone(m.phone) || '', set: set || 'Custom', bottom,
-        total: (MENU[set] ?? 0) + (bottom ? BOTTOM_PRICE : 0), date: m.date, time: m.time, notes: clean(m.notes, 600),
-        status: 'confirmed', source: 'manual', createdAt: new Date().toISOString(),
+        ref, name: clean(m.name, 80), phone: normalizePhone(m.phone) || '', ...q,
+        date: m.date, time: m.time, notes: clean(m.notes, 600), status: 'confirmed', source: 'manual', createdAt: new Date().toISOString(),
       };
       await s.setJSON(`booking/${ref}`, bk);
       return json({ ok: true, booking: bk });
+    }
+
+    case 'edit': { // change client details, set, add-ons or price on an existing booking
+      const bk = await s.get(`booking/${b.ref}`, { type: 'json' });
+      if (!bk) return json({ ok: false, error: 'Booking not found' }, 404);
+      const e = b.changes || {};
+      if (e.name != null) bk.name = clean(e.name, 80) || bk.name;
+      if (e.phone != null) bk.phone = normalizePhone(e.phone) || '';
+      if (e.notes != null) bk.notes = clean(e.notes, 600);
+      if (e.item) {
+        const q = quote(await getMenu(s), clean(e.item, 80), Array.isArray(e.addons) ? e.addons.map(String) : [], { allowInactive: true });
+        if (!q) return json({ ok: false, error: 'Choose a set' }, 400);
+        delete bk.undecided; delete bk.bottom; Object.assign(bk, q);
+      }
+      if (e.total != null && e.total !== '') bk.total = Math.max(0, Math.min(100000, Math.round(+e.total || 0)));
+      bk.updatedAt = new Date().toISOString();
+      await s.setJSON(`booking/${bk.ref}`, bk);
+      return json({ ok: true, booking: bk });
+    }
+
+    case 'setMenu': {
+      const menu = b.reset ? DEFAULT_MENU : sanitizeMenu(b.menu);
+      if (!menu.categories.length) return json({ ok: false, error: 'Keep at least one category' }, 400);
+      await s.setJSON('menu', menu);
+      return json({ ok: true, menu });
     }
 
     case 'delete': {
