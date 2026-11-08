@@ -411,7 +411,7 @@ html.lite .wa-float::before{animation:none;opacity:.5}
 .hero-fallback .hf-spin{animation:hfSpin 40s linear infinite;transform-origin:280px 280px}
 @keyframes hfFloat{50%{transform:translateY(-14px)}}
 @keyframes hfSpin{to{transform:rotate(360deg)}}
-@media (max-width:900px){.hero-fallback svg{right:50%;top:6vh;width:min(78vw,380px);transform:translateX(50%)}}
+@media (max-width:900px){.hero-fallback svg{right:50%;top:4vh;width:min(78vw,380px,42vh);transform:translateX(50%)}html.lite .hero-inner{padding-top:calc(4vh + min(78vw,380px,42vh) + 12px)}}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
