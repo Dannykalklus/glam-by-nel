@@ -62,7 +62,7 @@ Photos uploaded in the dashboard take priority over the bundled ones.
 
 ## 4. Map and location
 
-The map and the **Get directions** and **Open in Waze** buttons point to *Lord of Peace, Sowutuom, Accra*.
+The map and the **Get directions** and **Open in Waze** buttons point to the exact pin from Nel's Google Maps link (Lord Of Peace School, Sowutuom: `5.6425759, -0.2904883`).
 
 **For an exact pin:**
 
@@ -81,7 +81,18 @@ The block at the top of the main script in `index.html` holds the WhatsApp numbe
 const CONFIG = { whatsapp: '233593761476', instagram: 'https://www.instagram.com/nels_glam/', ... }
 ```
 
-Prices are in two places. Keep them the same:
+Prices and sets are edited in the dashboard (**Menu** tab). The lists in `index.html` and `netlify/lib/common.mjs` are only the starting defaults.
 
-- `MENU` in `index.html`
-- `MENU` in `netlify/lib/common.mjs`, which the server uses to calculate totals
+---
+
+## 6. Newer dashboard features
+
+- **Menu tab:** change prices, rename or reorder sets, hide a set ("Show on website"), add new categories (Nails, Lash Class, Infills…) and add-ons. Save, and the website updates instantly.
+- **"Not sure yet" bookings:** clients can book without choosing a set. Those bookings show **Needs help choosing**; tap **Help choose** to message them, then **Edit** to set the final set and price.
+- **Edit booking:** change the client's name or number, the set, add-ons, price (discounts or extras) and notes.
+- **Export:** download all bookings as a CSV spreadsheet (opens in Excel or Google Sheets).
+- **Earned this month:** the total of bookings marked *Completed* this month.
+- **Website announcement:** a banner at the top of the site (Settings → Website announcement).
+- **Calendar sync:** Settings → *Sync bookings to your phone calendar*. Subscribe once in Google Calendar or on iPhone, and bookings appear automatically with a 1-hour reminder. Keep the link private; "New private link" stops the old one working.
+
+The site also has a branded share preview (`og-image.jpg`) for WhatsApp and Instagram links, and phones get a lighter version without 3D for speed.

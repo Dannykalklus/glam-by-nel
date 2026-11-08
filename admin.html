@@ -48,7 +48,7 @@ textarea{min-height:110px;resize:vertical;line-height:1.5}
 .muted{color:var(--muted);font-size:.85rem}
 /* tabs */
 nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(11,10,11,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
-nav.tabs .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+nav.tabs .wrap{display:grid;grid-template-columns:repeat(5,1fr)}
 nav.tabs button{background:none;border:0;padding:.75rem 0 .65rem;display:flex;flex-direction:column;align-items:center;gap:.25rem;cursor:pointer;color:var(--muted);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;position:relative}
 nav.tabs svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.5}
 nav.tabs button.on{color:var(--gold1)}
@@ -56,7 +56,8 @@ nav.tabs button.on::before{content:"";position:absolute;top:0;left:30%;right:30%
 .badge{position:absolute;top:6px;left:55%;min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--rose);color:#fff;font-size:.62rem;letter-spacing:0;display:grid;place-items:center;font-weight:600}
 .view{display:none}.view.on{display:block}
 /* stats */
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-top:1.2rem}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-top:1.2rem}
+@media (max-width:560px){.stats{grid-template-columns:repeat(2,1fr)}}
 .stat{padding:1rem 1.1rem}
 .stat b{font-family:var(--serif);font-size:2.2rem;font-weight:600;line-height:1;display:block}
 .stat span{font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted)}
@@ -146,6 +147,25 @@ nav.tabs button.on::before{content:"";position:absolute;top:0;left:30%;right:30%
 #app{display:none}
 .help{font-size:.78rem;color:var(--muted);line-height:1.6}
 .help code{background:rgba(255,255,255,.07);padding:.1rem .35rem;border-radius:5px;font-size:.75rem}
+.pill.undecided{color:#f6cfc4;border-color:rgba(246,207,196,.45);background:rgba(246,207,196,.08);margin-left:.35rem}
+.tb-r{display:flex;gap:.5rem}
+/* menu editor */
+.mcat{padding:1.1rem;margin-bottom:1rem}
+.mcat-h{display:grid;grid-template-columns:1.4fr 1fr 1fr auto;gap:.5rem;align-items:end;margin-bottom:.8rem}
+.mitem{border:1px solid var(--line);border-radius:14px;padding:.8rem;margin-bottom:.6rem;background:rgba(0,0,0,.18)}
+.mitem.off{opacity:.55}
+.mrow{display:grid;grid-template-columns:2fr 1.2fr .8fr .8fr;gap:.5rem}
+.mitem textarea{min-height:56px;margin-top:.5rem;font-size:.85rem}
+.mtools{display:flex;gap:.35rem;align-items:center;margin-top:.5rem;flex-wrap:wrap}
+.mtools .sp{flex:1}
+.mini{padding:.4rem .7rem;font-size:.75rem}
+.toggle{display:flex;align-items:center;gap:.4rem;font-size:.78rem;color:var(--muted)}
+.toggle input{width:auto;accent-color:#d58f8e}
+.savebar{position:sticky;bottom:calc(76px + env(safe-area-inset-bottom));z-index:15;display:flex;gap:.6rem;align-items:center;justify-content:space-between;padding:.8rem 1rem;margin:1rem 0;border-radius:16px;background:var(--ink3);border:1px solid var(--line);box-shadow:0 10px 30px -10px rgba(0,0,0,.7)}
+.savebar.dirty{border-color:rgba(242,196,107,.5)}
+.copyrow{display:flex;gap:.5rem}
+.copyrow input{font-size:.75rem}
+@media (max-width:640px){.mrow{grid-template-columns:1fr 1fr}.mcat-h{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
@@ -177,10 +197,11 @@ nav.tabs button.on::before{content:"";position:absolute;top:0;left:30%;right:30%
       <div class="card stat"><b class="g" id="stPending">0</b><span>To confirm</span></div>
       <div class="card stat"><b id="stToday">0</b><span>Today</span></div>
       <div class="card stat"><b id="stWeek">0</b><span>Next 7 days</span></div>
+      <div class="card stat"><b id="stMonth">0</b><span>Earned this month</span></div>
     </div>
     <div class="toolbar">
       <div class="chips" id="bkFilters"></div>
-      <button class="btn pri" id="addBk">+ Add booking</button>
+      <div class="tb-r"><button class="btn" id="exportCsv" title="Download all bookings as a spreadsheet (CSV)">⬇ Export</button><button class="btn pri" id="addBk">+ Add booking</button></div>
     </div>
     <div class="list" id="bkList"></div>
   </section>
@@ -202,6 +223,18 @@ nav.tabs button.on::before{content:"";position:absolute;top:0;left:30%;right:30%
         <div style="display:flex;gap:.5rem"><button class="btn pri" id="wkOpen" style="flex:1">Open</button><button class="btn dang" id="wkClear" style="flex:1">Close</button></div>
       </div>
     </div>
+  </section>
+
+  <!-- MENU -->
+  <section class="view" id="v-menu">
+    <h2 class="t">Menu &amp; <span class="g">prices</span></h2>
+    <p class="help">Change prices, rename sets, add new ones (e.g. Infills, Removal, Nails, Lash Class) or hide a set without deleting it. The website updates as soon as you save. "Time" is how long the appointment takes, used for your calendar.</p>
+    <div id="menuEd"></div>
+    <div class="savebar" id="menuBar"><span class="muted" id="menuState">All changes saved</span><div style="display:flex;gap:.5rem"><button class="btn" id="menuAddCat">+ Category</button><button class="btn pri" id="menuSave">Save menu</button></div></div>
+    <h3 class="st">Add-ons</h3>
+    <div id="addonEd"></div>
+    <button class="btn" id="menuAddAddon" style="margin-bottom:1.4rem">+ Add-on</button>
+    <p class="help" style="margin-bottom:2rem"><button class="btn dang mini" id="menuReset">Reset to original menu</button></p>
   </section>
 
   <!-- LOOKS -->
@@ -229,14 +262,25 @@ nav.tabs button.on::before{content:"";position:absolute;top:0;left:30%;right:30%
       <div class="f"><label class="l">Minimum notice (hours)</label><input id="sLead" type="number" min="0" max="72"><p class="help" style="margin-top:.3rem">Clients can't book a slot starting sooner than this.</p></div>
       <div class="f"><label class="l">Studio address</label><input id="sAddr"></div>
       <div class="f"><label class="l">Map pin</label><input id="sMap" placeholder="e.g. 5.6239, -0.2789"><p class="help" style="margin-top:.3rem">For an exact pin: open Google Maps, press and hold on the studio, copy the numbers shown (latitude, longitude), and paste them here. This updates the website map and directions buttons.</p></div>
+      <h3 class="st">Website announcement</h3>
+      <label class="toggle f" style="font-size:.85rem;color:var(--cream)"><input type="checkbox" id="bOn"> Show a banner at the top of the website</label>
+      <div class="f"><input id="bText" maxlength="160" placeholder="e.g. Christmas slots are open! Book early 🎄  ·  Fully booked this week"></div>
       <h3 class="st">WhatsApp message templates</h3>
       <p class="help">You can use: <code>{name}</code> <code>{set}</code> <code>{date}</code> <code>{time}</code> <code>{total}</code> <code>{ref}</code> <code>{address}</code> <code>{map}</code> and in the decline message <code>{openings}</code>.</p>
       <div class="f" style="margin-top:.8rem"><label class="l">Confirmation</label><textarea id="tConfirm"></textarea></div>
       <div class="f"><label class="l">Reminder</label><textarea id="tReminder"></textarea></div>
       <div class="f"><label class="l">Slot unavailable / decline</label><textarea id="tDecline"></textarea></div>
       <div class="f"><label class="l">Rescheduled</label><textarea id="tReschedule"></textarea></div>
+      <div class="f"><label class="l">"Not sure yet" clients: help them choose</label><textarea id="tUndecided"></textarea></div>
       <button class="btn pri" type="submit" style="width:100%;padding:.95rem">Save settings</button>
     </form>
+    <div class="card panel">
+      <h3 class="st" style="margin-top:0">Sync bookings to your phone calendar</h3>
+      <p class="help">Subscribe once and every booking appears in your calendar automatically, with a reminder an hour before. Requests show as "⏳ REQUEST" until you confirm them. Keep this link private.</p>
+      <div class="copyrow" style="margin:.8rem 0"><input id="calUrl" readonly><button class="btn" id="calCopy" type="button">Copy</button></div>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap"><a class="btn pri" id="calGoogle" target="_blank" rel="noopener">Add to Google Calendar</a><a class="btn" id="calApple">Add to iPhone Calendar</a><button class="btn dang" id="calNew" type="button">New private link</button></div>
+      <p class="help" style="margin-top:.7rem">Google Calendar refreshes subscribed calendars every few hours; iPhone lets you choose how often. "New private link" stops the old link working.</p>
+    </div>
     <p class="help" style="margin:1.2rem 0 2rem">Tip: on your phone, use "Add to Home Screen" so this dashboard opens like an app.</p>
   </section>
 </main>
@@ -244,6 +288,7 @@ nav.tabs button.on::before{content:"";position:absolute;top:0;left:30%;right:30%
 <nav class="tabs"><div class="wrap">
   <button class="on" data-v="bookings"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>Bookings<span class="badge" id="badge" hidden>0</span></button>
   <button data-v="avail"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/></svg>Availability</button>
+  <button data-v="menu"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Menu</button>
   <button data-v="looks"><svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M20 16l-5-5-8 8"/></svg>Looks</button>
   <button data-v="settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>Settings</button>
 </div></nav>
@@ -254,7 +299,10 @@ nav.tabs button.on::before{content:"";position:absolute;top:0;left:30%;right:30%
 
 <script>
 (function(){
-const MENU={'Volume Wispy Set':330,'Hybrid Wispy Set':215,'Mini Hybrid Wispy':195,'Classic Wispy':180,'Volume Cat Eye Set':300,'Hybrid Cat Eye Set':210,'Mini Hybrid Cat Eye Set':190,'Classic Cat Eye Set':175,'Normal Volume Set':280,'Normal Hybrid Set':200,'Normal Mini Hybrid Set':180,'Normal Classic Lash':160,'Bottom Lashes only':0};
+const UNDECIDED='__undecided', ADDON_ONLY='__addons';
+const LEVELS=['Classic','Mini Hybrid','Hybrid','Volume',''];
+const SHAPES={wispy:'Wispy lash drawing',cateye:'Cat-eye lash drawing',normal:'Even lash drawing',none:'Sparkle icon (non-lash)'};
+const allItems=()=>(D.menu?.categories||[]).flatMap(c=>c.items.map(i=>({...i,cat:c.name})));
 const TAGS={wispy:'Wispy',cateye:'Cat Eye',classic:'Classic',hybrid:'Hybrid',volume:'Volume',other:'Other'};
 const GUIDE={classic:'Classic',hybrid:'Hybrid',volume:'Volume',wispy:'Wispy',cateye:'Cat Eye'};
 const $=s=>document.querySelector(s);
@@ -288,12 +336,13 @@ setInterval(()=>{if(KEY&&document.visibilityState==='visible'&&!$('#sheetBg').cl
 /* ---------- tabs ---------- */
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav.tabs button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+b.dataset.v));scrollTo(0,0)});
 
-function renderAll(){renderBookings();renderCal();renderDay();renderLooks();renderSettings()}
+function renderAll(){renderBookings();renderCal();renderDay();renderLooks();renderSettings();if(!menuDirty)renderMenuEd()}
 
 /* ---------- templates / whatsapp ---------- */
 const mapUrl=()=>'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(D.settings.mapQuery||'');
 function openingsText(){const lines=[];for(const d of Object.keys(D.open).sort()){for(const t of D.open[d]){lines.push(`• ${fmtDate(d)} at ${fmtTime(t)}`);if(lines.length>=6)break}if(lines.length>=6)break}return lines.join('\n')||'• (message me and we’ll find a time)'}
-function fill(tpl,b){const set=b.set+(b.bottom&&b.set!=='Bottom Lashes only'?' + Bottom lashes':'');return (tpl||'').replace(/\{(\w+)\}/g,(m,k)=>({name:b.name.split(' ')[0],set,date:fmtDate(b.date,{weekday:'long',day:'numeric',month:'long'}),time:fmtTime(b.time),total:'GHS '+b.total,ref:b.ref,address:D.settings.address,map:mapUrl(),openings:openingsText()}[k]??m))}
+const setText=b=>(b.undecided?'Undecided set':b.set)+(b.addons?.length?' + '+b.addons.join(', '):(b.bottom&&b.set!=='Bottom Lashes only'?' + Bottom lashes':''));
+function fill(tpl,b){const set=setText(b);return (tpl||'').replace(/\{(\w+)\}/g,(m,k)=>({name:b.name.split(' ')[0],set,date:fmtDate(b.date,{weekday:'long',day:'numeric',month:'long'}),time:fmtTime(b.time),total:'GHS '+b.total,ref:b.ref,address:D.settings.address,map:mapUrl(),openings:openingsText()}[k]??m))}
 const waLink=(phone,text)=>`https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
 function waSheet(title,b,tplKey,sub){
   if(!b.phone){sheet(`<h3>${title}</h3><p class="muted">This booking has no WhatsApp number saved.</p><div class="acts"><button class="btn" data-close>Close</button></div>`);return}
@@ -318,6 +367,7 @@ function renderBookings(){
   const pend=B.filter(b=>b.status==='pending').length;
   $('#stPending').textContent=pend;$('#stToday').textContent=B.filter(b=>b.date===t&&['pending','confirmed'].includes(b.status)).length;
   $('#stWeek').textContent=B.filter(b=>b.date>=t&&b.date<=wk&&['pending','confirmed'].includes(b.status)).length;
+  $('#stMonth').textContent='GHS '+B.filter(b=>b.status==='done'&&b.date.slice(0,7)===t.slice(0,7)).reduce((s,b)=>s+(+b.total||0),0).toLocaleString();
   $('#badge').hidden=!pend;$('#badge').textContent=pend;document.title=(pend?`(${pend}) `:'')+'Studio Dashboard · Glam By Nel';
   $('#bkFilters').innerHTML=Object.entries(FILTERS).map(([k,v])=>`<button class="chip ${k===bkFilter?'on':''}" data-f="${k}">${v}${k==='pending'&&pend?` (${pend})`:''}</button>`).join('');
   let list=bkFilter==='all'?B.slice():B.filter(b=>bucket(b)===bkFilter);
@@ -327,18 +377,20 @@ function renderBookings(){
 $('#bkFilters').onclick=e=>{const c=e.target.closest('.chip');if(c){bkFilter=c.dataset.f;renderBookings()}};
 const STATUS_LABEL={pending:'Pending',confirmed:'Confirmed',declined:'Declined',cancelled:'Cancelled',done:'Completed',noshow:'No-show'};
 function card(b){
-  const isPast=b.date<today(), set=esc(b.set)+(b.bottom&&b.set!=='Bottom Lashes only'?' + bottom lashes':'');
+  const isPast=b.date<today(), set=esc(setText(b));
   let acts='';
   if(b.status==='pending') acts=`<button class="btn pri" data-a="confirm" data-r="${b.ref}">✓ Confirm</button><button class="btn" data-a="decline" data-r="${b.ref}">Decline</button><button class="btn" data-a="move" data-r="${b.ref}">Reschedule</button>`;
   else if(b.status==='confirmed'&&!isPast) acts=`<button class="btn wa" data-a="sendconfirm" data-r="${b.ref}">${waIcon} Confirmation</button><button class="btn" data-a="remind" data-r="${b.ref}">Reminder</button><button class="btn" data-a="move" data-r="${b.ref}">Reschedule</button><button class="btn dang" data-a="cancel" data-r="${b.ref}">Cancel</button>`;
   else if(b.status==='confirmed') acts=`<button class="btn pri" data-a="done" data-r="${b.ref}">Mark completed</button><button class="btn dang" data-a="noshow" data-r="${b.ref}">No-show</button>`;
   else if(['declined','cancelled'].includes(b.status)) acts=`<button class="btn" data-a="restore" data-r="${b.ref}">Restore</button><button class="btn dang" data-a="delete" data-r="${b.ref}">Delete</button>`;
   else acts=`<button class="btn dang" data-a="delete" data-r="${b.ref}">Delete</button>`;
+  if(b.undecided&&['pending','confirmed'].includes(b.status)) acts+=`<button class="btn wa" data-a="helpchoose" data-r="${b.ref}">${waIcon} Help choose</button>`;
+  acts+=`<button class="btn" data-a="edit" data-r="${b.ref}" title="Edit details, set or price">✎ Edit</button>`;
   if(b.phone) acts+=`<a class="btn" href="https://wa.me/${b.phone}" target="_blank" rel="noopener" title="Chat">${waIcon}</a>`;
-  return `<article class="card bk"><div class="top"><span class="pill ${b.status}">${STATUS_LABEL[b.status]||b.status}</span><span class="ref">${b.ref}</span></div>
+  return `<article class="card bk"><div class="top"><span><span class="pill ${b.status}">${STATUS_LABEL[b.status]||b.status}</span>${b.undecided?'<span class="pill undecided">Needs help choosing</span>':''}</span><span class="ref">${b.ref}</span></div>
     <h4>${esc(b.name)}</h4>
     <div class="when"><span>📅 <b>${fmtDate(b.date,{weekday:'short',day:'numeric',month:'short'})}</b></span><span>⏰ <b>${fmtTime(b.time)}</b></span></div>
-    <div class="meta"><span>💎 ${set} · <b>GHS ${b.total}</b></span>${b.phone?`<span>📱 +${b.phone}</span>`:''}<span class="muted" style="font-size:.72rem">${b.source==='manual'?'Added by you':'Booked online'} · ${new Date(b.createdAt).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span></div>
+    <div class="meta"><span>💎 ${set} · <b>${b.undecided?'Price TBC'+(b.total?` (add-ons GHS ${b.total})`:''):'GHS '+b.total}</b></span>${b.phone?`<span>📱 +${b.phone}</span>`:''}<span class="muted" style="font-size:.72rem">${b.source==='manual'?'Added by you':'Booked online'} · ${new Date(b.createdAt).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span></div>
     ${b.notes?`<div class="notes">${esc(b.notes)}</div>`:''}
     <div class="acts">${acts}</div></article>`;
 }
@@ -358,6 +410,8 @@ $('#bkList').onclick=async e=>{
     else if(act==='restore'){await setStatus(b.ref,'pending');toast('Restored')}
     else if(act==='delete'){if(!confirm('Delete this booking permanently?'))return;await api({action:'delete',ref:b.ref});await load();toast('Deleted')}
     else if(act==='move') moveSheet(b);
+    else if(act==='helpchoose') waSheet('Help her choose',b,'undecided');
+    else if(act==='edit') editSheet(b);
   }catch(_){}finally{a.disabled=false}
 };
 function slotPicker(id,allowAny){
@@ -381,18 +435,93 @@ function moveSheet(b){
   const get=wirePicker('mv');
   $('#mvGo').onclick=async()=>{const p=get();if(!p)return toast('Pick a new date and time');try{const j=await api({action:'reschedule',ref:b.ref,...p});await load();toast('Rescheduled');waSheet('Let her know',j.booking,'reschedule')}catch(_){}};
 }
+function setPicker(id,cur={}){
+  const opts=(D.menu?.categories||[]).map(c=>`<optgroup label="${esc(c.name)} ${esc(c.sub||'')}">${c.items.map(i=>`<option value="${esc(i.id)}" data-p="${i.price}" ${cur.item===i.id?'selected':''}>${esc(i.name)} · GHS ${i.price}${i.active?'':' (hidden)'}</option>`).join('')}</optgroup>`).join('');
+  const ad=new Set(cur.addons||[]);
+  return `<div id="${id}"><div class="f"><label class="l">Set</label><select class="ps"><option value="${UNDECIDED}" ${cur.item===UNDECIDED?'selected':''}>Undecided: help her choose</option>${opts}<option value="${ADDON_ONLY}" ${cur.item===ADDON_ONLY?'selected':''}>Add-ons only</option></select></div>
+    <div class="f">${(D.menu?.addons||[]).map(a=>`<label class="toggle" style="color:var(--cream);font-size:.85rem;margin-bottom:.3rem"><input type="checkbox" value="${esc(a.id)}" ${ad.has(a.id)?'checked':''}> + ${esc(a.name)} (GHS ${a.price})</label>`).join('')}</div></div>`;
+}
+const readPicker=id=>({item:$('#'+id+' .ps').value,addons:[...document.querySelectorAll('#'+id+' input[type=checkbox]:checked')].map(i=>i.value)});
 $('#addBk').onclick=()=>{
   sheet(`<h3>Add a booking</h3><p class="muted" style="margin-bottom:.9rem">For clients who booked by DM or call. It's saved as confirmed and blocks the slot.</p>
     <div class="row"><div class="f"><label class="l">Name</label><input id="mName"></div><div class="f"><label class="l">WhatsApp</label><input id="mPhone" type="tel" placeholder="024…"></div></div>
-    <div class="f"><label class="l">Set</label><select id="mSet">${Object.entries(MENU).map(([k,v])=>`<option value="${k}">${k}${v?' · GHS '+v:' · GHS 70'}</option>`).join('')}</select></div>
-    <label class="f" style="display:flex;gap:.5rem;align-items:center;font-size:.85rem"><input type="checkbox" id="mBottom" style="width:auto"> + Bottom lashes</label>
+    ${setPicker('mSetP',{item:allItems()[0]?.id})}
     ${slotPicker('mp',true)}
     <div class="f" style="margin-top:.8rem"><label class="l">Notes</label><textarea id="mNotes" style="min-height:70px"></textarea></div>
     <div class="acts"><button class="btn" data-close>Cancel</button><button class="btn pri" id="mGo">Save booking</button></div>`);
   const get=wirePicker('mp');
   $('#mGo').onclick=async()=>{const p=get();if(!$('#mName').value.trim())return toast('Add a name');if(!p)return toast('Pick a date and time');
-    try{const j=await api({action:'manual',booking:{name:$('#mName').value,phone:$('#mPhone').value,set:$('#mSet').value,bottom:$('#mBottom').checked,notes:$('#mNotes').value,...p}});await load();bkFilter='upcoming';renderBookings();toast('Booking added');if(j.booking.phone)waSheet('Send confirmation?',j.booking,'confirm');else closeSheet()}catch(_){}};
+    try{const j=await api({action:'manual',booking:{name:$('#mName').value,phone:$('#mPhone').value,...readPicker('mSetP'),notes:$('#mNotes').value,...p}});await load();bkFilter='upcoming';renderBookings();toast('Booking added');if(j.booking.phone)waSheet('Send confirmation?',j.booking,'confirm');else closeSheet()}catch(_){}};
 };
+function editSheet(b){
+  sheet(`<h3>Edit booking</h3><p class="muted" style="margin-bottom:.9rem">${b.ref} · ${fmtDate(b.date)} at ${fmtTime(b.time)}. To change the date or time, use Reschedule.</p>
+    <div class="row"><div class="f"><label class="l">Name</label><input id="eName" value="${esc(b.name)}"></div><div class="f"><label class="l">WhatsApp</label><input id="ePhone" type="tel" value="${b.phone?'+'+b.phone:''}"></div></div>
+    ${setPicker('eSetP',{item:b.itemId||'',addons:b.addonIds||[]})}
+    <div class="f"><label class="l">Price (GHS)</label><input id="eTotal" type="number" min="0" value="${b.total??''}"><p class="help" style="margin-top:.3rem">Changing the set fills in its price. You can then adjust it, e.g. for a discount or an extra.</p></div>
+    <div class="f"><label class="l">Notes</label><textarea id="eNotes" style="min-height:70px">${esc(b.notes||'')}</textarea></div>
+    <div class="acts"><button class="btn" data-close>Cancel</button><button class="btn pri" id="eGo">Save changes</button></div>`);
+  const origSet=$('#eSetP .ps').value, origAdd=JSON.stringify(readPicker('eSetP').addons);
+  const recalc=()=>{const r=readPicker('eSetP');const it=allItems().find(i=>i.id===r.item);const add=(D.menu?.addons||[]).filter(a=>r.addons.includes(a.id)).reduce((t,a)=>t+a.price,0);$('#eTotal').value=(it?it.price:0)+add};
+  $('#eSetP').addEventListener('change',recalc);
+  $('#eGo').onclick=async()=>{const r=readPicker('eSetP');const changes={name:$('#eName').value,phone:$('#ePhone').value,notes:$('#eNotes').value,total:$('#eTotal').value};
+    if(r.item!==origSet||JSON.stringify(r.addons)!==origAdd){changes.item=r.item;changes.addons=r.addons}
+    if(r.item===ADDON_ONLY&&!r.addons.length)return toast('Tick at least one add-on');
+    try{await api({action:'edit',ref:b.ref,changes});await load();closeSheet();toast('Booking updated')}catch(_){}};
+}
+$('#exportCsv').onclick=()=>{
+  const cols=['ref','status','date','time','name','phone','set','addons','total','notes','source','createdAt'];
+  const q=v=>`"${String(v??'').replace(/"/g,'""')}"`;
+  const rows=[cols.join(',')].concat(D.bookings.map(b=>cols.map(c=>q(c==='addons'?(b.addons||[]).join('; '):c==='set'&&b.undecided?'Undecided':c==='phone'&&b.phone?'+'+b.phone:b[c])).join(',')));
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+rows.join('\r\n')],{type:'text/csv'}));a.download=`glam-by-nel-bookings-${today()}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+};
+
+/* ---------- menu editor ---------- */
+let MD=null, menuDirty=false;
+const uid=()=>Math.random().toString(36).slice(2,8);
+function markDirty(on=true){menuDirty=on;$('#menuBar').classList.toggle('dirty',on);$('#menuState').textContent=on?'Unsaved changes':'All changes saved'}
+function renderMenuEd(){
+  if(!D.menu)return; if(!menuDirty) MD=JSON.parse(JSON.stringify(D.menu));
+  $('#menuEd').innerHTML=MD.categories.map((c,ci)=>`<div class="card mcat" data-ci="${ci}">
+    <div class="mcat-h"><div><label class="l">Category</label><input data-k="name" value="${esc(c.name)}"></div>
+      <div><label class="l">Small label</label><input data-k="sub" value="${esc(c.sub||'')}" placeholder="Sets"></div>
+      <div><label class="l">Card picture</label><select data-k="shape">${Object.entries(SHAPES).map(([k,v])=>`<option value="${k}" ${c.shape===k?'selected':''}>${v}</option>`).join('')}</select></div>
+      <div class="mtools" style="margin:0"><button class="btn mini" data-act="cup" ${ci?'':'disabled'} title="Move up">↑</button><button class="btn mini" data-act="cdown" ${ci<MD.categories.length-1?'':'disabled'} title="Move down">↓</button><button class="btn mini dang" data-act="cdel" title="Delete category">✕</button></div></div>
+    ${c.items.map((x,ii)=>`<div class="mitem ${x.active?'':'off'}" data-ii="${ii}">
+      <div class="mrow"><div><label class="l">Name</label><input data-f="name" value="${esc(x.name)}"></div>
+        <div><label class="l">Fullness</label><select data-f="level">${LEVELS.map(l=>`<option value="${l}" ${x.level===l?'selected':''}>${l||'— none —'}</option>`).join('')}</select></div>
+        <div><label class="l">Price GHS</label><input data-f="price" type="number" min="0" value="${x.price}"></div>
+        <div><label class="l">Time (min)</label><input data-f="mins" type="number" min="15" step="15" value="${x.mins||120}"></div></div>
+      <textarea data-f="desc" placeholder="Short description shown on the website">${esc(x.desc||'')}</textarea>
+      <div class="mtools"><label class="toggle"><input type="checkbox" data-f="active" ${x.active?'checked':''}> Show on website</label><span class="sp"></span>
+        <button class="btn mini" data-act="up" ${ii?'':'disabled'}>↑</button><button class="btn mini" data-act="down" ${ii<c.items.length-1?'':'disabled'}>↓</button><button class="btn mini dang" data-act="del">Delete</button></div></div>`).join('')}
+    <button class="btn mini" data-act="add">+ Add a set to ${esc(c.name)}</button></div>`).join('');
+  $('#addonEd').innerHTML=MD.addons.map((a,ai)=>`<div class="mitem ${a.active?'':'off'}" data-ai="${ai}">
+      <div class="mrow"><div><label class="l">Name</label><input data-f="name" value="${esc(a.name)}"></div><div><label class="l">Price GHS</label><input data-f="price" type="number" min="0" value="${a.price}"></div>
+        <div><label class="l">Extra time (min)</label><input data-f="mins" type="number" min="0" step="15" value="${a.mins||0}"></div><div></div></div>
+      <textarea data-f="desc" placeholder="Short description">${esc(a.desc||'')}</textarea>
+      <div class="mtools"><label class="toggle"><input type="checkbox" data-f="active" ${a.active?'checked':''}> Show on website</label><span class="sp"></span><button class="btn mini dang" data-act="adel">Delete</button></div></div>`).join('')||'<p class="muted">No add-ons.</p>';
+}
+function readField(el){return el.type==='checkbox'?el.checked:el.type==='number'?+el.value:el.value}
+$('#menuEd').addEventListener('input',e=>{const el=e.target;const cat=el.closest('.mcat');if(!cat)return;const c=MD.categories[+cat.dataset.ci];
+  if(el.dataset.k) c[el.dataset.k]=readField(el);
+  if(el.dataset.f){const it=el.closest('.mitem');const x=c.items[+it.dataset.ii];x[el.dataset.f]=readField(el);if(el.dataset.f==='active')it.classList.toggle('off',!el.checked)}
+  markDirty()});
+$('#menuEd').addEventListener('click',e=>{const b=e.target.closest('[data-act]');if(!b)return;const cat=b.closest('.mcat');const ci=+cat.dataset.ci;const c=MD.categories[ci];const it=b.closest('.mitem');const ii=it?+it.dataset.ii:-1;
+  const sw=(arr,i,j)=>{[arr[i],arr[j]]=[arr[j],arr[i]]};
+  switch(b.dataset.act){
+    case 'add':c.items.push({id:'new-'+uid(),name:'New set',level:'',price:0,mins:120,desc:'',active:true});break;
+    case 'up':sw(c.items,ii,ii-1);break; case 'down':sw(c.items,ii,ii+1);break;
+    case 'del':if(!confirm(`Delete "${c.items[ii].name}"? (Tip: untick "Show on website" to hide it instead.)`))return;c.items.splice(ii,1);break;
+    case 'cup':sw(MD.categories,ci,ci-1);break; case 'cdown':sw(MD.categories,ci,ci+1);break;
+    case 'cdel':if(MD.categories.length<2)return toast('Keep at least one category');if(!confirm(`Delete the whole "${c.name}" category and its ${c.items.length} sets?`))return;MD.categories.splice(ci,1);break;
+  } markDirty();renderMenuEd()});
+$('#addonEd').addEventListener('input',e=>{const el=e.target;const it=el.closest('.mitem');if(!it||!el.dataset.f)return;const a=MD.addons[+it.dataset.ai];a[el.dataset.f]=readField(el);if(el.dataset.f==='active')it.classList.toggle('off',!el.checked);markDirty()});
+$('#addonEd').addEventListener('click',e=>{const b=e.target.closest('[data-act=adel]');if(!b)return;const ai=+b.closest('.mitem').dataset.ai;if(!confirm(`Delete "${MD.addons[ai].name}"?`))return;MD.addons.splice(ai,1);markDirty();renderMenuEd()});
+$('#menuAddCat').onclick=()=>{MD.categories.push({id:'cat-'+uid(),name:'New category',sub:'',shape:'none',items:[{id:'new-'+uid(),name:'New set',level:'',price:0,mins:120,desc:'',active:true}]});markDirty();renderMenuEd();setTimeout(()=>$('#menuEd').lastElementChild.scrollIntoView({behavior:'smooth'}),50)};
+$('#menuAddAddon').onclick=()=>{MD.addons.push({id:'addon-'+uid(),name:'New add-on',price:0,mins:0,desc:'',active:true});markDirty();renderMenuEd()};
+$('#menuSave').onclick=async()=>{try{const j=await api({action:'setMenu',menu:MD});D.menu=j.menu;markDirty(false);renderMenuEd();toast('Menu saved. The website is updated')}catch(_){}};
+$('#menuReset').onclick=async()=>{if(!confirm('Replace your menu with the original Glam By Nel menu and prices?'))return;try{const j=await api({action:'setMenu',reset:true});D.menu=j.menu;markDirty(false);renderMenuEd();toast('Menu reset')}catch(_){}};
+addEventListener('beforeunload',e=>{if(menuDirty){e.preventDefault();e.returnValue=''}});
 
 /* ---------- availability ---------- */
 let calM=today().slice(0,7), selDay=today(), saveT=null;
@@ -460,10 +589,16 @@ $('#upFiles').onchange=async e=>{
 
 /* ---------- settings ---------- */
 function renderSettings(){const s=D.settings;$('#sSlots').value=(s.slots||[]).join(', ');$('#sLead').value=s.leadHours??2;$('#sAddr').value=s.address||'';$('#sMap').value=s.mapQuery||'';
-  $('#tConfirm').value=s.templates.confirm||'';$('#tReminder').value=s.templates.reminder||'';$('#tDecline').value=s.templates.decline||'';$('#tReschedule').value=s.templates.reschedule||''}
+  $('#tConfirm').value=s.templates.confirm||'';$('#tReminder').value=s.templates.reminder||'';$('#tDecline').value=s.templates.decline||'';$('#tReschedule').value=s.templates.reschedule||'';$('#tUndecided').value=s.templates.undecided||'';
+  $('#bOn').checked=!!s.banner?.on;$('#bText').value=s.banner?.text||'';
+  const url=`${location.origin}/api/calendar/${s.calToken}`;$('#calUrl').value=url;
+  $('#calGoogle').href='https://calendar.google.com/calendar/r?cid='+encodeURIComponent(url.replace(/^https?:/,'webcal:'));
+  $('#calApple').href=url.replace(/^https?:/,'webcal:');}
+$('#calCopy').onclick=async()=>{try{await navigator.clipboard.writeText($('#calUrl').value);toast('Calendar link copied')}catch(_){$('#calUrl').select();toast('Select and copy the link')}};
+$('#calNew').onclick=async()=>{if(!confirm('Create a new private calendar link? Calendars using the old link will stop updating.'))return;try{const j=await api({action:'setSettings',settings:{newCalToken:true}});D.settings=j.settings;renderSettings();toast('New link created. Subscribe again with it')}catch(_){}};
 $('#setForm').onsubmit=async e=>{e.preventDefault();
   const slots=$('#sSlots').value.split(/[,\s]+/).map(x=>x.trim()).filter(Boolean).map(x=>{const m=/^(\d{1,2})[:.]?(\d{2})?$/.exec(x);return m?`${m[1].padStart(2,'0')}:${m[2]||'00'}`:null}).filter(Boolean);
-  try{const j=await api({action:'setSettings',settings:{slots,leadHours:+$('#sLead').value,address:$('#sAddr').value,mapQuery:$('#sMap').value,templates:{confirm:$('#tConfirm').value,reminder:$('#tReminder').value,decline:$('#tDecline').value,reschedule:$('#tReschedule').value}}});D.settings=j.settings;renderSettings();renderCal();toast('Settings saved')}catch(_){}};
+  try{const j=await api({action:'setSettings',settings:{slots,leadHours:+$('#sLead').value,address:$('#sAddr').value,mapQuery:$('#sMap').value,banner:{on:$('#bOn').checked,text:$('#bText').value},templates:{confirm:$('#tConfirm').value,reminder:$('#tReminder').value,decline:$('#tDecline').value,reschedule:$('#tReschedule').value,undecided:$('#tUndecided').value}}});D.settings=j.settings;renderSettings();renderCal();toast('Settings saved')}catch(_){}};
 
 if(KEY) start().catch(()=>{});
 })();

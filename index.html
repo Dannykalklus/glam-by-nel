@@ -6,8 +6,22 @@
 <title>Glam By Nel — Luxury Lash Extensions | Capitol Hill</title>
 <meta name="description" content="Glam By Nel — premium wispy, cat eye, classic, hybrid and volume lash extensions at Capitol Hill. Enhancing your natural beauty. Book on WhatsApp 059 376 1476.">
 <meta name="theme-color" content="#0b0a0b">
-<meta property="og:title" content="Glam By Nel — Luxury Lash Extensions">
-<meta property="og:description" content="Wispy, Cat Eye & Classic sets. Premium quality, lightweight comfort, long-lasting retention.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Glam By Nel">
+<meta property="og:url" content="https://glam-by-nel.netlify.app/">
+<meta property="og:title" content="Glam By Nel — Luxury Lash Extensions in Sowutuom">
+<meta property="og:description" content="Wispy, Cat Eye, Classic, Hybrid & Volume lash sets. See open dates and book online in seconds.">
+<meta property="og:image" content="https://glam-by-nel.netlify.app/og-image.jpg">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Glam By Nel — luxury lash extensions">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://glam-by-nel.netlify.app/og-image.jpg">
+<link rel="canonical" href="https://glam-by-nel.netlify.app/">
+<script>
+/* Lite mode: phones, slow connections and low-memory devices get a lighter, faster page (no 3D, fewer effects) */
+(function(){var c=navigator.connection||{};var lite=matchMedia('(max-width: 900px), (pointer: coarse)').matches||c.saveData||/(^|-)2g/.test(c.effectiveType||'')||(navigator.deviceMemory&&navigator.deviceMemory<4)||matchMedia('(prefers-reduced-motion: reduce)').matches;
+if(lite)document.documentElement.classList.add('lite');window.__LITE=!!lite;})();
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,500&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -36,11 +50,13 @@ button,input,select,textarea{font:inherit;color:inherit}
 ::selection{background:var(--rose);color:#fff}
 
 /* grain */
-body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:200;opacity:.07;mix-blend-mode:overlay;
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:200;opacity:.035;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
 
 /* ---------- glossy primitives ---------- */
-.gloss-text{background:var(--rosegold);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sheen 7s linear infinite}
+.gloss-text{background:var(--rosegold);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent}
+/* only the big headlines shimmer; animating every gradient caused constant repaints */
+.hero h1 .gloss-text,.final h2 .gloss-text{animation:sheen 7s linear infinite}
 @keyframes sheen{to{background-position:-250% 0}}
 .script{font-family:var(--script);font-weight:400;letter-spacing:0}
 .eyebrow{font-family:var(--sans);font-size:.72rem;letter-spacing:.42em;text-transform:uppercase;color:var(--gold-2);display:inline-flex;align-items:center;gap:.9rem}
@@ -72,8 +88,8 @@ section{position:relative}
 /* ---------- loader ---------- */
 #loader{position:fixed;inset:0;z-index:300;background:var(--ink);display:grid;place-items:center}
 #loader svg{width:min(240px,50vw);overflow:visible}
-#loader text{font-family:var(--serif);font-size:120px;font-weight:500;fill:transparent;stroke:url(#lg);stroke-width:1.2;stroke-dasharray:600;stroke-dashoffset:600;animation:draw 1.6s var(--ease) forwards,fill .6s 1.2s forwards}
-#loader .lt{font-family:var(--sans);font-size:11px;letter-spacing:.6em;fill:var(--gold-2);stroke:none;opacity:0;animation:fade .8s 1s forwards}
+#loader text{font-family:var(--serif);font-size:120px;font-weight:500;fill:transparent;stroke:url(#lg);stroke-width:1.2;stroke-dasharray:600;stroke-dashoffset:600;animation:draw .9s var(--ease) forwards,fill .4s .55s forwards}
+#loader .lt{font-family:var(--sans);font-size:11px;letter-spacing:.6em;fill:var(--gold-2);stroke:none;opacity:0;animation:fade .5s .5s forwards}
 @keyframes draw{to{stroke-dashoffset:0}}
 @keyframes fill{to{fill:url(#lg)}}
 @keyframes fade{to{opacity:1}}
@@ -110,8 +126,6 @@ section{position:relative}
   background:radial-gradient(900px 600px at 78% 40%,rgba(201,128,139,.28),transparent 60%),radial-gradient(700px 500px at 10% 90%,rgba(158,83,97,.25),transparent 60%),linear-gradient(180deg,#0b0a0b,#140f11 70%,#0b0a0b)}
 #gl{position:absolute;inset:0;width:100%;height:100%;z-index:0}
 .hero-fallback{position:absolute;inset:0;z-index:0;display:none}
-.hero-fallback i{position:absolute;border-radius:50%;filter:blur(2px);background:radial-gradient(circle at 30% 30%,#fff,#f4c6c8 30%,#b8737a 70%,#4a2328);animation:float 9s ease-in-out infinite}
-@keyframes float{50%{transform:translateY(-24px)}}
 .hero-inner{position:relative;z-index:2;width:min(1200px,92vw);margin:0 auto;padding:8rem 0 6rem;pointer-events:none}
 .hero-inner > *{pointer-events:auto}
 .hero h1{font-family:var(--serif);font-weight:500;font-size:clamp(3.6rem,10.5vw,9.4rem);line-height:.88;letter-spacing:-.02em;margin:1.4rem 0 .4rem}
@@ -163,7 +177,9 @@ section{position:relative}
 .tab small{font-size:.58rem;letter-spacing:.38em;margin-top:.35rem;text-transform:uppercase}
 .tab.active{color:#2a1215}
 .tab-pill{position:absolute;z-index:0;top:.45rem;bottom:.45rem;border-radius:999px;background:linear-gradient(180deg,#ffe9e3 0%,#f1b9b0 40%,#d58f8e 65%,#f3c2b8 100%);box-shadow:0 1px 0 #fff inset,0 -5px 12px rgba(125,65,72,.3) inset,0 14px 30px -12px rgba(233,170,180,.6);transition:left .6s var(--ease),width .6s var(--ease)}
-.menu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.4rem}
+.menu-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:1.4rem}
+.menu-grid>.set{flex:0 1 calc(25% - 1.05rem);min-width:240px}
+@media (max-width:620px){.menu-grid>.set{flex-basis:100%}}
 .set{padding:2rem 1.7rem 1.7rem;display:flex;flex-direction:column;min-height:390px;overflow:hidden;transition:transform .6s var(--ease)}
 .set:hover{transform:translateY(-8px)}
 .set .lvl{font-size:.6rem;letter-spacing:.34em;text-transform:uppercase;color:var(--gold-2);display:flex;justify-content:space-between;align-items:center}
@@ -188,8 +204,8 @@ section{position:relative}
 .addon h4{font-family:var(--serif);font-size:1.6rem;font-weight:500}
 .addon p{color:var(--muted);font-size:.86rem;font-weight:300}
 .addon .r{display:flex;align-items:center;gap:1.6rem}
-@media (max-width:1100px){.menu-grid{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:620px){.menu-grid{grid-template-columns:1fr}.set{min-height:0}.tab{padding:.8rem 1rem}.tab .script{font-size:1.55rem}}
+
+@media (max-width:620px){.set{min-height:0}.tab{padding:.8rem 1rem}.tab .script{font-size:1.55rem}}
 
 /* ---------- guide (blush) ---------- */
 .guide{padding:9rem 0;background:linear-gradient(180deg,var(--blush) 0%,#f6dcda 100%);color:var(--ink);overflow:hidden}
@@ -215,7 +231,7 @@ section{position:relative}
 /* ---------- gallery ---------- */
 .gallery{padding:9rem 0;background:var(--ink);overflow:hidden}
 .gal-wrap{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:2rem;align-items:center;perspective:1200px}
-.frame{position:relative;border-radius:200px 200px 26px 26px;padding:10px;background:var(--rosegold);background-size:200% 200%;animation:sheen 9s linear infinite;
+.frame{position:relative;border-radius:200px 200px 26px 26px;padding:10px;background:var(--rosegold);background-size:200% 200%;
   box-shadow:0 40px 80px -30px rgba(233,170,180,.45),0 0 0 1px rgba(255,255,255,.3) inset;transform-style:preserve-3d}
 .frame .ph{border-radius:190px 190px 18px 18px;overflow:hidden;aspect-ratio:3/4.4;position:relative;background:#2a1a1d}
 .frame img{width:100%;height:100%;object-fit:cover;transform:scale(1.12);filter:saturate(1.05) contrast(1.03)}
@@ -355,7 +371,7 @@ footer{padding:3rem 0 2.4rem;border-top:1px solid rgba(246,207,196,.12);backgrou
 /* ---------- visit / map ---------- */
 .visit{padding:8rem 0;background:linear-gradient(180deg,var(--ink-2),var(--ink))}
 .visit-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:2rem;align-items:stretch}
-.map-frame{position:relative;border-radius:32px;padding:8px;background:var(--rosegold);background-size:200% 200%;animation:sheen 9s linear infinite;box-shadow:0 40px 80px -30px rgba(233,170,180,.35);min-height:440px}
+.map-frame{position:relative;border-radius:32px;padding:8px;background:var(--rosegold);background-size:200% 200%;box-shadow:0 40px 80px -30px rgba(233,170,180,.35);min-height:440px}
 .map-frame .in{position:absolute;inset:8px;border-radius:26px;overflow:hidden;background:#1a1416}
 .map-frame iframe{width:100%;height:100%;border:0;filter:grayscale(.35) invert(.92) hue-rotate(180deg) saturate(1.3) brightness(.95) contrast(.95)}
 .map-frame .tint{position:absolute;inset:0;pointer-events:none;background:linear-gradient(160deg,rgba(201,128,139,.22),rgba(11,10,11,.05) 50%,rgba(201,128,139,.18));mix-blend-mode:color}
@@ -367,6 +383,35 @@ footer{padding:3rem 0 2.4rem;border-top:1px solid rgba(246,207,196,.12);backgrou
 .visit-card .btns{display:flex;flex-direction:column;gap:.8rem}
 .visit-card .btn{justify-content:center}
 @media (max-width:900px){.visit-grid{grid-template-columns:1fr}.map-frame{min-height:360px}.visit-card{padding:2.2rem 1.8rem}}
+
+/* ---------- announcement banner ---------- */
+.announce{position:fixed;top:0;left:0;right:0;z-index:101;min-height:38px;display:flex;align-items:center;justify-content:center;gap:.6rem;padding:.45rem 3rem;text-align:center;
+  font-size:.78rem;letter-spacing:.06em;color:#2a1215;background:linear-gradient(90deg,#f3c2b8,#ffe9e3 50%,#f1b9b0)}
+.announce b{font-family:var(--script);font-weight:400;font-size:1.3rem;line-height:1}
+.announce button{position:absolute;right:.8rem;top:50%;transform:translateY(-50%);background:none;border:0;cursor:pointer;font-size:1rem;color:#5a2a31}
+body.has-banner .nav{top:52px}
+/* ---------- add-ons + undecided ---------- */
+.addon-list{display:grid;gap:1rem;margin-top:1.6rem}
+.addon-list .addon{margin-top:0}
+.addon-checks{display:flex;flex-direction:column;gap:.2rem;margin-bottom:1.2rem}
+.addon-checks .check{margin-bottom:.4rem}
+.form-hint{font-size:.82rem;color:var(--petal);margin:-.6rem 0 1.1rem;display:flex;gap:.5rem;align-items:flex-start}
+.set .icon-art{height:110px;display:grid;place-items:center}
+.set .icon-art svg{width:84px;height:84px}
+/* ---------- lite mode (phones / slow connections) ---------- */
+html.lite body::after{display:none}
+html.lite .glass,html.lite .nav.scrolled,html.lite .mobile-menu,html.lite .btn-ghost{backdrop-filter:none;-webkit-backdrop-filter:none}
+html.lite .glass{background:linear-gradient(160deg,#211a1c,#171214)}
+html.lite .nav.scrolled{background:rgba(16,12,14,.96)}
+html.lite #gl{display:none}
+html.lite .hero-fallback{display:block}
+html.lite .wa-float::before{animation:none;opacity:.5}
+.hero-fallback svg{position:absolute;right:4%;top:50%;width:min(46vw,560px);transform:translateY(-50%);overflow:visible}
+.hero-fallback .hf-float{animation:hfFloat 7s ease-in-out infinite;transform-origin:center}
+.hero-fallback .hf-spin{animation:hfSpin 40s linear infinite;transform-origin:280px 280px}
+@keyframes hfFloat{50%{transform:translateY(-14px)}}
+@keyframes hfSpin{to{transform:rotate(360deg)}}
+@media (max-width:900px){.hero-fallback svg{right:50%;top:6vh;width:min(78vw,380px);transform:translateX(50%)}}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
@@ -381,6 +426,7 @@ footer{padding:3rem 0 2.4rem;border-top:1px solid rgba(246,207,196,.12);backgrou
   </svg>
 </div>
 
+<div class="announce" id="announce" hidden><b>✦</b><span id="announceText"></span><button aria-label="Dismiss announcement" id="announceX">✕</button></div>
 <div class="cursor"></div><div class="cursor-ring"></div>
 
 <nav class="nav" id="nav">
@@ -406,7 +452,21 @@ footer{padding:3rem 0 2.4rem;border-top:1px solid rgba(246,207,196,.12);backgrou
 <!-- HERO -->
 <section class="hero" id="hero">
   <canvas id="gl" aria-hidden="true"></canvas>
-  <div class="hero-fallback" aria-hidden="true"><i style="width:260px;height:260px;right:12%;top:22%"></i><i style="width:90px;height:90px;right:38%;top:18%;animation-delay:-3s"></i><i style="width:140px;height:140px;right:6%;top:62%;animation-delay:-6s"></i></div>
+  <div class="hero-fallback" aria-hidden="true"><svg viewBox="0 0 560 560">
+    <defs>
+      <radialGradient id="hfH" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#fff3f1"/><stop offset=".25" stop-color="#f4b7c0"/><stop offset=".65" stop-color="#d5808f"/><stop offset="1" stop-color="#7d3a48"/></radialGradient>
+      <radialGradient id="hfP" cx="35%" cy="30%" r="75%"><stop offset="0" stop-color="#fff"/><stop offset=".4" stop-color="#fbe3e3"/><stop offset="1" stop-color="#c9959b"/></radialGradient>
+      <linearGradient id="hfR" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f9dccf"/><stop offset=".45" stop-color="#b8737a"/><stop offset=".7" stop-color="#f6cfc4"/><stop offset="1" stop-color="#c4837f"/></linearGradient>
+      <radialGradient id="hfG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="rgba(233,170,180,.45)"/><stop offset="1" stop-color="rgba(233,170,180,0)"/></radialGradient>
+    </defs>
+    <circle cx="280" cy="280" r="270" fill="url(#hfG)"/>
+    <g class="hf-spin"><ellipse cx="280" cy="280" rx="235" ry="70" fill="none" stroke="url(#hfR)" stroke-width="5" transform="rotate(-18 280 280)"/>
+      <ellipse cx="280" cy="280" rx="262" ry="96" fill="none" stroke="url(#hfR)" stroke-width="2" opacity=".8" transform="rotate(14 280 280)"/></g>
+    <g class="hf-float"><path d="M280 430C170 360 120 300 120 240a75 75 0 0 1 160-40 75 75 0 0 1 160 40c0 60-50 120-160 190z" fill="url(#hfH)"/>
+      <path d="M180 200c18-30 60-38 82-14" stroke="#fff" stroke-width="16" stroke-linecap="round" fill="none" opacity=".75"/>
+      <ellipse cx="350" cy="215" rx="16" ry="9" fill="#fff" opacity=".55" transform="rotate(-25 350 215)"/></g>
+    <circle cx="95" cy="150" r="18" fill="url(#hfP)"/><circle cx="470" cy="420" r="26" fill="url(#hfP)"/><circle cx="455" cy="120" r="11" fill="url(#hfP)"/><circle cx="130" cy="430" r="14" fill="url(#hfP)"/><circle cx="505" cy="270" r="8" fill="url(#hfP)"/>
+  </svg></div>
   <div class="hero-inner">
     <span class="eyebrow hero-fade">Luxury Lash Studio · Capitol Hill</span>
     <h1 aria-label="Glam By Nel"><span class="line split">Glam</span><span class="line split gloss-text">By Nel</span></h1>
@@ -463,20 +523,11 @@ footer{padding:3rem 0 2.4rem;border-top:1px solid rgba(246,207,196,.12);backgrou
     <div class="section-head reveal">
       <span class="eyebrow">Services We Offer</span>
       <h2>The Lash <span class="script gloss-text">Menu</span></h2>
-      <p>Choose your shape, then your fullness. Tap any set to book it in seconds.</p>
+      <p>Choose your shape, then your fullness. Tap any set to book it in seconds, or pick <b style="color:var(--gold-1);font-weight:500">"Not sure yet"</b> when booking and Nel will help you choose.</p>
     </div>
-    <div class="tabs glass reveal" role="tablist">
-      <span class="tab-pill"></span>
-      <button class="tab active" data-cat="wispy" role="tab"><span class="script">Wispy</span><small>Sets</small></button>
-      <button class="tab" data-cat="cateye" role="tab"><span class="script">Cat Eye</span><small>Sets</small></button>
-      <button class="tab" data-cat="normal" role="tab"><span class="script">Normal</span><small>Sets</small></button>
-    </div>
+    <div class="tabs glass reveal" role="tablist" id="menuTabs"></div>
     <div class="menu-grid" id="menuGrid"></div>
-    <div class="addon glass reveal">
-      <div><h4>Bottom Lashes</h4><p>Add definition to your lower lash line. Pairs beautifully with any set.</p></div>
-      <div class="r"><div class="price"><small>GHS</small><b class="gloss-text">70</b></div>
-        <button class="btn btn-ghost" data-addon>Add to booking</button></div>
-    </div>
+    <div class="addon-list reveal" id="addonList"></div>
   </div>
 </section>
 
@@ -545,7 +596,8 @@ footer{padding:3rem 0 2.4rem;border-top:1px solid rgba(246,207,196,.12);backgrou
         <div class="field"><label for="fPhone">WhatsApp number</label><input id="fPhone" name="phone" type="tel" required placeholder="e.g. 024 123 4567" autocomplete="tel"></div>
       </div>
       <div class="field"><label for="fSet">Lash set</label><select id="fSet" required></select></div>
-      <label class="check"><input type="checkbox" id="fBottom"> Add bottom lashes (+ GHS 70)</label>
+      <p class="form-hint" id="setHint" hidden>💕 No problem. Nel will help you pick the perfect set when she confirms, and your final price depends on the set you choose.</p>
+      <div class="addon-checks" id="addonChecks"></div>
       <div class="field" id="liveSlots">
         <label>Choose a date</label>
         <div class="slot-rail" id="dateChips"><div class="slot-empty">Loading available dates…</div></div>
@@ -692,25 +744,35 @@ const CONFIG = {
 const WA = CONFIG.whatsapp;
 document.querySelectorAll('a[href*="instagram.com"]').forEach(a=>a.href=CONFIG.instagram);
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const MENU = {
-  wispy:[
-    {name:'Volume Wispy Set',lvl:'Volume',d:4,price:330,desc:'Full, fluffy fans in spiky wispy layers. Maximum drama, still featherlight.'},
-    {name:'Hybrid Wispy Set',lvl:'Hybrid',d:3,price:215,desc:'Classic and volume blended into textured wisps. The best of both.'},
-    {name:'Mini Hybrid Wispy',lvl:'Mini Hybrid',d:2,price:195,desc:'Soft wispy texture with a lighter touch of volume. Effortless flutter.'},
-    {name:'Classic Wispy',lvl:'Classic',d:1,price:180,desc:'One-to-one lashes in mixed lengths for a natural, spiky wisp.'}],
-  cateye:[
-    {name:'Volume Cat Eye Set',lvl:'Volume',d:4,price:300,desc:'Lush volume fans that sweep long at the outer corner. Bold and lifted.'},
-    {name:'Hybrid Cat Eye Set',lvl:'Hybrid',d:3,price:210,desc:'A textured, elongating flick with a balance of fullness and definition.'},
-    {name:'Mini Hybrid Cat Eye Set',lvl:'Mini Hybrid',d:2,price:190,desc:'A subtle feline lift with a whisper of volume.'},
-    {name:'Classic Cat Eye Set',lvl:'Classic',d:1,price:175,desc:'Clean one-to-one lashes that build toward the corners for a natural lift.'}],
-  normal:[
-    {name:'Normal Volume Set',lvl:'Volume',d:4,price:280,desc:'Even, balanced volume all across the lash line. Soft and full.'},
-    {name:'Normal Hybrid Set',lvl:'Hybrid',d:3,price:200,desc:'An even mix of classic and volume for everyday glam with texture.'},
-    {name:'Normal Mini Hybrid Set',lvl:'Mini Hybrid',d:2,price:180,desc:'Light, even fullness that looks naturally yours, only better.'},
-    {name:'Normal Classic Lash',lvl:'Classic',d:1,price:160,desc:'The timeless one-to-one set. Defined, clean and polished.'}]
+const LITE = !!window.__LITE;
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* Default menu: the live menu comes from Nel's dashboard (/api/availability) and replaces this */
+const it=(id,name,level,price,desc)=>({id,name,level,price,desc});
+let MENU_DATA = {
+  categories:[
+    {id:'wispy',name:'Wispy',sub:'Sets',shape:'wispy',items:[
+      it('volume-wispy','Volume Wispy Set','Volume',330,'Full, fluffy fans in spiky wispy layers. Maximum drama, still featherlight.'),
+      it('hybrid-wispy','Hybrid Wispy Set','Hybrid',215,'Classic and volume blended into textured wisps. The best of both.'),
+      it('mini-hybrid-wispy','Mini Hybrid Wispy','Mini Hybrid',195,'Soft wispy texture with a lighter touch of volume. Effortless flutter.'),
+      it('classic-wispy','Classic Wispy','Classic',180,'One-to-one lashes in mixed lengths for a natural, spiky wisp.')]},
+    {id:'cateye',name:'Cat Eye',sub:'Sets',shape:'cateye',items:[
+      it('volume-cateye','Volume Cat Eye Set','Volume',300,'Lush volume fans that sweep long at the outer corner. Bold and lifted.'),
+      it('hybrid-cateye','Hybrid Cat Eye Set','Hybrid',210,'A textured, elongating flick with a balance of fullness and definition.'),
+      it('mini-hybrid-cateye','Mini Hybrid Cat Eye Set','Mini Hybrid',190,'A subtle feline lift with a whisper of volume.'),
+      it('classic-cateye','Classic Cat Eye Set','Classic',175,'Clean one-to-one lashes that build toward the corners for a natural lift.')]},
+    {id:'normal',name:'Normal',sub:'Sets',shape:'normal',items:[
+      it('normal-volume','Normal Volume Set','Volume',280,'Even, balanced volume all across the lash line. Soft and full.'),
+      it('normal-hybrid','Normal Hybrid Set','Hybrid',200,'An even mix of classic and volume for everyday glam with texture.'),
+      it('normal-mini-hybrid','Normal Mini Hybrid Set','Mini Hybrid',180,'Light, even fullness that looks naturally yours, only better.'),
+      it('normal-classic','Normal Classic Lash','Classic',160,'The timeless one-to-one set. Defined, clean and polished.')]}],
+  addons:[{id:'bottom',name:'Bottom Lashes',price:70,desc:'Add definition to your lower lash line. Pairs beautifully with any set.'}]
 };
-const CAT_SHAPE = {wispy:'wispy',cateye:'cateye',normal:'normal'};
+const UNDECIDED='__undecided', ADDON_ONLY='__addons';
+const DOTS={'Classic':1,'Mini Hybrid':2,'Hybrid':3,'Volume':4};
 const FULL = {Classic:'classic','Mini Hybrid':'mini',Hybrid:'hybrid',Volume:'volume'};
+const allItems=()=>MENU_DATA.categories.flatMap(c=>c.items.map(i=>({...i,cat:c})));
+const findItem=id=>allItems().find(i=>i.id===id);
+const sparkle='<svg viewBox="0 0 24 24" fill="none" stroke="url(#spk)" stroke-width="1.2"><defs><linearGradient id="spk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f9dccf"/><stop offset="1" stop-color="#b8737a"/></linearGradient></defs><path d="M12 2l2.2 7.8L22 12l-7.8 2.2L12 22l-2.2-7.8L2 12l7.8-2.2z"/><path d="M19 3l.7 2.3L22 6l-2.3.7L19 9l-.7-2.3L16 6l2.3-.7z"/></svg>';
 
 /* ---- procedural lash SVG ---- */
 let gid=0;
@@ -742,33 +804,45 @@ function lashSVG(shape, fullness, opts={}){
 }
 
 /* ---- render menu ---- */
-const grid = document.getElementById('menuGrid');
-function renderMenu(cat, animate){
-  grid.innerHTML = MENU[cat].map((m,i)=>`
+const grid = document.getElementById('menuGrid'), tabsEl=document.getElementById('menuTabs');
+let curCat=null;
+function renderMenu(catId, animate){
+  const cat=MENU_DATA.categories.find(c=>c.id===catId)||MENU_DATA.categories[0]; if(!cat){grid.innerHTML='';return}
+  curCat=cat.id;
+  grid.innerHTML = cat.items.map(m=>`
     <article class="glass set">
       <span class="shine"></span>
-      <div class="lvl"><span>${m.lvl}</span><span class="dots">${[1,2,3,4].map(n=>`<i class="${n<=m.d?'on':''}"></i>`).join('')}</span></div>
-      <div class="lash">${lashSVG(CAT_SHAPE[cat], FULL[m.lvl])}</div>
-      <h3>${m.name}</h3><p>${m.desc}</p>
+      <div class="lvl"><span>${esc(m.level||cat.name)}</span>${DOTS[m.level]?`<span class="dots">${[1,2,3,4].map(n=>`<i class="${n<=DOTS[m.level]?'on':''}"></i>`).join('')}</span>`:''}</div>
+      ${cat.shape==='none'?`<div class="icon-art">${sparkle}</div>`:`<div class="lash">${lashSVG(cat.shape, FULL[m.level]||'hybrid')}</div>`}
+      <h3>${esc(m.name)}</h3><p>${esc(m.desc)}</p>
       <div class="foot"><div class="price"><small>GHS</small><b class="gloss-text">${m.price}</b></div>
-      <button class="book" data-book="${m.name}" aria-label="Book ${m.name}"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
+      <button class="book" data-book="${esc(m.id)}" aria-label="Book ${esc(m.name)}"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
     </article>`).join('');
-  grid.querySelectorAll('.set').forEach(card=>{
+  if(!LITE) grid.querySelectorAll('.set').forEach(card=>{
     card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect();card.style.setProperty('--mx',(e.clientX-r.left)+'px');card.style.setProperty('--my',(e.clientY-r.top)+'px')});
   });
   if(animate && window.gsap && !reduce){
-    gsap.fromTo(grid.children,{y:40,opacity:0,rotateX:-12},{y:0,opacity:1,rotateX:0,duration:.9,stagger:.08,ease:'expo.out'});
-    gsap.fromTo(grid.querySelectorAll('.l'),{strokeDasharray:80,strokeDashoffset:80},{strokeDashoffset:0,duration:1.2,stagger:.006,ease:'power2.out'});
+    gsap.fromTo(grid.children,{y:24,opacity:0},{y:0,opacity:1,duration:.5,stagger:.05,ease:'power3.out',clearProps:'transform,opacity'});
+    if(!LITE) gsap.fromTo(grid.querySelectorAll('.l'),{strokeDasharray:80,strokeDashoffset:80},{strokeDashoffset:0,duration:.8,stagger:.004,ease:'power2.out'});
   }
 }
-renderMenu('wispy');
-
-const tabs=[...document.querySelectorAll('.tab')], pill=document.querySelector('.tab-pill');
-function movePill(t){pill.style.left=t.offsetLeft+'px';pill.style.width=t.offsetWidth+'px'}
-tabs.forEach(t=>t.addEventListener('click',()=>{tabs.forEach(x=>x.classList.remove('active'));t.classList.add('active');movePill(t);renderMenu(t.dataset.cat,true)}));
-addEventListener('load',()=>movePill(document.querySelector('.tab.active')));
-addEventListener('resize',()=>movePill(document.querySelector('.tab.active')));
-if(document.fonts) document.fonts.ready.then(()=>movePill(document.querySelector('.tab.active')));
+function renderTabs(){
+  const cats=MENU_DATA.categories;
+  tabsEl.hidden=cats.length<2;
+  tabsEl.innerHTML='<span class="tab-pill"></span>'+cats.map(c=>`<button class="tab ${c.id===curCat?'active':''}" data-cat="${esc(c.id)}" role="tab"><span class="script">${esc(c.name)}</span><small>${esc(c.sub||'')}</small></button>`).join('');
+  requestAnimationFrame(movePill);
+}
+function movePill(){const t=tabsEl.querySelector('.tab.active')||tabsEl.querySelector('.tab');const pill=tabsEl.querySelector('.tab-pill');if(t&&pill){pill.style.left=t.offsetLeft+'px';pill.style.width=t.offsetWidth+'px'}}
+tabsEl.addEventListener('click',e=>{const t=e.target.closest('.tab');if(!t)return;tabsEl.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===t));movePill();renderMenu(t.dataset.cat,true)});
+addEventListener('resize',movePill);
+if(document.fonts) document.fonts.ready.then(movePill);
+function renderAddons(){
+  document.getElementById('addonList').innerHTML=(MENU_DATA.addons||[]).map(a=>`<div class="addon glass">
+      <div><h4>${esc(a.name)}</h4><p>${esc(a.desc)}</p></div>
+      <div class="r"><div class="price"><small>GHS</small><b class="gloss-text">${a.price}</b></div>
+        <button class="btn btn-ghost" data-addon="${esc(a.id)}">Add to booking</button></div></div>`).join('');
+}
+curCat=MENU_DATA.categories[0]?.id; renderTabs(); renderMenu(curCat); renderAddons();
 
 /* ---- guide ---- */
 const gsvg=document.getElementById('guideSvg'), gv=document.getElementById('guideVisual'), gImg=document.getElementById('guideImg'), gLabel=document.getElementById('guideLabel');
@@ -808,7 +882,7 @@ function renderLooks(){
   rail.innerHTML=shown.map((l,i)=>`<figure class="frame" data-i="${i}"><div class="ph"><img src="${l.src}" alt="${(l.caption||TAG_LABEL[l.tag]||'Lash set')} by Glam By Nel" loading="lazy" draggable="false"></div><figcaption class="cap">${l.caption||TAG_LABEL[l.tag]+' Set'}</figcaption></figure>`).join('');
   document.getElementById('lookCount').textContent=shown.length;
   rail.scrollLeft=0;
-  if(window.gsap&&!reduce) gsap.fromTo(rail.children,{y:60,opacity:0},{y:0,opacity:1,duration:1,stagger:.06,ease:'expo.out'});
+  if(window.gsap&&!reduce&&!LITE) gsap.fromTo(rail.children,{opacity:0},{opacity:1,duration:.5,stagger:.04,ease:'power2.out',clearProps:'opacity'});
 }
 filt.addEventListener('click',e=>{const c=e.target.closest('.chip');if(c){lookFilter=c.dataset.t;renderLooks()}});
 const step=()=>(rail.querySelector('.frame')?.offsetWidth||280)+25;
@@ -856,13 +930,26 @@ function applyStudio(){
 applyStudio();
 
 /* ---- booking ---- */
-const sel=document.getElementById('fSet'), bottom=document.getElementById('fBottom'), total=document.getElementById('fTotal');
+const sel=document.getElementById('fSet'), total=document.getElementById('fTotal'), addonBox=document.getElementById('addonChecks');
 const form=document.getElementById('bookForm'), err=document.getElementById('formErr');
-const label={wispy:'Wispy Sets',cateye:'Cat Eye Sets',normal:'Normal Sets'};
-sel.innerHTML='<option value="">Choose a set…</option>'+Object.keys(MENU).map(k=>`<optgroup label="${label[k]}">${MENU[k].map(m=>`<option value="${m.name.replace('Cat Eye','Cat Eye')}" data-p="${m.price}">${m.name} · GHS ${m.price}</option>`).join('')}</optgroup>`).join('')+'<optgroup label="Add-on only"><option value="Bottom Lashes only" data-p="0">Bottom lashes only · GHS 70</option></optgroup>';
-function calc(){const bo=sel.value==='Bottom Lashes only';return +(sel.selectedOptions[0]?.dataset.p||0)+((bottom.checked||bo)?70:0)}
-function upd(){total.textContent='GHS '+calc();if(window.gsap)gsap.fromTo(total,{scale:1.12},{scale:1,duration:.5,ease:'back.out(3)'})}
-sel.onchange=upd; bottom.onchange=upd;
+function buildSelect(){
+  const keep=sel.value;
+  sel.innerHTML='<option value="">Choose a set…</option>'
+    +`<optgroup label="Not sure?"><option value="${UNDECIDED}">✨ Not sure yet: help me choose</option></optgroup>`
+    +MENU_DATA.categories.map(c=>`<optgroup label="${esc(c.name)} ${esc(c.sub||'')}">${c.items.map(m=>`<option value="${esc(m.id)}">${esc(m.name)} · GHS ${m.price}</option>`).join('')}</optgroup>`).join('')
+    +((MENU_DATA.addons||[]).length?`<optgroup label="Add-ons only"><option value="${ADDON_ONLY}">Just add-ons (e.g. ${esc(MENU_DATA.addons[0].name.toLowerCase())})</option></optgroup>`:'');
+  if([...sel.options].some(o=>o.value===keep)) sel.value=keep;
+  const checked=new Set(chosenAddons());
+  addonBox.innerHTML=(MENU_DATA.addons||[]).map(a=>`<label class="check"><input type="checkbox" value="${esc(a.id)}" ${checked.has(a.id)?'checked':''}> Add ${esc(a.name.toLowerCase())} (+ GHS ${a.price})</label>`).join('');
+  upd(true);
+}
+const chosenAddons=()=>[...addonBox.querySelectorAll('input:checked')].map(i=>i.value);
+const addonObjs=()=>(MENU_DATA.addons||[]).filter(a=>chosenAddons().includes(a.id));
+function calc(){const it=findItem(sel.value);return (it?it.price:0)+addonObjs().reduce((t,a)=>t+a.price,0)}
+function totalText(){const a=addonObjs().reduce((t,x)=>t+x.price,0);if(sel.value===UNDECIDED)return a?`TBC + GHS ${a}`:'To be confirmed';return 'GHS '+calc()}
+function upd(quiet){document.getElementById('setHint').hidden=sel.value!==UNDECIDED;total.textContent=totalText();if(!quiet&&window.gsap)gsap.fromTo(total,{scale:1.1},{scale:1,duration:.4,ease:'back.out(3)'})}
+sel.onchange=()=>upd(); addonBox.addEventListener('change',()=>upd());
+function setLabel(o){const base=o.item===UNDECIDED?'Not sure yet (help me choose)':o.item===ADDON_ONLY?'Add-ons only':(findItem(o.item)?.name||o.item);return base+(o.addonNames.length?' + '+o.addonNames.join(', '):'')}
 const fmtTime=t=>{const[h,m]=t.split(':').map(Number);return `${(h%12)||12}:${String(m).padStart(2,'0')} ${h<12?'AM':'PM'}`};
 const fmtDate=(d,o={weekday:'long',day:'numeric',month:'long'})=>new Date(d+'T12:00:00Z').toLocaleDateString('en-GB',{...o,timeZone:'UTC'});
 
@@ -887,6 +974,11 @@ async function loadSlots(){
     const r=await fetch('/api/availability',{cache:'no-store'}); if(!r.ok) throw 0;
     const j=await r.json(); if(!j.ok) throw 0;
     SLOTS=j.slots||{}; if(j.studio){STUDIO={...STUDIO,...j.studio};applyStudio()}
+    if(j.menu&&j.menu.categories&&j.menu.categories.length){
+      MENU_DATA=j.menu; if(!MENU_DATA.categories.some(c=>c.id===curCat)) curCat=MENU_DATA.categories[0].id;
+      renderTabs(); renderMenu(curCat); renderAddons(); buildSelect();
+    }
+    showBanner(j.banner);
     renderDates();
   }catch(e){
     // No booking backend (e.g. opened as a local file): fall back to WhatsApp requests
@@ -897,36 +989,45 @@ async function loadSlots(){
     const d=document.getElementById('fDate'),t=new Date();d.min=new Date(t-t.getTimezoneOffset()*6e4).toISOString().slice(0,10);
   }
 }
+function showBanner(text){
+  const el=document.getElementById('announce');
+  let dismissed=null; try{dismissed=sessionStorage.getItem('gnBanner')}catch(_){}
+  if(!text||dismissed===text){el.hidden=true;document.body.classList.remove('has-banner');return}
+  document.getElementById('announceText').textContent=text; el.hidden=false; document.body.classList.add('has-banner');
+  document.getElementById('announceX').onclick=()=>{el.hidden=true;document.body.classList.remove('has-banner');try{sessionStorage.setItem('gnBanner',text)}catch(_){}};
+}
+buildSelect();
 loadSlots();
 
 document.addEventListener('click',e=>{
   const b=e.target.closest('[data-book]'); const a=e.target.closest('[data-addon]');
   if(b){sel.value=b.dataset.book;upd();scrollToEl('#book')}
-  if(a){bottom.checked=true;upd();scrollToEl('#book')}
+  if(a){const cb=addonBox.querySelector(`input[value="${CSS.escape(a.dataset.addon)}"]`);if(cb)cb.checked=true;if(!sel.value)sel.value=ADDON_ONLY;upd();scrollToEl('#book')}
 });
 function waToNel(o){
-  const set=o.set==='Bottom Lashes only'?'Bottom lashes only':o.set+(o.bottom?' + Bottom lashes':'');
-  return `https://wa.me/${WA}?text=`+encodeURIComponent(`Hi Nel! 💕 I'd love to book an appointment.\n\n`+(o.ref?`🔖 Ref: ${o.ref}\n`:'')+`✨ Name: ${o.name}\n📱 WhatsApp: ${o.phone}\n💎 Set: ${set}\n📅 Date: ${fmtDate(o.date)}\n⏰ Time: ${fmtTime(o.time)}\n💰 Estimate: GHS ${o.total}`+(o.notes?`\n📝 Notes: ${o.notes}`:'')+`\n\n`+(o.ref?`I've requested this slot on your website. Thank you!`:`Please let me know if this slot is available. Thank you!`));
+  const est=o.item===UNDECIDED?(o.addonTotal?`To be confirmed (add-ons GHS ${o.addonTotal})`:'To be confirmed'):`GHS ${o.total}`;
+  return `https://wa.me/${WA}?text=`+encodeURIComponent(`Hi Nel! 💕 I'd love to book an appointment.\n\n`+(o.ref?`🔖 Ref: ${o.ref}\n`:'')+`✨ Name: ${o.name}\n📱 WhatsApp: ${o.phone}\n💎 Set: ${setLabel(o)}\n📅 Date: ${fmtDate(o.date)}\n⏰ Time: ${fmtTime(o.time)}\n💰 Estimate: ${est}`+(o.notes?`\n📝 Notes: ${o.notes}`:'')+(o.item===UNDECIDED?`\n\nI'm not sure which set to get, so I'd love your advice!`:'')+`\n\n`+(o.ref?`I've requested this slot on your website. Thank you!`:`Please let me know if this slot is available. Thank you!`));
 }
 function notifyNetlify(o){ // Netlify Forms email notification (silently ignored if not enabled)
-  const body=new URLSearchParams({'form-name':'booking',ref:o.ref||'',name:o.name,phone:o.phone,set:o.set+(o.bottom?' + Bottom lashes':''),date:o.date,time:o.time,total:'GHS '+o.total,notes:o.notes||''});
+  const body=new URLSearchParams({'form-name':'booking',ref:o.ref||'',name:o.name,phone:o.phone,set:setLabel(o),date:o.date,time:o.time,total:o.item===UNDECIDED?'To be confirmed':'GHS '+o.total,notes:o.notes||''});
   fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body}).catch(()=>{});
 }
 function showSuccess(o){
   form.hidden=true; const sc=document.getElementById('bookSuccess'); sc.hidden=false;
   document.getElementById('sRef').textContent='REF · '+o.ref;
-  document.getElementById('sSummary').innerHTML=`<dt>Set</dt><dd>${o.set}${o.bottom&&o.set!=='Bottom Lashes only'?' + bottom lashes':''}</dd><dt>Date</dt><dd>${fmtDate(o.date)}</dd><dt>Time</dt><dd>${fmtTime(o.time)}</dd><dt>Total</dt><dd>GHS ${o.total}</dd>`;
+  document.getElementById('sSummary').innerHTML=`<dt>Set</dt><dd>${esc(setLabel(o))}</dd><dt>Date</dt><dd>${fmtDate(o.date)}</dd><dt>Time</dt><dd>${fmtTime(o.time)}</dd><dt>Total</dt><dd>${o.item===UNDECIDED?'To be confirmed':'GHS '+o.total}</dd>`;
   document.getElementById('sWa').href=waToNel(o);
-  if(window.gsap&&!reduce) gsap.from(sc.children,{y:20,opacity:0,stagger:.07,duration:.8,ease:'expo.out'});
+  if(window.gsap&&!reduce) gsap.from(sc.children,{y:16,opacity:0,stagger:.05,duration:.5,ease:'power3.out'});
   scrollToEl('#book');
 }
-document.getElementById('sAgain').onclick=()=>{document.getElementById('bookSuccess').hidden=true;form.hidden=false;form.reset();pickTime=null;upd();loadSlots()};
+document.getElementById('sAgain').onclick=()=>{document.getElementById('bookSuccess').hidden=true;form.hidden=false;form.reset();pickTime=null;upd(true);loadSlots()};
 
 form.addEventListener('submit',async e=>{
   e.preventDefault(); err.textContent='';
-  const o={name:form.fName.value.trim(),phone:form.fPhone.value.trim(),set:sel.value,bottom:bottom.checked||sel.value==='Bottom Lashes only',notes:form.fNotes.value.trim(),total:calc(),company:document.getElementById('fCompany').value};
+  const ad=addonObjs();
+  const o={name:form.fName.value.trim(),phone:form.fPhone.value.trim(),item:sel.value,addons:ad.map(a=>a.id),addonNames:ad.map(a=>a.name),addonTotal:ad.reduce((t,a)=>t+a.price,0),notes:form.fNotes.value.trim(),total:calc(),company:document.getElementById('fCompany').value};
   if(MODE==='live'){o.date=pickDate;o.time=pickTime}else{o.date=form.fDate.value;o.time=form.fTime.value}
-  const missing=[!o.name&&'your name',o.phone.replace(/\D/g,'').length<9&&'your WhatsApp number',!o.set&&'a lash set',!o.date&&'a date',!o.time&&'a time'].filter(Boolean);
+  const missing=[!o.name&&'your name',o.phone.replace(/\D/g,'').length<9&&'your WhatsApp number',!o.item&&'a lash set (or "Not sure yet")',o.item===ADDON_ONLY&&!o.addons.length&&'at least one add-on',!o.date&&'a date',!o.time&&'a time'].filter(Boolean);
   ['fName','fPhone','fSet'].forEach(id=>{const el=document.getElementById(id);el.style.borderColor=(id==='fPhone'?o.phone.replace(/\D/g,'').length<9:!el.value)?'#e07a8a':''});
   if(missing.length){err.textContent='Please choose '+missing.join(', ')+'.';if(window.gsap)gsap.fromTo(form,{x:-8},{x:0,duration:.6,ease:'elastic.out(1,.3)'});return}
   if(MODE==='offline'){window.open(waToNel(o),'_blank');return}
@@ -963,17 +1064,16 @@ window.__scrollToEl=scrollToEl;
 
 /* ---- loader + animations ---- */
 function hideLoader(){const l=document.getElementById('loader');if(!l)return;
-  if(window.gsap){gsap.to(l,{yPercent:-100,duration:1.1,ease:'expo.inOut',delay:reduce?0:1.6,onComplete:()=>l.remove()})}else l.remove()}
+  if(window.gsap){gsap.to(l,{yPercent:-100,duration:.7,ease:'power3.inOut',delay:reduce?0:(LITE?.25:.75),onComplete:()=>l.remove()})}else l.remove()}
 
 function initMotion(){
   if(!window.gsap){hideLoader();return}
   gsap.registerPlugin(ScrollTrigger);
-  if(window.Lenis && !reduce){
-    lenis=new Lenis({duration:1.2,smoothWheel:true});
+  if(window.Lenis && !reduce && !LITE){ // smooth wheel scrolling on desktop only; phones keep native scrolling
+    lenis=new Lenis({duration:1.05,smoothWheel:true});
     lenis.on('scroll',ScrollTrigger.update);
     gsap.ticker.add(t=>lenis.raf(t*1000)); gsap.ticker.lagSmoothing(0);
   }
-  // split hero title
   document.querySelectorAll('.split').forEach(el=>{
     const txt=el.textContent; const isGloss=el.classList.contains('gloss-text');
     el.classList.remove('gloss-text');
@@ -981,24 +1081,25 @@ function initMotion(){
   });
   hideLoader();
   if(reduce) return;
-  const d0=1.9;
-  gsap.from('.hero h1 .ch',{yPercent:115,rotate:6,duration:1.3,stagger:.045,ease:'expo.out',delay:d0});
-  gsap.from('.hero-fade',{y:30,opacity:0,duration:1.1,stagger:.12,ease:'expo.out',delay:d0+.35});
-  gsap.from('.nav',{y:-40,opacity:0,duration:1,ease:'expo.out',delay:d0+.2});
-  gsap.from('.hero-meta',{opacity:0,duration:1,delay:d0+.9});
-  gsap.to('.hero-inner',{yPercent:-18,opacity:.2,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:true}});
+  const d0=LITE?.35:.85;
+  const tl=gsap.timeline({delay:d0,defaults:{ease:'power3.out'}});
+  tl.from('.hero h1 .ch',{yPercent:110,duration:.8,stagger:.03})
+    .from('.hero-fade',{y:18,opacity:0,duration:.6,stagger:.07,clearProps:'transform,opacity'},'-=.5')
+    .from('.nav',{y:-24,opacity:0,duration:.5,clearProps:'transform,opacity'},'<')
+    .from('.hero-meta',{opacity:0,duration:.5},'-=.2');
+  if(!LITE) gsap.to('.hero-inner',{yPercent:-8,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:.4}});
 
-  gsap.utils.toArray('.reveal').forEach(el=>{
-    gsap.from(el,{y:60,opacity:0,duration:1.2,ease:'expo.out',scrollTrigger:{trigger:el,start:'top 88%'}});
-  });
-  gsap.fromTo('.guide-visual',{y:40},{y:-40,ease:'none',scrollTrigger:{trigger:'.guide',start:'top bottom',end:'bottom top',scrub:true}});
-  gsap.from('.final h2',{scale:.85,scrollTrigger:{trigger:'.final',start:'top bottom',end:'center center',scrub:1}});
+  // Section reveals: batched so cards come in together, run once, then hand transforms back to CSS (no overlap with hover tilt)
+  gsap.set('.reveal',{autoAlpha:0,y:LITE?14:26});
+  ScrollTrigger.batch('.reveal',{start:'top 92%',once:true,
+    onEnter:els=>gsap.to(els,{autoAlpha:1,y:0,duration:LITE?.45:.65,stagger:.06,ease:'power3.out',overwrite:true,clearProps:'transform,visibility,opacity'})});
+  ScrollTrigger.refresh();
   addEventListener('load',()=>ScrollTrigger.refresh());
 }
 
 /* ---- tilt + magnetic + cursor ---- */
 const fine=matchMedia('(hover:hover) and (pointer:fine)').matches;
-if(fine && !reduce){
+if(fine && !reduce && !LITE){
   document.querySelectorAll('.tilt').forEach(el=>{
     el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
       el.style.transform=`perspective(900px) rotateY(${x*10}deg) rotateX(${-y*10}deg) translateZ(0)`});
@@ -1014,22 +1115,21 @@ if(fine && !reduce){
   document.addEventListener('pointerover',e=>ring.classList.toggle('hover',!!e.target.closest('a,button,.style-row,select,input,textarea')));
 }
 
-if(document.readyState==='complete') initMotion(); else addEventListener('load',initMotion);
+initMotion(); // scripts sit at the end of <body>, so the page is ready; no need to wait for every image
 setTimeout(()=>{const l=document.getElementById('loader');if(l&&!window.gsap)l.remove()},4000);
 })();
 </script>
 
-<!-- ============ 3D HERO (three.js) ============ -->
+<!-- ============ 3D HERO (three.js) — desktop only; phones get the light SVG art ============ -->
 <script type="module">
-import * as THREE from 'three';
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-
+if (!window.__LITE) start().catch(()=>{ document.documentElement.classList.add('lite'); });
+async function start(){
+const THREE = await import('three');
+const { RoomEnvironment } = await import('three/addons/environments/RoomEnvironment.js');
 const canvas = document.getElementById('gl');
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-let renderer;
-try { renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true, powerPreference:'high-performance'}); }
-catch(e){ document.querySelector('.hero-fallback').style.display='block'; throw e; }
-renderer.setPixelRatio(Math.min(devicePixelRatio,1.75));
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true, powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.05;
 renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -1037,108 +1137,97 @@ renderer.outputColorSpace = THREE.SRGBColorSpace;
 const scene = new THREE.Scene();
 const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+pmrem.dispose();
 
 const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
 camera.position.set(0,0,9);
-
 const key = new THREE.DirectionalLight(0xffe6e0, 2.2); key.position.set(3,4,5); scene.add(key);
 const pinkL = new THREE.PointLight(0xff8fb0, 30, 20); pinkL.position.set(-3,-1,3); scene.add(pinkL);
 const rimL = new THREE.PointLight(0xffd2c2, 25, 20); rimL.position.set(4,2,-3); scene.add(rimL);
-
 const group = new THREE.Group(); scene.add(group);
 
-// --- glossy lacquer heart
+// glossy lacquer heart
 const hs = new THREE.Shape();
 hs.moveTo(5,5); hs.bezierCurveTo(5,5,4,0,0,0); hs.bezierCurveTo(-6,0,-6,7,-6,7);
 hs.bezierCurveTo(-6,11,-3,15.4,5,19); hs.bezierCurveTo(12,15.4,16,11,16,7);
 hs.bezierCurveTo(16,7,16,0,10,0); hs.bezierCurveTo(7,0,5,5,5,5);
-const hg = new THREE.ExtrudeGeometry(hs,{depth:3.2,bevelEnabled:true,bevelThickness:2.6,bevelSize:2.2,bevelSegments:16,curveSegments:48});
+const hg = new THREE.ExtrudeGeometry(hs,{depth:3.2,bevelEnabled:true,bevelThickness:2.6,bevelSize:2.2,bevelSegments:12,curveSegments:36});
 hg.center(); hg.scale(0.085,0.085,0.085); hg.rotateZ(Math.PI); hg.computeVertexNormals();
-const heartMat = new THREE.MeshPhysicalMaterial({color:0xe7929f,metalness:0.15,roughness:0.12,clearcoat:1,clearcoatRoughness:0.03,sheen:1,sheenColor:new THREE.Color(0xffc4d0),sheenRoughness:.4,iridescence:.35,iridescenceIOR:1.4});
-const heart = new THREE.Mesh(hg, heartMat); group.add(heart);
+const heart = new THREE.Mesh(hg, new THREE.MeshPhysicalMaterial({color:0xe7929f,metalness:0.15,roughness:0.12,clearcoat:1,clearcoatRoughness:0.03,sheen:1,sheenColor:new THREE.Color(0xffc4d0),sheenRoughness:.4,iridescence:.35,iridescenceIOR:1.4}));
+group.add(heart);
 
-// --- rose gold rings
+// rose gold rings
 const rg = new THREE.MeshPhysicalMaterial({color:0xe0a596,metalness:1,roughness:0.16,clearcoat:.7,clearcoatRoughness:.08});
-const ring1 = new THREE.Mesh(new THREE.TorusGeometry(1.85,0.045,32,220), rg);
-const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.25,0.022,24,220), rg);
+const ring1 = new THREE.Mesh(new THREE.TorusGeometry(1.85,0.045,24,160), rg);
+const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.25,0.022,16,160), rg);
 ring1.rotation.set(1.2,0.3,0); ring2.rotation.set(1.45,-0.5,0.4);
 group.add(ring1, ring2);
 
-// --- iridescent pearls
-const pearlMat = new THREE.MeshPhysicalMaterial({color:0xfff1f1,metalness:0,roughness:0.08,clearcoat:1,clearcoatRoughness:.04,iridescence:1,iridescenceIOR:1.7,iridescenceThicknessRange:[180,520],sheen:.6,sheenColor:new THREE.Color(0xffd6e0)});
-const sph = new THREE.SphereGeometry(1,48,48);
-const pearls=[];
-for(let i=0;i<16;i++){
-  const m=new THREE.Mesh(sph,pearlMat); const s=0.06+Math.random()*0.16; m.scale.setScalar(s);
-  const a=Math.random()*Math.PI*2, r=1.6+Math.random()*1.6;
-  m.userData={a,r,y:(Math.random()-.5)*3.2,sp:.15+Math.random()*.25,ph:Math.random()*6};
-  group.add(m); pearls.push(m);
-}
-// pearls along ring1
-const strand = new THREE.Group(); ring1.add(strand);
-for(let i=0;i<36;i++){const m=new THREE.Mesh(sph,pearlMat);m.scale.setScalar(.075);const t=i/36*Math.PI*2;m.position.set(Math.cos(t)*1.85,Math.sin(t)*1.85,0);strand.add(m)}
+// iridescent pearls (one instanced draw call instead of 50 separate meshes)
+const pearlMat = new THREE.MeshPhysicalMaterial({color:0xfff1f1,metalness:0,roughness:0.08,clearcoat:1,clearcoatRoughness:.04,iridescence:1,iridescenceIOR:1.7,iridescenceThicknessRange:[180,520]});
+const sph = new THREE.SphereGeometry(1,32,32);
+const FREE=14, STRAND=32;
+const pearls = new THREE.InstancedMesh(sph, pearlMat, FREE); group.add(pearls);
+const strand = new THREE.InstancedMesh(sph, pearlMat, STRAND); ring1.add(strand);
+const m4=new THREE.Matrix4(), q=new THREE.Quaternion(), v=new THREE.Vector3(), sc3=new THREE.Vector3();
+for(let i=0;i<STRAND;i++){const t=i/STRAND*Math.PI*2;m4.compose(v.set(Math.cos(t)*1.85,Math.sin(t)*1.85,0),q,sc3.setScalar(.075));strand.setMatrixAt(i,m4)}
+const pd=[...Array(FREE)].map(()=>({a:Math.random()*Math.PI*2,r:1.5+Math.random()*1.0,y:(Math.random()-.5)*3.0,sp:.15+Math.random()*.25,ph:Math.random()*6,s:.06+Math.random()*.16}));
 
-// --- glass bubbles
-const glassMat = new THREE.MeshPhysicalMaterial({color:0xffdfe6,metalness:0,roughness:0.03,transmission:1,thickness:.8,ior:1.45,iridescence:.8,iridescenceIOR:1.3,clearcoat:1});
-const bubbles=[];
-[[-2.3,1.4,-.5,.42],[2.1,-1.6,.3,.32],[1.9,1.8,-1,.26],[-1.7,-1.9,.6,.22]].forEach(([x,y,z,s])=>{
-  const m=new THREE.Mesh(sph,glassMat);m.position.set(x,y,z);m.scale.setScalar(s);m.userData.base=y;group.add(m);bubbles.push(m)});
+// polished rose-gold beads (solid metal reads glossy on the dark background, unlike see-through spheres)
+const bubMat = new THREE.MeshPhysicalMaterial({color:0xf2b8ae,metalness:1,roughness:0.12,clearcoat:1,clearcoatRoughness:.05});
+const bubbles=[[-2.3,1.4,-.5,.2],[2.1,-1.6,.3,.16],[1.9,1.8,-1,.13],[-1.7,-1.9,.6,.11]].map(([x,y,z,s])=>{const m=new THREE.Mesh(sph,bubMat);m.position.set(x,y,z);m.scale.setScalar(s);m.userData.base=y;group.add(m);return m});
 
-// --- sparkle dust
-const pc=500, pos=new Float32Array(pc*3);
+// sparkle dust
+const pc=350, pos=new Float32Array(pc*3);
 for(let i=0;i<pc;i++){pos[i*3]=(Math.random()-.5)*16;pos[i*3+1]=(Math.random()-.5)*10;pos[i*3+2]=(Math.random()-.5)*8-2}
 const pg=new THREE.BufferGeometry(); pg.setAttribute('position',new THREE.BufferAttribute(pos,3));
-const spr=document.createElement('canvas');spr.width=spr.height=64;const sc=spr.getContext('2d');
-const grd=sc.createRadialGradient(32,32,0,32,32,32);grd.addColorStop(0,'rgba(255,240,235,1)');grd.addColorStop(.3,'rgba(255,190,200,.6)');grd.addColorStop(1,'rgba(255,190,200,0)');sc.fillStyle=grd;sc.fillRect(0,0,64,64);
+const spr=document.createElement('canvas');spr.width=spr.height=64;const sctx=spr.getContext('2d');
+const grd=sctx.createRadialGradient(32,32,0,32,32,32);grd.addColorStop(0,'rgba(255,240,235,1)');grd.addColorStop(.3,'rgba(255,190,200,.6)');grd.addColorStop(1,'rgba(255,190,200,0)');sctx.fillStyle=grd;sctx.fillRect(0,0,64,64);
 const dust=new THREE.Points(pg,new THREE.PointsMaterial({size:.07,map:new THREE.CanvasTexture(spr),transparent:true,depthWrite:false,blending:THREE.AdditiveBlending}));
 scene.add(dust);
 
-// --- layout
-let mobile=false;
+// layout: keep the whole composition in the right-hand side so it never sits on top of the headline
+let baseX=2.4, baseY=0.1;
 function resize(){
   const w=canvas.clientWidth,h=canvas.clientHeight; renderer.setSize(w,h,false);
   camera.aspect=w/h; camera.updateProjectionMatrix();
-  mobile = w<900;
-  group.position.set(mobile?0:(w>1300?2.75:2.4), mobile?1.55:0.1, 0);
-  group.scale.setScalar(mobile?0.5:1);
+  const halfW=Math.tan(THREE.MathUtils.degToRad(17.5))*9*camera.aspect;
+  baseX=halfW*0.58; baseY=0.1;
+  group.scale.setScalar(Math.min(1, (halfW*0.38)/2.35));
 }
 addEventListener('resize',resize); resize();
 
-// --- interaction
 const mouse={x:0,y:0,tx:0,ty:0};
-addEventListener('pointermove',e=>{mouse.tx=e.clientX/innerWidth-.5;mouse.ty=e.clientY/innerHeight-.5});
+addEventListener('pointermove',e=>{mouse.tx=e.clientX/innerWidth-.5;mouse.ty=e.clientY/innerHeight-.5},{passive:true});
 let scrollP=0;
 addEventListener('scroll',()=>{scrollP=Math.min(scrollY/innerHeight,1.2)},{passive:true});
 let visible=true;
 new IntersectionObserver(([en])=>visible=en.isIntersecting).observe(canvas);
 
-// intro
-let intro=0; const t0=performance.now()+1500;
+const t0=performance.now()+800;
 const clock=new THREE.Clock();
-function tick(){
-  requestAnimationFrame(tick);
-  if(!visible) return;
+renderer.setAnimationLoop(()=>{
+  if(!visible||document.hidden) return;
   const t=clock.getElapsedTime(), sp=reduce?0.15:1;
-  intro=Math.min(Math.max((performance.now()-t0)/1800,0),1); const ie=1-Math.pow(1-intro,4);
+  const intro=Math.min(Math.max((performance.now()-t0)/1300,0),1), ie=1-Math.pow(1-intro,4);
   mouse.x+=(mouse.tx-mouse.x)*.05; mouse.y+=(mouse.ty-mouse.y)*.05;
-
   heart.rotation.y = t*.45*sp + mouse.x*.8;
   heart.rotation.x = Math.sin(t*.6)*.12 + mouse.y*.4;
   heart.position.y = Math.sin(t*1.1)*.08;
   heart.scale.setScalar(.4+.6*ie);
   ring1.rotation.z = t*.25*sp; ring2.rotation.z = -t*.18*sp;
   ring1.scale.setScalar(.6+.4*ie); ring2.scale.setScalar(.5+.5*ie);
-  pearls.forEach(p=>{const u=p.userData;const a=u.a+t*u.sp*sp;p.position.set(Math.cos(a)*u.r,u.y+Math.sin(t+u.ph)*.2,Math.sin(a)*u.r*.6)});
+  pd.forEach((u,i)=>{const a=u.a+t*u.sp*sp;m4.compose(v.set(Math.cos(a)*u.r,u.y+Math.sin(t+u.ph)*.2,Math.sin(a)*u.r*.6),q,sc3.setScalar(u.s*ie));pearls.setMatrixAt(i,m4)});
+  pearls.instanceMatrix.needsUpdate=true;
   bubbles.forEach((b,i)=>{b.position.y=b.userData.base+Math.sin(t*.8+i)*.18});
-  dust.rotation.y=t*.02; dust.position.y=Math.sin(t*.3)*.1;
-
+  dust.rotation.y=t*.02;
   group.rotation.y = mouse.x*.25 + scrollP*.8;
   group.rotation.x = mouse.y*.15 - scrollP*.3;
-  group.position.y = (mobile?1.55:0.1) + scrollP*1.6;
+  group.position.set(baseX, baseY + scrollP*1.6, 0);
   camera.position.x = mouse.x*.4; camera.position.y = -mouse.y*.3; camera.lookAt(0,0,0);
   renderer.render(scene,camera);
+});
 }
-tick();
 </script>
 </body>
 </html>
