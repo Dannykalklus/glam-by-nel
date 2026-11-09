@@ -212,7 +212,7 @@ body.cursor-off .cursor,body.cursor-off .cursor-ring{opacity:0}
 @media (max-width:620px){.set{min-height:0}.tab{padding:.8rem 1rem}.tab .script{font-size:1.55rem}}
 
 /* ---------- guide (blush) ---------- */
-.guide{padding:9rem 0;background:linear-gradient(180deg,var(--blush) 0%,#f6dcda 100%);color:var(--ink);overflow:hidden}
+.guide{padding:9rem 0;background:linear-gradient(180deg,var(--blush) 0%,#f6dcda 100%);color:var(--ink);overflow:hidden;overflow:clip}
 .guide .eyebrow{color:var(--gold-3)}
 .guide .eyebrow::before,.guide .eyebrow::after{background:linear-gradient(90deg,transparent,var(--gold-3))}
 .guide .section-head p{color:#7a5f63}
@@ -230,7 +230,18 @@ body.cursor-off .cursor,body.cursor-off .cursor-ring{opacity:0}
 .style-row h4{font-family:var(--serif);font-size:1.8rem;font-weight:600;line-height:1.1}
 .style-row h4 .script{font-weight:400;color:var(--rose-deep);font-size:1.15em;margin-left:.3rem}
 .style-row p{font-size:.9rem;color:#6b5357;font-weight:400;margin-top:.3rem}
-@media (max-width:900px){.guide-grid{grid-template-columns:1fr}.guide-visual{max-width:420px;margin:0 auto;width:100%}}
+@media (min-width:901px){.guide-grid{align-items:start}.guide-visual{position:sticky;top:110px}}
+/* phones: photo on top, styles as a swipeable row underneath so both stay on screen */
+@media (max-width:900px){.guide-grid{grid-template-columns:1fr;gap:1.6rem}.guide-visual{max-width:min(76vw,340px);margin:0 auto;width:100%}
+  .styles{flex-direction:row;overflow-x:auto;scroll-snap-type:x mandatory;gap:.8rem;margin:0 -4vw;padding:.3rem 11vw 1rem;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .styles::-webkit-scrollbar{display:none}
+  .style-row{flex:0 0 78vw;scroll-snap-align:center}
+  .style-row:hover,.style-row.active{transform:none}
+  .style-row.active{background:rgba(255,255,255,.92);box-shadow:0 0 0 2px rgba(184,115,122,.45) inset,0 20px 40px -30px rgba(125,65,72,.6)}
+  .guide-dots{display:flex;justify-content:center;gap:.45rem;margin-top:-.4rem}
+  .guide-dots i{width:7px;height:7px;border-radius:50%;background:rgba(184,115,122,.3);transition:all .3s}
+  .guide-dots i.on{width:22px;border-radius:4px;background:var(--gold-3)}}
+@media (min-width:901px){.guide-dots{display:none}}
 
 /* ---------- gallery ---------- */
 .gallery{padding:9rem 0;background:var(--ink);overflow:hidden}
@@ -871,10 +882,17 @@ function showGuide(k){
     if(window.gsap && !reduce) gsap.fromTo(gsvg.querySelectorAll('.l'),{strokeDasharray:80,strokeDashoffset:80},{strokeDashoffset:0,duration:1,stagger:.01,ease:'power2.out'});
   }
 }
-document.querySelectorAll('.style-row').forEach(r=>{
-  const go=()=>{document.querySelectorAll('.style-row').forEach(x=>x.classList.remove('active'));r.classList.add('active');showGuide(r.dataset.style)};
-  r.addEventListener('click',go); r.addEventListener('mouseenter',()=>{if(matchMedia('(hover:hover)').matches)go()});
+const stylesEl=document.getElementById('styles'), rows=[...document.querySelectorAll('.style-row')];
+const dotsEl=document.createElement('div');dotsEl.className='guide-dots';dotsEl.innerHTML=rows.map(()=>'<i></i>').join('');stylesEl.after(dotsEl);
+const phoneGuide=()=>matchMedia('(max-width:900px)').matches;
+function pickRow(r){if(r.classList.contains('active'))return;rows.forEach((x,i)=>{x.classList.toggle('active',x===r);dotsEl.children[i].classList.toggle('on',x===r)});showGuide(r.dataset.style)}
+dotsEl.children[0].classList.add('on');
+rows.forEach(r=>{
+  r.addEventListener('click',()=>{pickRow(r);if(phoneGuide())stylesEl.scrollTo({left:r.offsetLeft-(stylesEl.clientWidth-r.offsetWidth)/2,behavior:'smooth'})});
+  r.addEventListener('mouseenter',()=>{if(matchMedia('(hover:hover)').matches)pickRow(r)});
 });
+// phones: swiping the row of styles switches the photo to the card in the middle
+let swipeT;stylesEl.addEventListener('scroll',()=>{if(!phoneGuide())return;clearTimeout(swipeT);swipeT=setTimeout(()=>{const mid=stylesEl.scrollLeft+stylesEl.clientWidth/2;let best=rows[0],d=1e9;rows.forEach(r=>{const c=r.offsetLeft+r.offsetWidth/2;if(Math.abs(c-mid)<d){d=Math.abs(c-mid);best=r}});pickRow(best)},80)},{passive:true});
 showGuide('classic');
 // bundled guide photos: only use files that actually exist
 Object.entries(CONFIG.guide||{}).forEach(([k,src])=>{const im=new Image();im.onload=()=>{if(!guidePhotos[k]){guidePhotos[k]=src;if(guideCur===k)showGuide(k)}};im.src=src});
