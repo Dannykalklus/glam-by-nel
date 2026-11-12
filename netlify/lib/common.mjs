@@ -43,6 +43,8 @@ export const DEFAULT_SETTINGS = {
   mapQuery: '5.6425759,-0.2904883', // Lord Of Peace School, Sowutuom
   banner: { on: false, text: '' },
   calToken: '',
+  phone: '0593761476',        // call number shown on the website for clients not booking online
+  whatsapp: '233593761476',   // WhatsApp number used for all website links (international format)
   templates: {
     confirm: "Hi {name}! 💕 Your appointment with Glam By Nel is CONFIRMED.\n\n💎 {set}\n📅 {date}\n⏰ {time}\n💰 {total}\n🔖 Ref: {ref}\n\n📍 {address}\nMap: {map}\n\nPlease come with clean, makeup-free lashes. See you soon! ✨",
     decline: "Hi {name}, thank you for choosing Glam By Nel 💕 Unfortunately {date} at {time} is no longer available. Here are my next open slots:\n{openings}\n\nReply with the one that suits you and I'll lock it in for you. ✨",
@@ -164,3 +166,155 @@ export function sameSecret(a, b) {
   const h = (x) => createHash('sha256').update(x).digest();
   return timingSafeEqual(h(a), h(b));
 }
+
+/* ---------- offers: discount codes + promotions ---------- */
+export const MAX_PEOPLE = 5;
+export const EMPTY_OFFERS = { codes: [], promos: [] };
+export async function getOffers(s = store()) {
+  const o = (await s.get('offers', { type: 'json' })) || EMPTY_OFFERS;
+  return { codes: o.codes || [], promos: o.promos || [] };
+}
+const inWindow = (x, day) => (!x.start || day >= x.start) && (!x.end || day <= x.end);
+export const livePromos = (offers, day = todayAccra()) => offers.promos.filter((p) => p.active && inWindow(p, day));
+
+/** Validate a code's own rules (not its effect). Returns {code} or {error}. */
+export function findCode(offers, raw, day = todayAccra()) {
+  const c = String(raw || '').trim().toUpperCase();
+  if (!c) return {};
+  const code = offers.codes.find((x) => x.code === c);
+  if (!code || !code.active) return { error: 'That discount code isn’t valid.' };
+  if (code.start && day < code.start) return { error: 'That code isn’t active yet.' };
+  if (code.end && day > code.end) return { error: 'That code has expired.' };
+  if (code.maxUses && (code.used || 0) >= code.maxUses) return { error: 'That code has been fully used.' };
+  return { code };
+}
+
+/** Best promotion for one menu item (applies to the set price, not add-ons). */
+export function promoFor(promos, itemId, catId, price) {
+  let best = null;
+  for (const p of promos) {
+    const hit = p.scope === 'all' || (p.scope === 'cat' && p.targets?.includes(catId)) || (p.scope === 'items' && p.targets?.includes(itemId));
+    if (!hit) continue;
+    const off = Math.min(price, p.type === 'pct' ? Math.round(price * p.value / 100) : p.value);
+    if (off > 0 && (!best || off > best.off)) best = { off, title: p.title, id: p.id };
+  }
+  return best;
+}
+
+/**
+ * Price a booking for 1–5 people.
+ * people: [{ name, item, addons }]; the first person is the main client.
+ * Promotions apply automatically to set prices. A discount code applies to the subtotal:
+ * on top of promotions if the code allows stacking, otherwise whichever saves the client more.
+ */
+export function priceBooking(menu, offers, people, rawCode, { allowInactive = false, day = todayAccra(), countUse = false } = {}) {
+  if (!Array.isArray(people) || !people.length) return { error: 'Please choose a lash set.' };
+  if (people.length > MAX_PEOPLE) return { error: `Group bookings are up to ${MAX_PEOPLE} people.` };
+  const promos = livePromos(offers, day);
+  const persons = [];
+  for (const [i, p] of people.entries()) {
+    const q = quote(menu, clean(p.item, 80), Array.isArray(p.addons) ? p.addons.map(String) : [], { allowInactive });
+    if (!q) return { error: people.length > 1 ? `Please choose a set for person ${i + 1}.` : 'Please choose a lash set (or "Not sure yet").' };
+    const cat = menu.categories.find((c) => c.items.some((x) => x.id === q.itemId));
+    const pr = q.undecided || q.itemId === ADDON_ONLY ? null : promoFor(promos, q.itemId, cat?.id, q.price);
+    persons.push({ name: clean(p.name, 60) || (i ? `Guest ${i}` : ''), ...q, list: q.total, promoOff: pr?.off || 0, promo: pr?.title || '' });
+  }
+  const list = persons.reduce((t, p) => t + p.list, 0);
+  const promoOff = persons.reduce((t, p) => t + p.promoOff, 0);
+  let codeOff = 0, codeInfo = null, codeError = null, applied = 'none';
+  const f = findCode(offers, rawCode, day);
+  if (f.error) codeError = f.error;
+  else if (f.code) {
+    const c = f.code;
+    const base = c.stack ? list - promoOff : list;
+    if (c.minSpend && list < c.minSpend) codeError = `This code needs a spend of at least GHS ${c.minSpend}.`;
+    else {
+      codeOff = Math.min(base, c.type === 'pct' ? Math.round(base * c.value / 100) : c.value);
+      codeInfo = { code: c.code, type: c.type, value: c.value };
+    }
+  }
+  let discount;
+  if (codeInfo && !f.code.stack && promoOff) { // not combinable: client gets the better of the two
+    if (codeOff >= promoOff) { discount = codeOff; applied = 'code'; persons.forEach((p) => { p.promoOff = 0; p.promo = ''; }); }
+    else { discount = promoOff; applied = 'promo'; codeInfo = null; codeOff = 0; codeError = 'Your sale price is already better than this code.'; }
+  } else { discount = promoOff + codeOff; applied = codeInfo && promoOff ? 'both' : codeInfo ? 'code' : promoOff ? 'promo' : 'none'; }
+  const undecided = persons.some((p) => p.undecided);
+  return {
+    persons, people: persons.length, list, promoOff: applied === 'code' ? 0 : promoOff, codeOff, discount,
+    total: Math.max(0, list - discount), code: codeInfo, codeError, undecided,
+    mins: persons.reduce((t, p) => t + p.mins, 0),
+    promoTitles: [...new Set(persons.map((p) => p.promo).filter(Boolean))],
+  };
+}
+
+/** Record that a code was used (best effort). */
+export async function countCodeUse(s, code) {
+  if (!code) return;
+  const o = await getOffers(s);
+  const c = o.codes.find((x) => x.code === code);
+  if (c) { c.used = (c.used || 0) + 1; await s.setJSON('offers', o); }
+}
+
+/** Validate offers sent from the dashboard; keeps live usage counts. */
+export function sanitizeOffers(o, current = EMPTY_OFFERS) {
+  const d = (v) => (isDate(v) ? v : '');
+  const used = Object.fromEntries((current.codes || []).map((c) => [c.code, c.used || 0]));
+  const seen = new Set();
+  const codes = (Array.isArray(o?.codes) ? o.codes : []).slice(0, 100).map((c) => ({
+    code: clean(c.code, 24).toUpperCase().replace(/[^A-Z0-9_-]/g, ''), type: c.type === 'amt' ? 'amt' : 'pct',
+    value: c.type === 'amt' ? money(c.value) : Math.max(0, Math.min(100, Math.round(+c.value || 0))),
+    minSpend: money(c.minSpend), maxUses: Math.max(0, Math.round(+c.maxUses || 0)), start: d(c.start), end: d(c.end),
+    stack: !!c.stack, active: c.active !== false, note: clean(c.note, 80),
+  })).filter((c) => c.code && c.value > 0 && !seen.has(c.code) && seen.add(c.code)).map((c) => ({ ...c, used: used[c.code] || 0 }));
+  const promos = (Array.isArray(o?.promos) ? o.promos : []).slice(0, 30).map((p, i) => ({
+    id: clean(p.id, 40) || 'promo-' + Date.now().toString(36) + i, title: clean(p.title, 60) || 'Special offer', text: clean(p.text, 160),
+    type: p.type === 'amt' ? 'amt' : 'pct', value: p.type === 'amt' ? money(p.value) : Math.max(0, Math.min(100, Math.round(+p.value || 0))),
+    scope: ['all', 'cat', 'items'].includes(p.scope) ? p.scope : 'all',
+    targets: (Array.isArray(p.targets) ? p.targets : []).map((t) => clean(t, 80)).slice(0, 60),
+    start: d(p.start), end: d(p.end), active: p.active !== false, banner: p.banner !== false,
+  })).filter((p) => p.value > 0);
+  return { codes, promos };
+}
+
+/* ---------- slot ranges (group bookings block the following open slots too) ---------- */
+export async function lockRange(s, ref, date, time, mins) {
+  const k = slotKey(date, time);
+  const r = await s.setJSON(k, { ref }, { onlyIfNew: true });
+  if (!r.modified) { const cur = await s.get(k, { type: 'json' }); if (cur?.ref !== ref) return null; }
+  const extra = [];
+  if (mins > 180) { // long appointments: also hold open slots that start before this one would finish
+    const avail = (await s.get('availability', { type: 'json' })) || {};
+    const start = new Date(`${date}T${time}:00Z`).getTime(), end = start + mins * 60e3;
+    for (const t of avail[date] || []) {
+      const at = new Date(`${date}T${t}:00Z`).getTime();
+      if (at > start && at < end) { const w = await s.setJSON(slotKey(date, t), { ref }, { onlyIfNew: true }); if (w.modified) extra.push(t); }
+    }
+  }
+  return extra;
+}
+export async function releaseRange(s, bk) {
+  for (const t of [bk.time, ...(bk.extraSlots || [])]) {
+    const k = slotKey(bk.date, t);
+    const cur = await s.get(k, { type: 'json' });
+    if (cur?.ref === bk.ref) await s.delete(k);
+  }
+}
+/** Fields stored on a booking from a priced quote. */
+export function bookingFields(pq) {
+  const main = pq.persons[0];
+  return {
+    itemId: main.itemId, set: main.set, addons: main.addons, addonIds: main.addonIds, price: main.price, undecided: pq.undecided || undefined,
+    guests: pq.people > 1 ? pq.persons.slice(1).map(({ name, itemId, set, addons, addonIds, price, list, promoOff, undecided }) => ({ name, itemId, set, addons, addonIds, price, list, promoOff, undecided })) : undefined,
+    people: pq.people, list: pq.list, promoOff: pq.promoOff, codeOff: pq.codeOff, discount: pq.discount,
+    code: pq.code?.code || undefined, promo: pq.promoTitles.join(', ') || undefined, total: pq.total, mins: pq.mins,
+  };
+}
+
+/** Turn the request into a list of people (1 = just the client, up to 5 for a group). */
+export function readPeople(b, mainName) {
+  if (Array.isArray(b.people) && b.people.length) {
+    return b.people.slice(0, MAX_PEOPLE + 1).map((p, i) => ({ name: i ? p.name : mainName, item: p.item, addons: p.addons }));
+  }
+  return [{ name: mainName, item: b.item, addons: b.addons }];
+}
+

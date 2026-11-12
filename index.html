@@ -416,6 +416,31 @@ body.has-banner .nav{top:52px}
 .addon-list .addon{margin-top:0}
 .addon-checks{display:flex;flex-direction:column;gap:.2rem;margin-bottom:1.2rem}
 .addon-checks .check{margin-bottom:.4rem}
+.promo-strip{display:flex;flex-wrap:wrap;justify-content:center;gap:.8rem;margin:0 auto 2rem;max-width:900px}
+.promo-card{display:flex;align-items:center;gap:.9rem;padding:.9rem 1.3rem;border-radius:18px;background:linear-gradient(135deg,rgba(233,170,180,.18),rgba(184,115,122,.1));border:1px solid rgba(246,207,196,.35);text-align:left}
+.promo-card .pct{font-family:var(--serif);font-size:1.9rem;font-weight:600;line-height:1;white-space:nowrap}
+.promo-card b{display:block;font-size:.66rem;letter-spacing:.26em;text-transform:uppercase;color:var(--gold-1)}
+.promo-card span{display:block;font-size:.84rem;color:#e6d4d4;font-weight:300}
+.promo-card i{display:block;font-style:normal;font-size:.7rem;color:var(--muted);margin-top:.15rem}
+.sale-badge{align-self:flex-start;margin:0 0 .7rem;font-size:.56rem;letter-spacing:.24em;text-transform:uppercase;padding:.38rem .7rem;border-radius:99px;background:linear-gradient(135deg,var(--gold-1),var(--gold-3));color:#2a1215;font-weight:600}
+.price s{display:block;font-family:var(--sans);font-size:.78rem;color:var(--muted);margin-bottom:.2rem}
+.ppl{display:flex;gap:.5rem;flex-wrap:wrap}
+.ppl button{flex:1;min-width:46px;padding:.7rem 0;border-radius:14px;border:1px solid rgba(246,207,196,.25);background:rgba(255,255,255,.03);color:var(--cream);font:inherit;font-size:1rem;cursor:pointer;transition:.3s}
+.ppl button.on{background:linear-gradient(135deg,var(--gold-1),var(--gold-3));color:#2a1215;border-color:transparent;font-weight:600}
+.guest{border:1px solid rgba(246,207,196,.16);border-radius:18px;padding:1.1rem 1.1rem .4rem;margin-bottom:1rem;background:rgba(255,255,255,.02)}
+.guest h5{font-size:.6rem;letter-spacing:.32em;text-transform:uppercase;color:var(--gold-2);margin-bottom:.8rem;font-weight:500}
+.guest .field{margin-bottom:.9rem}
+.guest .check{margin-bottom:.6rem}
+.code-row{display:flex;gap:.6rem}
+.code-row input{flex:1 1 auto;width:auto;min-width:0;text-transform:uppercase}
+.code-row .btn{padding:.8rem 1.3rem;flex:0 0 auto;width:auto}
+#fTotal{white-space:nowrap;font-size:clamp(1.5rem,6.5vw,2.3rem)}
+.code-msg{font-size:.8rem;margin-top:.5rem;min-height:1em;color:var(--muted)}
+.code-msg.ok{color:#9fd8b0}.code-msg.bad{color:#f0a0ac}
+.breakdown{font-size:.86rem;color:#e6d4d4;margin-bottom:.2rem}
+.breakdown div{display:flex;justify-content:space-between;padding:.25rem 0}
+.breakdown .off{color:#9fd8b0}
+.call-note a{color:var(--gold-1)}
 .form-hint{font-size:.82rem;color:var(--petal);margin:-.6rem 0 1.1rem;display:flex;gap:.5rem;align-items:flex-start}
 .set .icon-art{height:110px;display:grid;place-items:center}
 .set .icon-art svg{width:84px;height:84px}
@@ -546,6 +571,7 @@ html.lite .wa-float::before{animation:none;opacity:.5}
       <h2>The Lash <span class="script gloss-text">Menu</span></h2>
       <p>Choose your shape, then your fullness. Tap any set to book it in seconds, or pick <b style="color:var(--gold-1);font-weight:500">"Not sure yet"</b> when booking and Nel will help you choose.</p>
     </div>
+    <div class="promo-strip" id="promoStrip" hidden></div>
     <div class="tabs glass reveal" role="tablist" id="menuTabs"></div>
     <div class="menu-grid" id="menuGrid"></div>
     <div class="addon-list reveal" id="addonList"></div>
@@ -606,6 +632,7 @@ html.lite .wa-float::before{animation:none;opacity:.5}
       <p>Pick your set, then choose from Nel's open dates and times. Your slot is held as soon as you request it, and Nel confirms with you on WhatsApp.</p>
       <ul class="contact-list">
         <li><a href="https://wa.me/233593761476" target="_blank" rel="noopener"><span class="ci"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1112 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 01-3.3-2.9c-.3-.4.2-.4.7-1.4.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 00-.7.3 3 3 0 00-.9 2.2 5.2 5.2 0 001.1 2.7 11.8 11.8 0 004.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.2-.3-.2-.5-.3z"/></svg></span><span><small>WhatsApp</small>059 376 1476</span></a></li>
+        <li><a href="tel:0593761476" class="tel-link"><span class="ci"><svg viewBox="0 0 24 24"><path d="M6.6 10.8a15.2 15.2 0 006.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 013 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1z"/></svg></span><span><small>Call to book</small><span class="tel-text">059 376 1476</span></span></a></li>
         <li><a href="https://www.instagram.com/nels_glam/" target="_blank" rel="noopener"><span class="ci"><svg viewBox="0 0 24 24"><path d="M12 2.2c3.2 0 3.6 0 4.8.1 3.3.1 4.8 1.7 4.9 4.9.1 1.3.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 3.2-1.7 4.8-4.9 4.9-1.3.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-3.3-.1-4.8-1.7-4.9-4.9C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8C2.4 3.9 3.9 2.4 7.2 2.3 8.4 2.2 8.8 2.2 12 2.2zM12 7a5 5 0 100 10 5 5 0 000-10zm0 8.2a3.2 3.2 0 110-6.4 3.2 3.2 0 010 6.4zM17.3 5.5a1.2 1.2 0 100 2.4 1.2 1.2 0 000-2.4z"/></svg></span><span><small>Instagram</small>@nels_glam</span></a></li>
         <li><div><span class="ci"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 00-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg></span><span><small>Studio</small><a href="#visit">Capitol Hill, Lord of Peace – Sowutuom</a></span></div></li>
       </ul>
@@ -616,9 +643,12 @@ html.lite .wa-float::before{animation:none;opacity:.5}
         <div class="field"><label for="fName">Your name</label><input id="fName" name="name" required placeholder="e.g. Ama Mensah" autocomplete="name"></div>
         <div class="field"><label for="fPhone">WhatsApp number</label><input id="fPhone" name="phone" type="tel" required placeholder="e.g. 024 123 4567" autocomplete="tel"></div>
       </div>
-      <div class="field"><label for="fSet">Lash set</label><select id="fSet" required></select></div>
+      <div class="field"><label>How many people?</label><div class="ppl" id="pplChips"><button type="button" data-n="1" class="on" aria-label="1 person">1</button><button type="button" data-n="2" aria-label="2 people">2</button><button type="button" data-n="3" aria-label="3 people">3</button><button type="button" data-n="4" aria-label="4 people">4</button><button type="button" data-n="5" aria-label="5 people">5</button></div></div>
+      <div class="field"><label for="fSet" id="fSetLabel">Lash set</label><select id="fSet" required></select></div>
       <p class="form-hint" id="setHint" hidden>💕 No problem. Nel will help you pick the perfect set when she confirms, and your final price depends on the set you choose.</p>
       <div class="addon-checks" id="addonChecks"></div>
+      <div id="guests"></div>
+      <p class="form-hint" id="groupHint" hidden>👯 Group booking: Nel holds a longer block for your group and confirms the exact timing with you on WhatsApp.</p>
       <div class="field" id="liveSlots">
         <label>Choose a date</label>
         <div class="slot-rail" id="dateChips"><div class="slot-empty">Loading available dates…</div></div>
@@ -630,12 +660,15 @@ html.lite .wa-float::before{animation:none;opacity:.5}
         <div class="field"><label for="fTime">Preferred time</label><input type="time" id="fTime"></div>
       </div>
       <div class="field"><label for="fNotes">Notes (optional)</label><textarea id="fNotes" placeholder="First time? Infill? Any inspo you'd like to share…"></textarea></div>
+      <div class="field"><label for="fCode">Discount code (optional)</label><div class="code-row"><input id="fCode" placeholder="e.g. GLAM10" autocomplete="off" maxlength="24"><button type="button" class="btn btn-ghost" id="codeApply">Apply</button></div><p class="code-msg" id="codeMsg"></p></div>
       <input class="hp" id="fCompany" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <div class="breakdown" id="fBreak"></div>
       <div class="total"><span>Estimated total</span><b class="gloss-text" id="fTotal">GHS 0</b></div>
       <p class="form-err" id="formErr" role="alert"></p>
       <button class="btn btn-lacquer" type="submit" id="fSubmit">Request appointment
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       <p class="form-note" id="formNote">Your slot is held for you. Nel confirms on WhatsApp.</p>
+      <p class="form-note call-note">Prefer to call? <a href="tel:0593761476" class="tel-link">Call Nel on <span class="tel-text">059 376 1476</span></a></p>
     </form>
     <div class="glass success" id="bookSuccess" hidden>
       <div class="tick"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
@@ -664,6 +697,7 @@ html.lite .wa-float::before{animation:none;opacity:.5}
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 00-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 00-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg>Get directions</a>
         <a class="btn btn-ghost magnetic" id="dirWaze" target="_blank" rel="noopener">Open in Waze</a>
         <a class="btn btn-ghost magnetic" id="dirAsk" target="_blank" rel="noopener">Ask for directions</a>
+        <a class="btn btn-ghost magnetic tel-link" href="tel:0593761476">Call to book · <span class="tel-text">059 376 1476</span></a>
       </div>
     </div>
   </div>
@@ -719,7 +753,7 @@ html.lite .wa-float::before{animation:none;opacity:.5}
       <a href="#top" class="brand"><span class="monogram"><span class="gloss-text">G</span><span class="gloss-text">N</span></span><span class="brand-name">Glam By Nel</span></a>
       <div class="foot-links"><a href="#services">Services</a><a href="#guide">Guide</a><a href="#gallery">Gallery</a><a href="#book">Book</a><a href="https://www.instagram.com/nels_glam/" target="_blank" rel="noopener">Instagram</a></div>
     </div>
-    <p class="copy">© <span id="yr"></span> Glam By Nel · Capitol Hill · 059 376 1476</p>
+    <p class="copy">© <span id="yr"></span> Glam By Nel · Capitol Hill · <a href="tel:0593761476" class="tel-link" style="color:inherit"><span class="tel-text">059 376 1476</span></a></p>
   </div>
 </footer>
 
@@ -762,7 +796,8 @@ const CONFIG = {
   // Optional bundled lash-guide photos (drop files in images/guide/). Admin uploads take priority.
   guide: { classic: 'images/guide/classic.jpg', hybrid: 'images/guide/hybrid.jpg', volume: 'images/guide/volume.jpg', wispy: 'images/guide/wispy.jpg', cateye: 'images/guide/cateye.jpg' },
 };
-const WA = CONFIG.whatsapp;
+let WA = CONFIG.whatsapp;
+let PROMOS = [];
 document.querySelectorAll('a[href*="instagram.com"]').forEach(a=>a.href=CONFIG.instagram);
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const LITE = !!window.__LITE;
@@ -824,19 +859,28 @@ function lashSVG(shape, fullness, opts={}){
   return s+'</svg>';
 }
 
+/* ---- promotions ---- */
+function promoOf(itemId,catId,price){let best=null;for(const p of PROMOS){const hit=p.scope==='all'||(p.scope==='cat'&&(p.targets||[]).includes(catId))||(p.scope==='items'&&(p.targets||[]).includes(itemId));if(!hit)continue;const off=Math.min(price,p.type==='pct'?Math.round(price*p.value/100):p.value);if(off>0&&(!best||off>best.off))best={off,title:p.title}}return best}
+const promoLabel=p=>p.type==='pct'?`${p.value}% off`:`GHS ${p.value} off`;
+function renderPromos(){
+  const el=document.getElementById('promoStrip'); el.hidden=!PROMOS.length;
+  const scopeTxt=p=>p.scope==='all'?'All lash sets':p.scope==='cat'?(p.targets||[]).map(id=>MENU_DATA.categories.find(c=>c.id===id)?.name).filter(Boolean).join(' & ')+' sets':(p.targets||[]).map(id=>findItem(id)?.name).filter(Boolean).join(', ');
+  el.innerHTML=PROMOS.map(p=>`<div class="promo-card"><div class="pct gloss-text">${p.type==='pct'?p.value+'%':'−'+p.value}</div><div><b>${esc(p.title)}</b><span>${esc(p.text||scopeTxt(p)+' · '+promoLabel(p))}</span>${p.end?`<i>Ends ${fmtDate(p.end,{day:'numeric',month:'short'})}</i>`:''}</div></div>`).join('');
+}
+
 /* ---- render menu ---- */
 const grid = document.getElementById('menuGrid'), tabsEl=document.getElementById('menuTabs');
 let curCat=null;
 function renderMenu(catId, animate){
   const cat=MENU_DATA.categories.find(c=>c.id===catId)||MENU_DATA.categories[0]; if(!cat){grid.innerHTML='';return}
   curCat=cat.id;
-  grid.innerHTML = cat.items.map(m=>`
+  let pr; grid.innerHTML = cat.items.map(m=>`
     <article class="glass set">
       <span class="shine"></span>
       <div class="lvl"><span>${esc(m.level||cat.name)}</span>${DOTS[m.level]?`<span class="dots">${[1,2,3,4].map(n=>`<i class="${n<=DOTS[m.level]?'on':''}"></i>`).join('')}</span>`:''}</div>
       ${cat.shape==='none'?`<div class="icon-art">${sparkle}</div>`:`<div class="lash">${lashSVG(cat.shape, FULL[m.level]||'hybrid')}</div>`}
-      <h3>${esc(m.name)}</h3><p>${esc(m.desc)}</p>
-      <div class="foot"><div class="price"><small>GHS</small><b class="gloss-text">${m.price}</b></div>
+      ${(pr=promoOf(m.id,cat.id,m.price))?`<span class="sale-badge">${esc(pr.title)}</span>`:''}<h3>${esc(m.name)}</h3><p>${esc(m.desc)}</p>
+      <div class="foot"><div class="price"><small>GHS</small>${pr?`<s>GHS ${m.price}</s>`:''}<b class="gloss-text">${pr?m.price-pr.off:m.price}</b></div>
       <button class="book" data-book="${esc(m.id)}" aria-label="Book ${esc(m.name)}"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div>
     </article>`).join('');
   if(!LITE) grid.querySelectorAll('.set').forEach(card=>{
@@ -964,24 +1008,86 @@ applyStudio();
 /* ---- booking ---- */
 const sel=document.getElementById('fSet'), total=document.getElementById('fTotal'), addonBox=document.getElementById('addonChecks');
 const form=document.getElementById('bookForm'), err=document.getElementById('formErr');
-function buildSelect(){
-  const keep=sel.value;
-  sel.innerHTML='<option value="">Choose a set…</option>'
+const ppl=document.getElementById('pplChips'), guestsEl=document.getElementById('guests'), codeIn=document.getElementById('fCode'), codeMsg=document.getElementById('codeMsg');
+let PEOPLE=1, CODE='', QUOTE=null, qTimer=null, qSeq=0;
+function optionsHTML(){
+  return '<option value="">Choose a set…</option>'
     +`<optgroup label="Not sure?"><option value="${UNDECIDED}">✨ Not sure yet: help me choose</option></optgroup>`
-    +MENU_DATA.categories.map(c=>`<optgroup label="${esc(c.name)} ${esc(c.sub||'')}">${c.items.map(m=>`<option value="${esc(m.id)}">${esc(m.name)} · GHS ${m.price}</option>`).join('')}</optgroup>`).join('')
+    +MENU_DATA.categories.map(c=>`<optgroup label="${esc(c.name)} ${esc(c.sub||'')}">${c.items.map(m=>{const pr=promoOf(m.id,c.id,m.price);return `<option value="${esc(m.id)}">${esc(m.name)} · GHS ${pr?(m.price-pr.off)+' · sale':m.price}</option>`}).join('')}</optgroup>`).join('')
     +((MENU_DATA.addons||[]).length?`<optgroup label="Add-ons only"><option value="${ADDON_ONLY}">Just add-ons (e.g. ${esc(MENU_DATA.addons[0].name.toLowerCase())})</option></optgroup>`:'');
-  if([...sel.options].some(o=>o.value===keep)) sel.value=keep;
-  const checked=new Set(chosenAddons());
-  addonBox.innerHTML=(MENU_DATA.addons||[]).map(a=>`<label class="check"><input type="checkbox" value="${esc(a.id)}" ${checked.has(a.id)?'checked':''}> Add ${esc(a.name.toLowerCase())} (+ GHS ${a.price})</label>`).join('');
-  upd(true);
+}
+const addonHTML=checked=>(MENU_DATA.addons||[]).map(a=>`<label class="check"><input type="checkbox" value="${esc(a.id)}" ${checked.has(a.id)?'checked':''}> Add ${esc(a.name.toLowerCase())} (+ GHS ${a.price})</label>`).join('');
+const setVal=(s,v)=>{if([...s.options].some(o=>o.value===v)) s.value=v};
+function buildSelect(){
+  const keep=sel.value; sel.innerHTML=optionsHTML(); setVal(sel,keep);
+  addonBox.innerHTML=addonHTML(new Set(chosenAddons()));
+  renderGuests(); upd(true);
+}
+function readGuests(){return [...guestsEl.querySelectorAll('.guest')].map(g=>({name:g.querySelector('.gName').value.trim(),item:g.querySelector('.gSet').value,addons:[...g.querySelectorAll('.gAdd input:checked')].map(i=>i.value)}))}
+function renderGuests(){
+  const prev=readGuests();
+  guestsEl.innerHTML=Array.from({length:PEOPLE-1},(_,i)=>`<div class="guest"><h5>Guest ${i+2}</h5>
+    <div class="field"><label for="gName${i}">Guest's name</label><input class="gName" id="gName${i}" maxlength="60" placeholder="e.g. Efua"></div>
+    <div class="field"><label for="gSet${i}">Their lash set</label><select class="gSet" id="gSet${i}">${optionsHTML()}</select></div>
+    <div class="addon-checks gAdd">${addonHTML(new Set(prev[i]?.addons||[]))}</div></div>`).join('');
+  guestsEl.querySelectorAll('.guest').forEach((g,i)=>{if(prev[i]){g.querySelector('.gName').value=prev[i].name;setVal(g.querySelector('.gSet'),prev[i].item)}});
+  ppl.querySelectorAll('button').forEach(b=>b.classList.toggle('on',+b.dataset.n===PEOPLE));
 }
 const chosenAddons=()=>[...addonBox.querySelectorAll('input:checked')].map(i=>i.value);
-const addonObjs=()=>(MENU_DATA.addons||[]).filter(a=>chosenAddons().includes(a.id));
-function calc(){const it=findItem(sel.value);return (it?it.price:0)+addonObjs().reduce((t,a)=>t+a.price,0)}
-function totalText(){const a=addonObjs().reduce((t,x)=>t+x.price,0);if(sel.value===UNDECIDED)return a?`TBC + GHS ${a}`:'To be confirmed';return 'GHS '+calc()}
-function upd(quiet){document.getElementById('setHint').hidden=sel.value!==UNDECIDED;total.textContent=totalText();if(!quiet&&window.gsap)gsap.fromTo(total,{scale:1.1},{scale:1,duration:.4,ease:'back.out(3)'})}
+const addonObjs=(ids=chosenAddons())=>(MENU_DATA.addons||[]).filter(a=>ids.includes(a.id));
+const people=()=>[{item:sel.value,addons:chosenAddons()},...readGuests()];
+function personPrice(p){const it=findItem(p.item);const ad=addonObjs(p.addons).reduce((t,a)=>t+a.price,0);const pr=it?promoOf(it.id,it.cat.id,it.price):null;return {list:(it?it.price:0)+ad,off:pr?pr.off:0,undecided:p.item===UNDECIDED}}
+function localQuote(){const ps=people().map(personPrice);const list=ps.reduce((t,p)=>t+p.list,0),promoOff=ps.reduce((t,p)=>t+p.off,0);return {list,promoOff,codeOff:0,discount:promoOff,total:list-promoOff,undecided:ps.some(p=>p.undecided),people:ps.length}}
+const curQuote=()=>CODE&&QUOTE&&QUOTE.code?QUOTE:localQuote();
+const priceText=q=>q.undecided?(q.total?`TBC + GHS ${q.total}`:'To be confirmed'):'GHS '+q.total;
+function renderTotals(){
+  const q=curQuote(), rows=[];
+  if(q.discount>0||PEOPLE>1) rows.push(['Subtotal'+(PEOPLE>1?` (${PEOPLE} people)`:''),'GHS '+q.list]);
+  if(q.promoOff>0) rows.push(['Sale savings','− GHS '+q.promoOff,'off']);
+  if(q.codeOff>0) rows.push([`Code ${q.code.code}`,'− GHS '+q.codeOff,'off']);
+  document.getElementById('fBreak').innerHTML=rows.map(r=>`<div class="${r[2]||''}"><span>${esc(r[0])}</span><span>${r[1]}</span></div>`).join('');
+  total.textContent=priceText(q);
+}
+function upd(quiet){
+  const ps=people();
+  document.getElementById('setHint').hidden=sel.value!==UNDECIDED;
+  document.getElementById('groupHint').hidden=PEOPLE<2;
+  document.getElementById('fSetLabel').textContent=PEOPLE>1?'Your lash set':'Lash set';
+  renderTotals();
+  if(CODE) requote();
+  if(!quiet&&window.gsap)gsap.fromTo(total,{scale:1.1},{scale:1,duration:.4,ease:'back.out(3)'});
+}
+function codeNote(t,cls){codeMsg.textContent=t;codeMsg.className='code-msg '+(cls||'')}
+function requote(now){
+  clearTimeout(qTimer);
+  qTimer=setTimeout(async()=>{
+    const seq=++qSeq;
+    if(MODE==='offline'){codeNote('Nel will apply your code when she confirms.');return}
+    try{
+      const r=await fetch('/api/quote',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({people:people(),code:CODE})});
+      const j=await r.json(); if(seq!==qSeq) return;
+      if(!j.ok){QUOTE=null;codeNote(/set/i.test(j.error||'')?'Choose your set and your code will be applied.':j.error)}
+      else if(j.code){QUOTE=j;codeNote(`✓ Code ${j.code.code} applied: you save GHS ${j.codeOff}.`,'ok')}
+      else{QUOTE=null;codeNote(j.codeError||'That code isn\'t valid.','bad')}
+    }catch(_){QUOTE=null;codeNote('Couldn\'t check the code right now. Nel will apply it when she confirms.')}
+    renderTotals();
+  },now?0:350);
+}
+document.getElementById('codeApply').onclick=()=>{CODE=codeIn.value.trim().toUpperCase();codeIn.value=CODE;QUOTE=null;if(!CODE){codeNote('');renderTotals();return}codeNote('Checking…');requote(true)};
+codeIn.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();document.getElementById('codeApply').click()}});
+codeIn.addEventListener('input',()=>{if(CODE&&codeIn.value.trim().toUpperCase()!==CODE){CODE='';QUOTE=null;codeNote('');renderTotals()}});
+ppl.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;PEOPLE=+b.dataset.n;renderGuests();upd();if(PEOPLE>1&&window.gsap&&!reduce)gsap.from(guestsEl.lastElementChild,{y:12,opacity:0,duration:.45,ease:'power3.out'})});
+guestsEl.addEventListener('change',()=>upd()); guestsEl.addEventListener('input',e=>{if(e.target.classList.contains('gName'))e.target.style.borderColor=''});
 sel.onchange=()=>upd(); addonBox.addEventListener('change',()=>upd());
-function setLabel(o){const base=o.item===UNDECIDED?'Not sure yet (help me choose)':o.item===ADDON_ONLY?'Add-ons only':(findItem(o.item)?.name||o.item);return base+(o.addonNames.length?' + '+o.addonNames.join(', '):'')}
+const labelFor=(item,names)=>(item===UNDECIDED?'Not sure yet (help me choose)':item===ADDON_ONLY?'Add-ons only':(findItem(item)?.name||item))+(names.length?' + '+names.join(', '):'');
+function setLabel(o){return labelFor(o.item,o.addonNames)}
+const guestLines=o=>(o.guests||[]).map((g,i)=>`${g.name||'Guest '+(i+2)}: ${labelFor(g.item,addonObjs(g.addons).map(a=>a.name))}`);
+const fmtPhone=d=>d.length===10&&d[0]==='0'?`${d.slice(0,3)} ${d.slice(3,6)} ${d.slice(6)}`:d;
+function applyContact(){
+  if(STUDIO.whatsapp&&/^\d{10,15}$/.test(STUDIO.whatsapp)){WA=STUDIO.whatsapp;document.querySelectorAll('a[href^="https://wa.me/"]').forEach(a=>a.href=a.href.replace(/wa\.me\/\d+/,'wa.me/'+WA))}
+  const d=String(STUDIO.phone||'').replace(/[^\d+]/g,'');
+  if(d.length>=9){document.querySelectorAll('a.tel-link').forEach(a=>a.href='tel:'+d);document.querySelectorAll('.tel-text').forEach(e=>e.textContent=fmtPhone(d))}
+}
 const fmtTime=t=>{const[h,m]=t.split(':').map(Number);return `${(h%12)||12}:${String(m).padStart(2,'0')} ${h<12?'AM':'PM'}`};
 const fmtDate=(d,o={weekday:'long',day:'numeric',month:'long'})=>new Date(d+'T12:00:00Z').toLocaleDateString('en-GB',{...o,timeZone:'UTC'});
 
@@ -1005,12 +1111,14 @@ async function loadSlots(){
   try{
     const r=await fetch('/api/availability',{cache:'no-store'}); if(!r.ok) throw 0;
     const j=await r.json(); if(!j.ok) throw 0;
-    SLOTS=j.slots||{}; if(j.studio){STUDIO={...STUDIO,...j.studio};applyStudio()}
+    SLOTS=j.slots||{}; if(j.studio){STUDIO={...STUDIO,...j.studio};applyStudio();applyContact()}
+    PROMOS=Array.isArray(j.promos)?j.promos:[]; renderPromos();
     if(j.menu&&j.menu.categories&&j.menu.categories.length){
       MENU_DATA=j.menu; if(!MENU_DATA.categories.some(c=>c.id===curCat)) curCat=MENU_DATA.categories[0].id;
-      renderTabs(); renderMenu(curCat); renderAddons(); buildSelect();
     }
-    showBanner(j.banner);
+    renderTabs(); renderMenu(curCat); renderAddons(); buildSelect();
+    const bp=PROMOS.find(p=>p.banner);
+    showBanner(j.banner||(bp?`${bp.title} · ${promoLabel(bp)}${bp.end?' until '+fmtDate(bp.end,{day:'numeric',month:'short'}):''}`:''));
     renderDates();
   }catch(e){
     // No booking backend (e.g. opened as a local file): fall back to WhatsApp requests
@@ -1037,38 +1145,42 @@ document.addEventListener('click',e=>{
   if(a){const cb=addonBox.querySelector(`input[value="${CSS.escape(a.dataset.addon)}"]`);if(cb)cb.checked=true;if(!sel.value)sel.value=ADDON_ONLY;upd();scrollToEl('#book')}
 });
 function waToNel(o){
-  const est=o.item===UNDECIDED?(o.addonTotal?`To be confirmed (add-ons GHS ${o.addonTotal})`:'To be confirmed'):`GHS ${o.total}`;
-  return `https://wa.me/${WA}?text=`+encodeURIComponent(`Hi Nel! 💕 I'd love to book an appointment.\n\n`+(o.ref?`🔖 Ref: ${o.ref}\n`:'')+`✨ Name: ${o.name}\n📱 WhatsApp: ${o.phone}\n💎 Set: ${setLabel(o)}\n📅 Date: ${fmtDate(o.date)}\n⏰ Time: ${fmtTime(o.time)}\n💰 Estimate: ${est}`+(o.notes?`\n📝 Notes: ${o.notes}`:'')+(o.item===UNDECIDED?`\n\nI'm not sure which set to get, so I'd love your advice!`:'')+`\n\n`+(o.ref?`I've requested this slot on your website. Thank you!`:`Please let me know if this slot is available. Thank you!`));
+  const est=priceText({undecided:o.undecided,total:o.total});
+  const grp=o.guests&&o.guests.length;
+  return `https://wa.me/${WA}?text=`+encodeURIComponent(`Hi Nel! 💕 I'd love to book an appointment`+(grp?` for ${o.guests.length+1} people`:'')+`.\n\n`+(o.ref?`🔖 Ref: ${o.ref}\n`:'')+`✨ Name: ${o.name}\n📱 WhatsApp: ${o.phone}\n💎 ${grp?'My set':'Set'}: ${setLabel(o)}\n`+(grp?guestLines(o).map(l=>`👯 ${l}\n`).join(''):'')+`📅 Date: ${fmtDate(o.date)}\n⏰ Time: ${fmtTime(o.time)}\n💰 Estimate: ${est}`+(o.discount?` (GHS ${o.discount} off)`:'')+(o.codeTyped?`\n🎟️ Code: ${o.codeTyped}`:'')+(o.notes?`\n📝 Notes: ${o.notes}`:'')+(o.undecided?`\n\nI'm not sure which set to get, so I'd love your advice!`:'')+`\n\n`+(o.ref?`I've requested this slot on your website. Thank you!`:`Please let me know if this slot is available. Thank you!`));
 }
 function notifyNetlify(o){ // Netlify Forms email notification (silently ignored if not enabled)
-  const body=new URLSearchParams({'form-name':'booking',ref:o.ref||'',name:o.name,phone:o.phone,set:setLabel(o),date:o.date,time:o.time,total:o.item===UNDECIDED?'To be confirmed':'GHS '+o.total,notes:o.notes||''});
+  const set=[setLabel(o),...guestLines(o)].join(' | ')+(o.code?` | Code ${o.code}`:'');
+  const body=new URLSearchParams({'form-name':'booking',ref:o.ref||'',name:o.name,phone:o.phone,set,date:o.date,time:o.time,total:priceText({undecided:o.undecided,total:o.total}),notes:o.notes||''});
   fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body}).catch(()=>{});
 }
 function showSuccess(o){
   form.hidden=true; const sc=document.getElementById('bookSuccess'); sc.hidden=false;
   document.getElementById('sRef').textContent='REF · '+o.ref;
-  document.getElementById('sSummary').innerHTML=`<dt>Set</dt><dd>${esc(setLabel(o))}</dd><dt>Date</dt><dd>${fmtDate(o.date)}</dd><dt>Time</dt><dd>${fmtTime(o.time)}</dd><dt>Total</dt><dd>${o.item===UNDECIDED?'To be confirmed':'GHS '+o.total}</dd>`;
+  document.getElementById('sSummary').innerHTML=`<dt>Set</dt><dd>${esc(setLabel(o))}</dd><dt>Date</dt><dd>${fmtDate(o.date)}</dd><dt>Time</dt><dd>${fmtTime(o.time)}</dd>${o.guests.length?`<dt>Group</dt><dd>${o.guests.length+1} people<br><small>${guestLines(o).map(esc).join('<br>')}</small></dd>`:''}${o.discount?`<dt>Savings</dt><dd>GHS ${o.discount}</dd>`:''}<dt>Total</dt><dd>${priceText({undecided:o.undecided,total:o.total})}</dd>`;
   document.getElementById('sWa').href=waToNel(o);
   if(window.gsap&&!reduce) gsap.from(sc.children,{y:16,opacity:0,stagger:.05,duration:.5,ease:'power3.out'});
   scrollToEl('#book');
 }
-document.getElementById('sAgain').onclick=()=>{document.getElementById('bookSuccess').hidden=true;form.hidden=false;form.reset();pickTime=null;upd(true);loadSlots()};
+document.getElementById('sAgain').onclick=()=>{document.getElementById('bookSuccess').hidden=true;form.hidden=false;form.reset();pickTime=null;PEOPLE=1;CODE='';QUOTE=null;codeNote('');renderGuests();upd(true);loadSlots()};
 
 form.addEventListener('submit',async e=>{
   e.preventDefault(); err.textContent='';
-  const ad=addonObjs();
-  const o={name:form.fName.value.trim(),phone:form.fPhone.value.trim(),item:sel.value,addons:ad.map(a=>a.id),addonNames:ad.map(a=>a.name),addonTotal:ad.reduce((t,a)=>t+a.price,0),notes:form.fNotes.value.trim(),total:calc(),company:document.getElementById('fCompany').value};
+  const ad=addonObjs(), guests=readGuests(), q=curQuote();
+  const o={name:form.fName.value.trim(),phone:form.fPhone.value.trim(),item:sel.value,addons:ad.map(a=>a.id),addonNames:ad.map(a=>a.name),guests,
+    code:q.code?q.code.code:'',codeTyped:CODE,discount:q.discount,total:q.total,undecided:q.undecided,notes:form.fNotes.value.trim(),company:document.getElementById('fCompany').value};
   if(MODE==='live'){o.date=pickDate;o.time=pickTime}else{o.date=form.fDate.value;o.time=form.fTime.value}
-  const missing=[!o.name&&'your name',o.phone.replace(/\D/g,'').length<9&&'your WhatsApp number',!o.item&&'a lash set (or "Not sure yet")',o.item===ADDON_ONLY&&!o.addons.length&&'at least one add-on',!o.date&&'a date',!o.time&&'a time'].filter(Boolean);
+  const missing=[!o.name&&'your name',o.phone.replace(/\D/g,'').length<9&&'your WhatsApp number',!o.item&&'a lash set (or "Not sure yet")',o.item===ADDON_ONLY&&!o.addons.length&&'at least one add-on',...guests.flatMap((g,i)=>[!g.name&&`a name for guest ${i+2}`,!g.item&&`a set for guest ${i+2}`,g.item===ADDON_ONLY&&!g.addons.length&&`an add-on for guest ${i+2}`]),!o.date&&'a date',!o.time&&'a time'].filter(Boolean);
   ['fName','fPhone','fSet'].forEach(id=>{const el=document.getElementById(id);el.style.borderColor=(id==='fPhone'?o.phone.replace(/\D/g,'').length<9:!el.value)?'#e07a8a':''});
+  guestsEl.querySelectorAll('.gName,.gSet').forEach(el=>el.style.borderColor=el.value?'':'#e07a8a');
   if(missing.length){err.textContent='Please choose '+missing.join(', ')+'.';if(window.gsap)gsap.fromTo(form,{x:-8},{x:0,duration:.6,ease:'elastic.out(1,.3)'});return}
   if(MODE==='offline'){window.open(waToNel(o),'_blank');return}
   const btn=document.getElementById('fSubmit'); btn.disabled=true; btn.style.opacity=.7;
   try{
-    const r=await fetch('/api/book',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(o)});
+    const r=await fetch('/api/book',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:o.name,phone:o.phone,date:o.date,time:o.time,notes:o.notes,company:o.company,code:o.code,people:[{item:o.item,addons:o.addons},...guests.map(g=>({name:g.name,item:g.item,addons:g.addons}))]})});
     const j=await r.json();
     if(!j.ok){err.textContent=j.error||'Something went wrong. Please try again.';if(j.slots){SLOTS=j.slots;renderDates()}return}
-    o.ref=j.ref; o.total=j.total; notifyNetlify(o); showSuccess(o);
+    o.ref=j.ref; o.total=j.total; o.discount=j.discount||0; if(typeof j.undecided==='boolean')o.undecided=j.undecided; notifyNetlify(o); showSuccess(o);
   }catch(_){err.innerHTML=`Couldn't reach the booking system. <a href="${waToNel(o)}" target="_blank" rel="noopener" style="color:var(--gold-1)">Send your request on WhatsApp instead</a>.`}
   finally{btn.disabled=false;btn.style.opacity=''}
 });

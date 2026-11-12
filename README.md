@@ -96,3 +96,15 @@ Prices and sets are edited in the dashboard (**Menu** tab). The lists in `index.
 - **Calendar sync:** Settings → *Sync bookings to your phone calendar*. Subscribe once in Google Calendar or on iPhone, and bookings appear automatically with a 1-hour reminder. Keep the link private; "New private link" stops the old one working.
 
 The site also has a branded share preview (`og-image.jpg`) for WhatsApp and Instagram links, and phones get a lighter version without 3D for speed.
+
+## 7. Offers, group bookings, phone bookings and the app
+
+**Promotions (Offers tab).** Put all sets, some categories or specific sets on sale (% or GHS off) between two dates. The website shows a sale badge, the old price crossed out and a promo card above the menu. Tick "Show in website banner" to announce it at the top of the site (your own banner text from Settings takes priority).
+
+**Discount codes (Offers tab).** Create codes such as `GLAM10` (% or GHS off) with an optional minimum spend, a usage limit, start/end dates and a private note. Clients type the code when booking and see the new price straight away. "Works on top of sale prices" lets a code stack with a promotion; otherwise the client gets whichever saves her more. Tap **Share** to send a code on WhatsApp. You can also add or remove a code from a booking with ✎ Edit.
+
+**Group bookings.** Clients can book for up to 5 people in one slot, each with their own set and add-ons. Long group appointments automatically hold the next open slots that day. Group bookings show a "Group of N" badge with every guest listed, in the dashboard, the calendar feed and the CSV export. You can also add guests to bookings you enter yourself.
+
+**Phone bookings.** The call number (Settings → Contact numbers) appears on the website for clients who'd rather phone. Add those bookings with "+ Add booking". The WhatsApp number there is where website booking requests are sent.
+
+**Install the dashboard as an app.** Open `/admin` on your phone, then Settings → **Install app** (Android Chrome), or in Safari tap Share → Add to Home Screen (iPhone). It opens full-screen as "Nel Studio" with its own icon.

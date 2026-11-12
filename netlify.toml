@@ -16,3 +16,8 @@
   for = "/images/*"
   [headers.values]
     Cache-Control = "public, max-age=604800"
+
+[[headers]]
+  for = "/admin.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json"

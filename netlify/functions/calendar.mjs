@@ -26,8 +26,10 @@ export default async (req, context) => {
     if (start.getTime() < from) continue;
     const end = new Date(start.getTime() + (b.mins || 150) * 60e3);
     const extras = b.addons?.length ? ` + ${b.addons.join(', ')}` : (b.bottom && b.set !== 'Bottom Lashes only' ? ' + Bottom lashes' : '');
-    const title = `${b.status === 'pending' ? '⏳ REQUEST: ' : ''}${b.name} · ${b.undecided ? 'Undecided set' : b.set}${extras}`;
-    const desc = [`Ref: ${b.ref}`, `Status: ${b.status}`, `Set: ${b.set}${extras}`, `Total: GHS ${b.total}`,
+    const group = b.people > 1 ? `👥${b.people} ` : '';
+    const title = `${b.status === 'pending' ? '⏳ REQUEST: ' : ''}${group}${b.name} · ${b.undecided && !(b.people > 1) ? 'Undecided set' : b.set}${extras}`;
+    const guests = (b.guests || []).map((g, i) => `Guest ${i + 2}: ${g.name || ''} · ${g.undecided ? 'Undecided' : g.set}${g.addons?.length ? ' + ' + g.addons.join(', ') : ''}`);
+    const desc = [`Ref: ${b.ref}`, `Status: ${b.status}`, `Set: ${b.set}${extras}`, ...guests, `Total: GHS ${b.total}${b.discount ? ` (after GHS ${b.discount} off${b.code ? ' · code ' + b.code : ''})` : ''}`,
       b.phone ? `WhatsApp: https://wa.me/${b.phone}` : '', b.notes ? `Notes: ${b.notes}` : ''].filter(Boolean).join('\n');
     lines.push('BEGIN:VEVENT', `UID:${b.ref}@glambynel`, `DTSTAMP:${stamp(new Date(b.updatedAt || b.createdAt || Date.now()))}`,
       `DTSTART:${stamp(start)}`, `DTEND:${stamp(end)}`, `SUMMARY:${esc(title)}`, `DESCRIPTION:${esc(desc)}`,

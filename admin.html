@@ -7,7 +7,11 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#0b0a0b">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Nel Bookings">
+<meta name="apple-mobile-web-app-title" content="Nel Studio">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="/admin.webmanifest">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Great+Vibes&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230b0a0b'/%3E%3Ctext x='32' y='44' font-family='Georgia,serif' font-size='30' text-anchor='middle' fill='%23e2a99b'%3EGN%3C/text%3E%3C/svg%3E">
@@ -166,6 +170,25 @@ nav.tabs button.on::before{content:"";position:absolute;top:0;left:30%;right:30%
 .copyrow{display:flex;gap:.5rem}
 .copyrow input{font-size:.75rem}
 @media (max-width:640px){.mrow{grid-template-columns:1fr 1fr}.mcat-h{grid-template-columns:1fr 1fr}}
+nav.tabs .wrap{grid-template-columns:repeat(6,1fr)}
+@media (max-width:520px){nav.tabs button{font-size:.52rem;letter-spacing:.08em}nav.tabs svg{width:20px;height:20px}}
+.offer .otop{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;margin-bottom:.7rem}
+.offer .otop b{font-family:var(--serif);font-size:1.25rem}
+.offer .otop b.code{font-family:var(--sans);font-size:.95rem;letter-spacing:.14em}
+.offer .otop .muted{font-size:.78rem}
+.opill{font-size:.58rem;letter-spacing:.18em;text-transform:uppercase;padding:.25rem .55rem;border-radius:99px;border:1px solid var(--line)}
+.opill.live{color:var(--ok);border-color:rgba(143,214,174,.45)}.opill.sched{color:var(--warn);border-color:rgba(242,196,107,.45)}.opill.exp,.opill.off{color:var(--muted)}
+.mrow>div{min-width:0}.dup{display:flex;gap:.35rem;min-width:0}.dup select{width:78px;flex:none;padding-left:.6rem;padding-right:.3rem}.dup input{min-width:0;flex:1;width:auto}
+.tchips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.5rem}
+.tchips label{display:flex;align-items:center;gap:.35rem;font-size:.78rem;padding:.35rem .6rem;border:1px solid var(--line);border-radius:99px;cursor:pointer}
+.tchips input{width:auto;accent-color:#d58f8e}
+.pill.group{color:#cfe0ff;border-color:rgba(160,190,255,.4);background:rgba(160,190,255,.08);margin-left:.35rem}
+.guests{font-size:.82rem;color:var(--muted);margin:.15rem 0 0 1.4rem;line-height:1.55}
+.disc{color:var(--ok);font-size:.8rem}
+.gRow{border:1px solid var(--line);border-radius:14px;padding:.7rem .8rem .2rem;margin-bottom:.6rem}
+.gRow .gh{display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold)}
+.install{display:flex;gap:.8rem;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.install .mono2{width:52px;height:52px;border-radius:14px;flex:none;background:#0b0a0b url(/icons/icon-192.png) center/cover;border:1px solid var(--line)}
 </style>
 </head>
 <body>
@@ -237,6 +260,17 @@ nav.tabs button.on::before{content:"";position:absolute;top:0;left:30%;right:30%
     <p class="help" style="margin-bottom:2rem"><button class="btn dang mini" id="menuReset">Reset to original menu</button></p>
   </section>
 
+  <!-- OFFERS -->
+  <section class="view" id="v-offers">
+    <h2 class="t">Offers &amp; <span class="g">codes</span></h2>
+    <p class="help">Promotions put sets on sale for everyone, with the old price crossed out on the website. Discount codes are for the clients you give them to: they type the code when booking and the price drops automatically. If a code isn't set to work on top of sale prices, the client gets whichever saves her more.</p>
+    <div class="toolbar"><h3 class="st" style="margin:0">Promotions</h3><button class="btn pri" id="addPromo">+ Promotion</button></div>
+    <div id="promoEd"></div>
+    <div class="toolbar" style="margin-top:1.4rem"><h3 class="st" style="margin:0">Discount codes</h3><button class="btn pri" id="addCode">+ Code</button></div>
+    <div id="codeEd"></div>
+    <div class="savebar" id="ofBar"><span class="muted" id="ofState">All changes saved</span><button class="btn pri" id="ofSave">Save offers</button></div>
+  </section>
+
   <!-- LOOKS -->
   <section class="view" id="v-looks">
     <h2 class="t">Looks &amp; <span class="g">photos</span></h2>
@@ -262,11 +296,15 @@ nav.tabs button.on::before{content:"";position:absolute;top:0;left:30%;right:30%
       <div class="f"><label class="l">Minimum notice (hours)</label><input id="sLead" type="number" min="0" max="72"><p class="help" style="margin-top:.3rem">Clients can't book a slot starting sooner than this.</p></div>
       <div class="f"><label class="l">Studio address</label><input id="sAddr"></div>
       <div class="f"><label class="l">Map pin</label><input id="sMap" placeholder="e.g. 5.6239, -0.2789"><p class="help" style="margin-top:.3rem">For an exact pin: open Google Maps, press and hold on the studio, copy the numbers shown (latitude, longitude), and paste them here. This updates the website map and directions buttons.</p></div>
+      <h3 class="st">Contact numbers</h3>
+      <div class="row"><div class="f"><label class="l">Call number (shown on the website)</label><input id="sPhone" type="tel" placeholder="059 376 1476"></div>
+      <div class="f"><label class="l">WhatsApp number (bookings go here)</label><input id="sWa" type="tel" placeholder="059 376 1476"></div></div>
+      <p class="help" style="margin:-.3rem 0 .8rem">The call number is for clients who'd rather phone than book online. Add those bookings yourself with "+ Add booking".</p>
       <h3 class="st">Website announcement</h3>
       <label class="toggle f" style="font-size:.85rem;color:var(--cream)"><input type="checkbox" id="bOn"> Show a banner at the top of the website</label>
       <div class="f"><input id="bText" maxlength="160" placeholder="e.g. Christmas slots are open! Book early 🎄  ·  Fully booked this week"></div>
       <h3 class="st">WhatsApp message templates</h3>
-      <p class="help">You can use: <code>{name}</code> <code>{set}</code> <code>{date}</code> <code>{time}</code> <code>{total}</code> <code>{ref}</code> <code>{address}</code> <code>{map}</code> and in the decline message <code>{openings}</code>.</p>
+      <p class="help">You can use: <code>{name}</code> <code>{set}</code> <code>{date}</code> <code>{time}</code> <code>{total}</code> <code>{ref}</code> <code>{people}</code> <code>{address}</code> <code>{map}</code> and in the decline message <code>{openings}</code>.</p>
       <div class="f" style="margin-top:.8rem"><label class="l">Confirmation</label><textarea id="tConfirm"></textarea></div>
       <div class="f"><label class="l">Reminder</label><textarea id="tReminder"></textarea></div>
       <div class="f"><label class="l">Slot unavailable / decline</label><textarea id="tDecline"></textarea></div>
@@ -281,14 +319,16 @@ nav.tabs button.on::before{content:"";position:absolute;top:0;left:30%;right:30%
       <div style="display:flex;gap:.5rem;flex-wrap:wrap"><a class="btn pri" id="calGoogle" target="_blank" rel="noopener">Add to Google Calendar</a><a class="btn" id="calApple">Add to iPhone Calendar</a><button class="btn dang" id="calNew" type="button">New private link</button></div>
       <p class="help" style="margin-top:.7rem">Google Calendar refreshes subscribed calendars every few hours; iPhone lets you choose how often. "New private link" stops the old link working.</p>
     </div>
-    <p class="help" style="margin:1.2rem 0 2rem">Tip: on your phone, use "Add to Home Screen" so this dashboard opens like an app.</p>
+    <div class="card panel install" id="installCard"><div style="display:flex;gap:.8rem;align-items:center"><span class="mono2"></span><div><h3 class="st" style="margin:0">Get the Nel Studio app</h3><p class="help" id="installHelp" style="margin:.2rem 0 0">Install this dashboard on your phone so it opens full-screen from your home screen, like an app.</p></div></div><button class="btn pri" id="installBtn" type="button">Install app</button></div>
+    <p class="help" style="margin:1.2rem 0 2rem"></p>
   </section>
 </main>
 
 <nav class="tabs"><div class="wrap">
   <button class="on" data-v="bookings"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>Bookings<span class="badge" id="badge" hidden>0</span></button>
-  <button data-v="avail"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/></svg>Availability</button>
+  <button data-v="avail"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3 2"/></svg>Dates</button>
   <button data-v="menu"><svg viewBox="0 0 24 24"><path d="M5 4h14v16H5z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Menu</button>
+  <button data-v="offers"><svg viewBox="0 0 24 24"><path d="M3.5 12.5l8-8H20v8.5l-8 8z"/><circle cx="15.5" cy="8.5" r="1.4"/></svg>Offers</button>
   <button data-v="looks"><svg viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M20 16l-5-5-8 8"/></svg>Looks</button>
   <button data-v="settings"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>Settings</button>
 </div></nav>
@@ -336,13 +376,17 @@ setInterval(()=>{if(KEY&&document.visibilityState==='visible'&&!$('#sheetBg').cl
 /* ---------- tabs ---------- */
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav.tabs button').forEach(x=>x.classList.toggle('on',x===b));document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+b.dataset.v));scrollTo(0,0)});
 
-function renderAll(){renderBookings();renderCal();renderDay();renderLooks();renderSettings();if(!menuDirty)renderMenuEd()}
+function renderAll(){if(!ofDirty){OF=structuredClone(D.offers||{codes:[],promos:[]});renderOffers()}renderBookings();renderCal();renderDay();renderLooks();renderSettings();if(!menuDirty)renderMenuEd()}
 
 /* ---------- templates / whatsapp ---------- */
 const mapUrl=()=>'https://www.google.com/maps/dir/?api=1&destination='+encodeURIComponent(D.settings.mapQuery||'');
 function openingsText(){const lines=[];for(const d of Object.keys(D.open).sort()){for(const t of D.open[d]){lines.push(`• ${fmtDate(d)} at ${fmtTime(t)}`);if(lines.length>=6)break}if(lines.length>=6)break}return lines.join('\n')||'• (message me and we’ll find a time)'}
-const setText=b=>(b.undecided?'Undecided set':b.set)+(b.addons?.length?' + '+b.addons.join(', '):(b.bottom&&b.set!=='Bottom Lashes only'?' + Bottom lashes':''));
-function fill(tpl,b){const set=setText(b);return (tpl||'').replace(/\{(\w+)\}/g,(m,k)=>({name:b.name.split(' ')[0],set,date:fmtDate(b.date,{weekday:'long',day:'numeric',month:'long'}),time:fmtTime(b.time),total:'GHS '+b.total,ref:b.ref,address:D.settings.address,map:mapUrl(),openings:openingsText()}[k]??m))}
+const mainUnd=b=>b.itemId===UNDECIDED||(b.undecided&&!b.guests?.length&&!b.itemId);
+const setText=b=>(mainUnd(b)?'Undecided set':b.set)+(b.addons?.length?' + '+b.addons.join(', '):(b.bottom&&b.set!=='Bottom Lashes only'?' + Bottom lashes':''));
+const gSet=g=>(g.undecided?'Undecided set':g.set)+(g.addons?.length?' + '+g.addons.join(', '):'');
+const fullSet=b=>b.guests?.length?`${setText(b)} for you, `+b.guests.map(g=>`${gSet(g)} for ${g.name}`).join(', '):setText(b);
+const priceTxt=b=>b.undecided?(b.total?`To be confirmed (from GHS ${b.total})`:'To be confirmed'):'GHS '+b.total;
+function fill(tpl,b){const set=fullSet(b);return (tpl||'').replace(/\{(\w+)\}/g,(m,k)=>({name:b.name.split(' ')[0],set,date:fmtDate(b.date,{weekday:'long',day:'numeric',month:'long'}),time:fmtTime(b.time),total:priceTxt(b)+(b.discount?` (you save GHS ${b.discount})`:''),ref:b.ref,people:String(b.people||1),address:D.settings.address,map:mapUrl(),openings:openingsText()}[k]??m))}
 const waLink=(phone,text)=>`https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
 function waSheet(title,b,tplKey,sub){
   if(!b.phone){sheet(`<h3>${title}</h3><p class="muted">This booking has no WhatsApp number saved.</p><div class="acts"><button class="btn" data-close>Close</button></div>`);return}
@@ -387,10 +431,10 @@ function card(b){
   if(b.undecided&&['pending','confirmed'].includes(b.status)) acts+=`<button class="btn wa" data-a="helpchoose" data-r="${b.ref}">${waIcon} Help choose</button>`;
   acts+=`<button class="btn" data-a="edit" data-r="${b.ref}" title="Edit details, set or price">✎ Edit</button>`;
   if(b.phone) acts+=`<a class="btn" href="https://wa.me/${b.phone}" target="_blank" rel="noopener" title="Chat">${waIcon}</a>`;
-  return `<article class="card bk"><div class="top"><span><span class="pill ${b.status}">${STATUS_LABEL[b.status]||b.status}</span>${b.undecided?'<span class="pill undecided">Needs help choosing</span>':''}</span><span class="ref">${b.ref}</span></div>
+  return `<article class="card bk"><div class="top"><span><span class="pill ${b.status}">${STATUS_LABEL[b.status]||b.status}</span>${b.undecided?'<span class="pill undecided">Needs help choosing</span>':''}${b.guests?.length?`<span class="pill group">👥 Group of ${b.guests.length+1}</span>`:''}</span><span class="ref">${b.ref}</span></div>
     <h4>${esc(b.name)}</h4>
     <div class="when"><span>📅 <b>${fmtDate(b.date,{weekday:'short',day:'numeric',month:'short'})}</b></span><span>⏰ <b>${fmtTime(b.time)}</b></span></div>
-    <div class="meta"><span>💎 ${set} · <b>${b.undecided?'Price TBC'+(b.total?` (add-ons GHS ${b.total})`:''):'GHS '+b.total}</b></span>${b.phone?`<span>📱 +${b.phone}</span>`:''}<span class="muted" style="font-size:.72rem">${b.source==='manual'?'Added by you':'Booked online'} · ${new Date(b.createdAt).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span></div>
+    <div class="meta"><span>💎 ${set}${b.guests?.length?' <span class="muted">('+esc(b.name.split(' ')[0])+')</span>':''} · <b>${b.undecided?'Price TBC'+(b.total?` (from GHS ${b.total})`:''):'GHS '+b.total}</b></span>${b.guests?.length?`<div class="guests">${b.guests.map(g=>`+ ${esc(g.name)}: ${esc(gSet(g))}`).join('<br>')}</div>`:''}${b.discount?`<span class="disc">🏷️ Saved GHS ${b.discount}${b.code?' · code '+esc(b.code):''}${b.promo?' · '+esc(b.promo):''}</span>`:''}${b.priceEdited?'<span class="muted" style="font-size:.72rem">Price set by you</span>':''}${b.phone?`<span>📱 +${b.phone}</span>`:''}<span class="muted" style="font-size:.72rem">${b.source==='manual'?'Added by you':'Booked online'} · ${new Date(b.createdAt).toLocaleString('en-GB',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}</span></div>
     ${b.notes?`<div class="notes">${esc(b.notes)}</div>`:''}
     <div class="acts">${acts}</div></article>`;
 }
@@ -446,32 +490,42 @@ $('#addBk').onclick=()=>{
   sheet(`<h3>Add a booking</h3><p class="muted" style="margin-bottom:.9rem">For clients who booked by DM or call. It's saved as confirmed and blocks the slot.</p>
     <div class="row"><div class="f"><label class="l">Name</label><input id="mName"></div><div class="f"><label class="l">WhatsApp</label><input id="mPhone" type="tel" placeholder="024…"></div></div>
     ${setPicker('mSetP',{item:allItems()[0]?.id})}
+    <div id="mGuests"></div><button class="btn mini" type="button" id="mAddG" style="margin-bottom:.9rem">+ Add a guest (group booking)</button>
+    <div class="f"><label class="l">Discount code (optional)</label><input id="mCode" style="text-transform:uppercase" placeholder="e.g. GLAM10"></div>
     ${slotPicker('mp',true)}
     <div class="f" style="margin-top:.8rem"><label class="l">Notes</label><textarea id="mNotes" style="min-height:70px"></textarea></div>
     <div class="acts"><button class="btn" data-close>Cancel</button><button class="btn pri" id="mGo">Save booking</button></div>`);
-  const get=wirePicker('mp');
+  const get=wirePicker('mp');let gn=0;
+  $('#mAddG').onclick=()=>{const n=$('#mGuests').children.length;if(n>=4)return toast('Groups are up to 5 people');const id='mg'+(gn++);
+    $('#mGuests').insertAdjacentHTML('beforeend',`<div class="gRow" data-g="${id}"><div class="gh">Guest<button class="btn mini dang" type="button" data-rm>Remove</button></div><div class="f"><input class="gn" placeholder="Guest's name"></div>${setPicker(id,{item:allItems()[0]?.id})}</div>`);
+    $('#mAddG').hidden=n+1>=4};
+  $('#mGuests').onclick=e=>{if(e.target.closest('[data-rm]')){e.target.closest('.gRow').remove();$('#mAddG').hidden=false}};
   $('#mGo').onclick=async()=>{const p=get();if(!$('#mName').value.trim())return toast('Add a name');if(!p)return toast('Pick a date and time');
-    try{const j=await api({action:'manual',booking:{name:$('#mName').value,phone:$('#mPhone').value,...readPicker('mSetP'),notes:$('#mNotes').value,...p}});await load();bkFilter='upcoming';renderBookings();toast('Booking added');if(j.booking.phone)waSheet('Send confirmation?',j.booking,'confirm');else closeSheet()}catch(_){}};
+    const guests=[...document.querySelectorAll('#mGuests .gRow')].map((r,i)=>({name:r.querySelector('.gn').value.trim()||'Guest '+(i+2),...readPicker(r.dataset.g)}));
+    try{const j=await api({action:'manual',booking:{name:$('#mName').value,phone:$('#mPhone').value,...readPicker('mSetP'),guests,code:$('#mCode').value.trim(),notes:$('#mNotes').value,...p}});await load();bkFilter='upcoming';renderBookings();toast('Booking added');if(j.booking.phone)waSheet('Send confirmation?',j.booking,'confirm');else closeSheet()}catch(_){}};
 };
 function editSheet(b){
   sheet(`<h3>Edit booking</h3><p class="muted" style="margin-bottom:.9rem">${b.ref} · ${fmtDate(b.date)} at ${fmtTime(b.time)}. To change the date or time, use Reschedule.</p>
     <div class="row"><div class="f"><label class="l">Name</label><input id="eName" value="${esc(b.name)}"></div><div class="f"><label class="l">WhatsApp</label><input id="ePhone" type="tel" value="${b.phone?'+'+b.phone:''}"></div></div>
+    ${b.guests?.length?`<p class="help" style="margin-bottom:.5rem">Group of ${b.guests.length+1}. The set below is ${esc(b.name.split(' ')[0])}'s. Guests: ${b.guests.map(g=>esc(g.name+': '+gSet(g))).join('; ')}.</p>`:''}
     ${setPicker('eSetP',{item:b.itemId||'',addons:b.addonIds||[]})}
-    <div class="f"><label class="l">Price (GHS)</label><input id="eTotal" type="number" min="0" value="${b.total??''}"><p class="help" style="margin-top:.3rem">Changing the set fills in its price. You can then adjust it, e.g. for a discount or an extra.</p></div>
+    <div class="f"><label class="l">Discount code</label><input id="eCode" style="text-transform:uppercase" value="${esc(b.code||'')}" placeholder="None"></div>
+    <div class="f"><label class="l">Price (GHS)</label><input id="eTotal" type="number" min="0" value="${b.total??''}"><p class="help" style="margin-top:.3rem">Changing the set or code re-prices the booking (sales and codes included) when you save. Type a price here only to override it.</p></div>
     <div class="f"><label class="l">Notes</label><textarea id="eNotes" style="min-height:70px">${esc(b.notes||'')}</textarea></div>
     <div class="acts"><button class="btn" data-close>Cancel</button><button class="btn pri" id="eGo">Save changes</button></div>`);
   const origSet=$('#eSetP .ps').value, origAdd=JSON.stringify(readPicker('eSetP').addons);
-  const recalc=()=>{const r=readPicker('eSetP');const it=allItems().find(i=>i.id===r.item);const add=(D.menu?.addons||[]).filter(a=>r.addons.includes(a.id)).reduce((t,a)=>t+a.price,0);$('#eTotal').value=(it?it.price:0)+add};
-  $('#eSetP').addEventListener('change',recalc);
-  $('#eGo').onclick=async()=>{const r=readPicker('eSetP');const changes={name:$('#eName').value,phone:$('#ePhone').value,notes:$('#eNotes').value,total:$('#eTotal').value};
+  let touched=false;$('#eTotal').oninput=()=>touched=true;
+  $('#eGo').onclick=async()=>{const r=readPicker('eSetP');const changes={name:$('#eName').value,phone:$('#ePhone').value,notes:$('#eNotes').value};
     if(r.item!==origSet||JSON.stringify(r.addons)!==origAdd){changes.item=r.item;changes.addons=r.addons}
+    const code=$('#eCode').value.trim().toUpperCase();if(code!==(b.code||''))changes.code=code;
+    if(touched)changes.total=$('#eTotal').value;
     if(r.item===ADDON_ONLY&&!r.addons.length)return toast('Tick at least one add-on');
     try{await api({action:'edit',ref:b.ref,changes});await load();closeSheet();toast('Booking updated')}catch(_){}};
 }
 $('#exportCsv').onclick=()=>{
-  const cols=['ref','status','date','time','name','phone','set','addons','total','notes','source','createdAt'];
+  const cols=['ref','status','date','time','name','phone','set','addons','people','guests','list','discount','code','promo','total','notes','source','createdAt'];
   const q=v=>`"${String(v??'').replace(/"/g,'""')}"`;
-  const rows=[cols.join(',')].concat(D.bookings.map(b=>cols.map(c=>q(c==='addons'?(b.addons||[]).join('; '):c==='set'&&b.undecided?'Undecided':c==='phone'&&b.phone?'+'+b.phone:b[c])).join(',')));
+  const rows=[cols.join(',')].concat(D.bookings.map(b=>cols.map(c=>q(c==='guests'?(b.guests||[]).map(g=>g.name+': '+gSet(g)).join('; '):c==='people'?(b.people||1):c==='addons'?(b.addons||[]).join('; '):c==='set'&&b.undecided?'Undecided':c==='phone'&&b.phone?'+'+b.phone:b[c])).join(',')));
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+rows.join('\r\n')],{type:'text/csv'}));a.download=`glam-by-nel-bookings-${today()}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
 };
 
@@ -588,7 +642,7 @@ $('#upFiles').onchange=async e=>{
 };
 
 /* ---------- settings ---------- */
-function renderSettings(){const s=D.settings;$('#sSlots').value=(s.slots||[]).join(', ');$('#sLead').value=s.leadHours??2;$('#sAddr').value=s.address||'';$('#sMap').value=s.mapQuery||'';
+function renderSettings(){const s=D.settings;$('#sSlots').value=(s.slots||[]).join(', ');$('#sLead').value=s.leadHours??2;$('#sAddr').value=s.address||'';$('#sMap').value=s.mapQuery||'';$('#sPhone').value=s.phone||'';$('#sWa').value=s.whatsapp?(s.whatsapp.startsWith('233')?'0'+s.whatsapp.slice(3):'+'+s.whatsapp):'';
   $('#tConfirm').value=s.templates.confirm||'';$('#tReminder').value=s.templates.reminder||'';$('#tDecline').value=s.templates.decline||'';$('#tReschedule').value=s.templates.reschedule||'';$('#tUndecided').value=s.templates.undecided||'';
   $('#bOn').checked=!!s.banner?.on;$('#bText').value=s.banner?.text||'';
   const url=`${location.origin}/api/calendar/${s.calToken}`;$('#calUrl').value=url;
@@ -598,7 +652,82 @@ $('#calCopy').onclick=async()=>{try{await navigator.clipboard.writeText($('#calU
 $('#calNew').onclick=async()=>{if(!confirm('Create a new private calendar link? Calendars using the old link will stop updating.'))return;try{const j=await api({action:'setSettings',settings:{newCalToken:true}});D.settings=j.settings;renderSettings();toast('New link created. Subscribe again with it')}catch(_){}};
 $('#setForm').onsubmit=async e=>{e.preventDefault();
   const slots=$('#sSlots').value.split(/[,\s]+/).map(x=>x.trim()).filter(Boolean).map(x=>{const m=/^(\d{1,2})[:.]?(\d{2})?$/.exec(x);return m?`${m[1].padStart(2,'0')}:${m[2]||'00'}`:null}).filter(Boolean);
-  try{const j=await api({action:'setSettings',settings:{slots,leadHours:+$('#sLead').value,address:$('#sAddr').value,mapQuery:$('#sMap').value,banner:{on:$('#bOn').checked,text:$('#bText').value},templates:{confirm:$('#tConfirm').value,reminder:$('#tReminder').value,decline:$('#tDecline').value,reschedule:$('#tReschedule').value,undecided:$('#tUndecided').value}}});D.settings=j.settings;renderSettings();renderCal();toast('Settings saved')}catch(_){}};
+  try{const j=await api({action:'setSettings',settings:{slots,leadHours:+$('#sLead').value,address:$('#sAddr').value,mapQuery:$('#sMap').value,phone:$('#sPhone').value,whatsapp:$('#sWa').value,banner:{on:$('#bOn').checked,text:$('#bText').value},templates:{confirm:$('#tConfirm').value,reminder:$('#tReminder').value,decline:$('#tDecline').value,reschedule:$('#tReschedule').value,undecided:$('#tUndecided').value}}});D.settings=j.settings;renderSettings();renderCal();toast('Settings saved')}catch(_){}};
+
+/* ---------- offers: discount codes + promotions ---------- */
+let OF={codes:[],promos:[]}, ofDirty=false;
+function ofMark(on=true){ofDirty=on;$('#ofBar').classList.toggle('dirty',on);$('#ofState').textContent=on?'Unsaved changes':'All changes saved'}
+const ofStatus=o=>{const t=today();if(!o.active)return['off','Off'];if(o.start&&o.start>t)return['sched','Starts '+fmtDate(o.start,{day:'numeric',month:'short'})];if(o.end&&o.end<t)return['exp','Ended'];if(o.maxUses&&(o.used||0)>=o.maxUses)return['exp','Used up'];return['live','Live']};
+const offTxt=o=>o.type==='pct'?`${o.value||0}% off`:`GHS ${o.value||0} off`;
+function renderOffers(){
+  const cats=D.menu?.categories||[], items=allItems();
+  $('#promoEd').innerHTML=OF.promos.length?OF.promos.map((p,i)=>{const [cls,lab]=ofStatus(p);return `<div class="card mitem offer ${p.active?'':'off'}" data-i="${i}" data-t="promos">
+    <div class="otop"><span class="opill ${cls}">${lab}</span><b>${esc(p.title||'New promotion')}</b><span class="muted">${offTxt(p)}</span></div>
+    <div class="mrow"><div><label class="l">Title</label><input data-k="title" value="${esc(p.title)}" maxlength="60" placeholder="e.g. Wispy Week"></div>
+      <div><label class="l">Discount</label><div class="dup"><select data-k="type"><option value="pct" ${p.type==='pct'?'selected':''}>%</option><option value="amt" ${p.type==='amt'?'selected':''}>GHS</option></select><input data-k="value" type="number" min="0" value="${p.value||''}"></div></div>
+      <div><label class="l">Starts</label><input data-k="start" type="date" value="${p.start||''}"></div><div><label class="l">Ends</label><input data-k="end" type="date" value="${p.end||''}"></div></div>
+    <label class="l" style="margin-top:.5rem">Text on the website (optional)</label><input data-k="text" value="${esc(p.text)}" maxlength="160" placeholder="e.g. 20% off all wispy sets this week only">
+    <label class="l" style="margin-top:.5rem">Applies to</label><select data-k="scope" data-re="1"><option value="all" ${p.scope==='all'?'selected':''}>All lash sets</option><option value="cat" ${p.scope==='cat'?'selected':''}>Some categories</option><option value="items" ${p.scope==='items'?'selected':''}>Specific sets</option></select>
+    ${p.scope==='cat'?`<div class="tchips">${cats.map(c=>`<label><input type="checkbox" data-tg="${esc(c.id)}" ${(p.targets||[]).includes(c.id)?'checked':''}> ${esc(c.name)}</label>`).join('')}</div>`:''}
+    ${p.scope==='items'?`<div class="tchips">${items.map(it=>`<label><input type="checkbox" data-tg="${esc(it.id)}" ${(p.targets||[]).includes(it.id)?'checked':''}> ${esc(it.name)}</label>`).join('')}</div>`:''}
+    <div class="mtools"><label class="toggle"><input type="checkbox" data-k="active" ${p.active?'checked':''}> On</label><label class="toggle"><input type="checkbox" data-k="banner" ${p.banner?'checked':''}> Show in website banner</label><span class="sp"></span><button class="btn dang mini" data-del>Delete</button></div></div>`}).join(''):'<p class="muted" style="margin-bottom:1rem">No promotions yet. Sale prices show on the website with the old price crossed out.</p>';
+  $('#codeEd').innerHTML=OF.codes.length?OF.codes.map((c,i)=>{const [cls,lab]=ofStatus(c);return `<div class="card mitem offer ${c.active?'':'off'}" data-i="${i}" data-t="codes">
+    <div class="otop"><span class="opill ${cls}">${lab}</span><b class="code">${esc(c.code||'NEWCODE')}</b><span class="muted">${offTxt(c)} · used ${c.used||0}${c.maxUses?' / '+c.maxUses:''}</span></div>
+    <div class="mrow"><div><label class="l">Code</label><input data-k="code" value="${esc(c.code)}" maxlength="24" style="text-transform:uppercase" placeholder="e.g. GLAM10"></div>
+      <div><label class="l">Discount</label><div class="dup"><select data-k="type"><option value="pct" ${c.type==='pct'?'selected':''}>%</option><option value="amt" ${c.type==='amt'?'selected':''}>GHS</option></select><input data-k="value" type="number" min="0" value="${c.value||''}"></div></div>
+      <div><label class="l">Min. spend (GHS)</label><input data-k="minSpend" type="number" min="0" value="${c.minSpend||''}" placeholder="None"></div>
+      <div><label class="l">Max uses</label><input data-k="maxUses" type="number" min="0" value="${c.maxUses||''}" placeholder="Unlimited"></div>
+      <div><label class="l">Starts</label><input data-k="start" type="date" value="${c.start||''}"></div><div><label class="l">Ends</label><input data-k="end" type="date" value="${c.end||''}"></div></div>
+    <label class="l" style="margin-top:.5rem">Private note (only you see this)</label><input data-k="note" value="${esc(c.note)}" maxlength="80" placeholder="e.g. For Ama's referrals">
+    <div class="mtools"><label class="toggle"><input type="checkbox" data-k="active" ${c.active?'checked':''}> On</label><label class="toggle"><input type="checkbox" data-k="stack" ${c.stack?'checked':''}> Works on top of sale prices</label><span class="sp"></span><button class="btn mini" data-share>${waIcon} Share</button><button class="btn dang mini" data-del>Delete</button></div></div>`}).join(''):'<p class="muted" style="margin-bottom:1rem">No codes yet. Clients type a code when booking and the discount is applied automatically.</p>';
+}
+function ofInput(e){
+  const el=e.target, box=el.closest('.offer');if(!box)return;const o=OF[box.dataset.t][+box.dataset.i];
+  if(el.dataset.k){let v=el.type==='checkbox'?el.checked:el.type==='number'?(el.value===''?0:+el.value):el.value;if(el.dataset.k==='code')v=v.toUpperCase().replace(/[^A-Z0-9_-]/g,'');o[el.dataset.k]=v;if(el.dataset.k==='scope')o.targets=[]}
+  else if(el.dataset.tg){o.targets=[...box.querySelectorAll('[data-tg]:checked')].map(x=>x.dataset.tg)}
+  else return;
+  ofMark();
+  if(e.type==='change'&&(el.dataset.re||el.type==='checkbox'||el.type==='date'||el.tagName==='SELECT'))renderOffers();
+  else{const head=box.querySelector('.otop');const [cls,lab]=ofStatus(o);head.innerHTML=`<span class="opill ${cls}">${lab}</span><b class="${box.dataset.t==='codes'?'code':''}">${esc((box.dataset.t==='codes'?o.code:o.title)||'…')}</b><span class="muted">${offTxt(o)}${box.dataset.t==='codes'?` · used ${o.used||0}${o.maxUses?' / '+o.maxUses:''}`:''}</span>`}
+}
+['#promoEd','#codeEd'].forEach(id=>{const el=$(id);el.addEventListener('input',ofInput);el.addEventListener('change',ofInput);
+  el.addEventListener('click',e=>{const box=e.target.closest('.offer');if(!box)return;const t=box.dataset.t,i=+box.dataset.i;
+    if(e.target.closest('[data-del]')){if(!confirm('Delete this '+(t==='codes'?'code':'promotion')+'?'))return;OF[t].splice(i,1);ofMark();renderOffers()}
+    if(e.target.closest('[data-share]')){const c=OF.codes[i];if(!c.code)return toast('Add a code first');
+      const msg=`Hi love 💕 Here's a little treat from Glam By Nel: use code ${c.code} for ${offTxt(c)} your next lash set${c.end?` (valid until ${fmtDate(c.end,{day:'numeric',month:'long'})})`:''}. Book here: ${location.origin}/#book`;
+      sheet(`<h3>Share code ${esc(c.code)}</h3><p class="muted" style="margin-bottom:.8rem">Edit the message, then send it on WhatsApp or copy it for Instagram.</p><textarea id="shTxt" style="min-height:140px">${esc(msg)}</textarea><div class="acts"><button class="btn" id="shCopy">Copy</button><a class="btn wa" id="shGo" target="_blank" rel="noopener">${waIcon} WhatsApp</a></div>`);
+      const go=$('#shGo'),ta=$('#shTxt');const s=()=>go.href='https://wa.me/?text='+encodeURIComponent(ta.value);s();ta.oninput=s;
+      $('#shCopy').onclick=async()=>{try{await navigator.clipboard.writeText(ta.value);toast('Copied')}catch(_){ta.select()}}}
+  })});
+const rndCode=()=>'GLAM'+Math.random().toString(36).slice(2,6).toUpperCase().replace(/[^A-Z0-9]/g,'X');
+$('#addCode').onclick=()=>{OF.codes.unshift({code:rndCode(),type:'pct',value:10,minSpend:0,maxUses:0,start:'',end:'',stack:false,active:true,note:'',used:0});ofMark();renderOffers()};
+$('#addPromo').onclick=()=>{OF.promos.unshift({id:'',title:'',text:'',type:'pct',value:10,scope:'all',targets:[],start:today(),end:addDays(today(),7),active:true,banner:true});ofMark();renderOffers()};
+$('#ofSave').onclick=async()=>{
+  const bad=OF.codes.find(c=>!c.code||!(c.value>0))||OF.promos.find(p=>!(p.value>0));if(bad)return toast('Every code needs a name and a discount');
+  const dupe=OF.codes.map(c=>c.code).find((c,i,a)=>a.indexOf(c)!==i);if(dupe)return toast(`Code ${dupe} is listed twice`);
+  if(OF.promos.some(p=>p.scope!=='all'&&!(p.targets||[]).length))return toast('Pick what each promotion applies to');
+  try{const j=await api({action:'setOffers',offers:OF});D.offers=j.offers;OF=structuredClone(j.offers);ofMark(false);renderOffers();toast('Offers saved. Website updated')}catch(_){}
+};
+
+/* ---------- install as an app (PWA) ---------- */
+let deferredInstall=null;
+const standalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone;
+const isIOS=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+function installUI(){
+  const btn=$('#installBtn'),help=$('#installHelp');
+  if(standalone()){help.textContent="You're using the installed app. 💕";btn.hidden=true;return}
+  if(deferredInstall){btn.hidden=false;btn.textContent='Install app';return}
+  if(isIOS){btn.hidden=false;btn.textContent='How to install';return}
+  btn.hidden=false;btn.textContent='How to install';
+}
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredInstall=e;installUI()});
+addEventListener('appinstalled',()=>{deferredInstall=null;toast('Nel Studio installed on your home screen');installUI()});
+$('#installBtn').onclick=async()=>{
+  if(deferredInstall){deferredInstall.prompt();const r=await deferredInstall.userChoice;deferredInstall=null;if(r.outcome==='accepted')toast('Installing…');installUI();return}
+  sheet(`<h3>Install Nel Studio</h3>${isIOS?`<p class="muted" style="margin:.6rem 0">On iPhone, open this page in <b>Safari</b>, then:</p><ol style="margin-left:1.2rem;line-height:1.9"><li>Tap the <b>Share</b> button (square with an arrow)</li><li>Scroll down and tap <b>Add to Home Screen</b></li><li>Tap <b>Add</b></li></ol>`:`<p class="muted" style="margin:.6rem 0">On Android, open this page in <b>Chrome</b>, then:</p><ol style="margin-left:1.2rem;line-height:1.9"><li>Tap the <b>⋮</b> menu (top right)</li><li>Tap <b>Install app</b> or <b>Add to Home screen</b></li><li>Tap <b>Install</b></li></ol>`}<p class="help" style="margin-top:.8rem">The app opens straight to your dashboard and stays signed in.</p><div class="acts"><button class="btn pri" data-close>Got it</button></div>`);
+};
+installUI();
+if('serviceWorker' in navigator) addEventListener('load',()=>navigator.serviceWorker.register('/admin-sw.js',{scope:'/admin'}).catch(()=>{}));
 
 if(KEY) start().catch(()=>{});
 })();

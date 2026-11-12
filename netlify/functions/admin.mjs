@@ -1,6 +1,7 @@
 import {
   store, json, isAdmin, getSettings, openSlots, slotKey, isDate, isTime, clean, normalizePhone, newRef, newToken,
-  getMenu, sanitizeMenu, quote, TAGS, GUIDE_KEYS, DEFAULT_SETTINGS, DEFAULT_MENU,
+  getMenu, sanitizeMenu, TAGS, GUIDE_KEYS, DEFAULT_SETTINGS, DEFAULT_MENU,
+  getOffers, sanitizeOffers, priceBooking, lockRange, releaseRange, bookingFields,
 } from '../lib/common.mjs';
 import { randomBytes } from 'node:crypto';
 
@@ -12,34 +13,23 @@ async function allBookings(s) {
   return items.filter(Boolean).sort((a, b) => (a.date + a.time).localeCompare(b.date + b.time));
 }
 
-async function releaseSlot(s, bk) {
-  const k = slotKey(bk.date, bk.time);
-  const cur = await s.get(k, { type: 'json' });
-  if (cur?.ref === bk.ref) await s.delete(k);
-}
-
-async function lockSlot(s, ref, date, time) {
-  const k = slotKey(date, time);
-  const r = await s.setJSON(k, { ref }, { onlyIfNew: true });
-  if (r.modified) return true;
-  const cur = await s.get(k, { type: 'json' });
-  return cur?.ref === ref;
-}
+const releaseSlot = releaseRange;
+async function lockSlot(s, ref, date, time, mins = 0) { return (await lockRange(s, ref, date, time, mins)) !== null; }
 
 export default async (req) => {
   if (!isAdmin(req)) return json({ ok: false, error: process.env.ADMIN_PASSWORD ? 'Wrong password' : 'ADMIN_PASSWORD is not set in Netlify' }, 401);
   const s = store();
 
   if (req.method === 'GET') {
-    const [bookings, availability, settings, looks, guide, open, menu] = await Promise.all([
+    const [bookings, availability, settings, looks, guide, open, menu, offers] = await Promise.all([
       allBookings(s), s.get('availability', { type: 'json' }), getSettings(s),
-      s.get('looks', { type: 'json' }), s.get('guide', { type: 'json' }), openSlots(s), getMenu(s),
+      s.get('looks', { type: 'json' }), s.get('guide', { type: 'json' }), openSlots(s), getMenu(s), getOffers(s),
     ]);
     if (!settings.calToken) { // create the private calendar link on first use
       settings.calToken = newToken();
       await s.setJSON('settings', settings);
     }
-    return json({ ok: true, bookings, availability: availability || {}, settings, looks: looks || [], guide: guide || {}, open, menu });
+    return json({ ok: true, bookings, availability: availability || {}, settings, looks: looks || [], guide: guide || {}, open, menu, offers });
   }
 
   let b;
@@ -68,6 +58,8 @@ export default async (req) => {
         address: n.address != null ? clean(n.address, 200) : cur.address,
         mapQuery: n.mapQuery != null ? clean(n.mapQuery, 200) || cur.mapQuery : cur.mapQuery,
         banner: n.banner ? { on: !!n.banner.on, text: clean(n.banner.text, 160) } : cur.banner,
+        phone: n.phone != null ? clean(n.phone, 20) || cur.phone : cur.phone,
+        whatsapp: n.whatsapp != null ? normalizePhone(n.whatsapp) || cur.whatsapp : cur.whatsapp,
         calToken: n.newCalToken ? newToken() : cur.calToken,
         templates: { ...cur.templates },
       };
@@ -83,6 +75,7 @@ export default async (req) => {
       if (!['pending', 'confirmed', 'declined', 'cancelled', 'done', 'noshow'].includes(st)) return json({ ok: false, error: 'Bad status' }, 400);
       if (ACTIVE.includes(st) && !ACTIVE.includes(bk.status)) {
         if (!(await lockSlot(s, bk.ref, bk.date, bk.time))) return json({ ok: false, error: 'That slot is now held by another booking. Reschedule instead.' }, 409);
+        bk.extraSlots = undefined;
       }
       if (['declined', 'cancelled'].includes(st)) await releaseSlot(s, bk);
       bk.status = st; bk.updatedAt = new Date().toISOString();
@@ -94,9 +87,11 @@ export default async (req) => {
       const bk = await s.get(`booking/${b.ref}`, { type: 'json' });
       if (!bk) return json({ ok: false, error: 'Booking not found' }, 404);
       if (!isDate(b.date) || !isTime(b.time)) return json({ ok: false, error: 'Pick a date and time' }, 400);
-      if (!(await lockSlot(s, bk.ref, b.date, b.time))) return json({ ok: false, error: 'That slot is already booked' }, 409);
-      await releaseSlot(s, bk);
-      Object.assign(bk, { date: b.date, time: b.time, updatedAt: new Date().toISOString() });
+      const old = { ...bk };
+      const extra = await lockRange(s, bk.ref, b.date, b.time, bk.mins || 0);
+      if (extra === null) return json({ ok: false, error: 'That slot is already booked' }, 409);
+      if (old.date !== b.date || old.time !== b.time) await releaseSlot(s, old);
+      Object.assign(bk, { date: b.date, time: b.time, extraSlots: extra.length ? extra : undefined, updatedAt: new Date().toISOString() });
       if (!ACTIVE.includes(bk.status)) bk.status = 'confirmed';
       await s.setJSON(`booking/${bk.ref}`, bk);
       return json({ ok: true, booking: bk });
@@ -106,34 +101,48 @@ export default async (req) => {
       const m = b.booking || {};
       if (!clean(m.name)) return json({ ok: false, error: 'Name is required' }, 400);
       if (!isDate(m.date) || !isTime(m.time)) return json({ ok: false, error: 'Pick a date and time' }, 400);
-      const q = quote(await getMenu(s), clean(m.item, 80), Array.isArray(m.addons) ? m.addons.map(String) : [], { allowInactive: true });
-      if (!q) return json({ ok: false, error: 'Choose a set' }, 400);
+      const [menu, offers] = await Promise.all([getMenu(s), getOffers(s)]);
+      const people = [{ name: m.name, item: m.item, addons: m.addons }, ...(Array.isArray(m.guests) ? m.guests : [])];
+      const pq = priceBooking(menu, offers, people, m.code, { allowInactive: true });
+      if (pq.error) return json({ ok: false, error: pq.error }, 400);
       const ref = newRef();
-      if (!(await lockSlot(s, ref, m.date, m.time))) return json({ ok: false, error: 'That slot is already booked' }, 409);
+      const extra = await lockRange(s, ref, m.date, m.time, pq.mins);
+      if (extra === null) return json({ ok: false, error: 'That slot is already booked' }, 409);
       const bk = {
-        ref, name: clean(m.name, 80), phone: normalizePhone(m.phone) || '', ...q,
+        ref, name: clean(m.name, 80), phone: normalizePhone(m.phone) || '', ...bookingFields(pq), extraSlots: extra.length ? extra : undefined,
         date: m.date, time: m.time, notes: clean(m.notes, 600), status: 'confirmed', source: 'manual', createdAt: new Date().toISOString(),
       };
       await s.setJSON(`booking/${ref}`, bk);
       return json({ ok: true, booking: bk });
     }
 
-    case 'edit': { // change client details, set, add-ons or price on an existing booking
+    case 'edit': { // change client details, set, add-ons, code or price on an existing booking
       const bk = await s.get(`booking/${b.ref}`, { type: 'json' });
       if (!bk) return json({ ok: false, error: 'Booking not found' }, 404);
       const e = b.changes || {};
       if (e.name != null) bk.name = clean(e.name, 80) || bk.name;
       if (e.phone != null) bk.phone = normalizePhone(e.phone) || '';
       if (e.notes != null) bk.notes = clean(e.notes, 600);
-      if (e.item) {
-        const q = quote(await getMenu(s), clean(e.item, 80), Array.isArray(e.addons) ? e.addons.map(String) : [], { allowInactive: true });
-        if (!q) return json({ ok: false, error: 'Choose a set' }, 400);
-        delete bk.undecided; delete bk.bottom; Object.assign(bk, q);
+      if (e.item || e.code != null) {
+        const [menu, offers] = await Promise.all([getMenu(s), getOffers(s)]);
+        const people = [{ name: bk.name, item: e.item || bk.itemId, addons: e.item ? e.addons : bk.addonIds },
+          ...(bk.guests || []).map((g) => ({ name: g.name, item: g.itemId, addons: g.addonIds }))];
+        const pq = priceBooking(menu, offers, people, e.code != null ? e.code : bk.code, { allowInactive: true });
+        if (pq.error) return json({ ok: false, error: pq.error }, 400);
+        if (e.code && !pq.code) return json({ ok: false, error: pq.codeError || 'Code not valid' }, 400);
+        for (const k of ['undecided', 'bottom', 'guests', 'code', 'promo']) delete bk[k];
+        Object.assign(bk, bookingFields(pq));
       }
-      if (e.total != null && e.total !== '') bk.total = Math.max(0, Math.min(100000, Math.round(+e.total || 0)));
+      if (e.total != null && e.total !== '' && +e.total !== bk.total) { bk.total = Math.max(0, Math.min(100000, Math.round(+e.total || 0))); bk.priceEdited = true; }
       bk.updatedAt = new Date().toISOString();
       await s.setJSON(`booking/${bk.ref}`, bk);
       return json({ ok: true, booking: bk });
+    }
+
+    case 'setOffers': {
+      const offers = sanitizeOffers(b.offers, await getOffers(s));
+      await s.setJSON('offers', offers);
+      return json({ ok: true, offers });
     }
 
     case 'setMenu': {
